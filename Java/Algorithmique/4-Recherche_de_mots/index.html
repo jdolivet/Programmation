@@ -1,0 +1,601 @@
+<html itemtype="http://schema.org" xmlns:fb="http://ogp.me/ns/fb#" class="supports-svg"><head><meta content="IE=Edge,chrome=IE7" http-equiv="X-UA-Compatible"><meta content="!" name="fragment"><meta content="NOODP" name="robots"><meta charset="utf-8"><meta content="Coursera" property="og:title"><meta content="website" property="og:type"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" property="og:image"><meta content="https://www.coursera.org/assignment/view?assignment_id=11" property="og:url"><meta content="Coursera" property="og:site_name"><meta content="en_US" property="og:locale"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." property="og:description"><meta content="727836538,4807654" property="fb:admins"><meta content="274998519252278" property="fb:app_id"><meta content="Coursera" name="twitter:site"><meta content="Coursera" name="twitter:app:name:iphone"><meta content="Coursera" name="twitter:app:name:ipad"><meta content="Coursera" name="twitter:app:name:googleplay"><meta content="id736535961" name="twitter:app:id:iphone"><meta content="id736535961" name="twitter:app:id:ipad"><meta content="org.coursera.android" name="twitter:app:id:googleplay"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." name="description"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" name="image"><meta content="app-id=736535961" name="apple-itunes-app"><title>Assignment Details | Coursera</title>    <link type="text/css" rel="stylesheet" href="https://dw0ugk4msqulk.cloudfront.net/d46360155a05cf6b222ae3e8c8df91df805e1b48/css/spark.main.css">
+      <link type="text/css" rel="stylesheet" href="https://www.coursera.org/maestro/api/course/973093/course.css">
+    <link rel="icon" href="https://spark-public.s3.amazonaws.com/algoprog/static/images/favicon.ico">
+<div style="padding-left:5%;padding-right:5%" role="main"><div style="display: block;" id="spark" class="hide"><h2 class="course-page-header">
+  <span>Recherche de mots dans une grille - partie 2: Instructions</span>
+
+
+</h2>
+
+<p>
+<style type="text/css">blockquote p {font-size:10.5pt; font-weight:normal;}</style>
+<style type="text/css">
+  table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+    margin: 0; padding: 0; vertical-align: baseline; border: none; }
+  table.sourceCode { width: 100%; }
+  td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+  td.sourceCode { padding-left: 5px; }
+  code &gt; span.kw { color: #007020; font-weight: bold; }
+  code &gt; span.dt { color: #902000; }
+  code &gt; span.dv { color: #40a070; }
+  code &gt; span.bn { color: #40a070; }
+  code &gt; span.fl { color: #40a070; }
+  code &gt; span.ch { color: #4070a0; }
+  code &gt; span.st { color: #4070a0; }
+  code &gt; span.co { color: #60a0b0; font-style: italic; }
+  code &gt; span.ot { color: #007020; }
+  code &gt; span.al { color: #ff0000; font-weight: bold; }
+  code &gt; span.fu { color: #06287e; }
+  code &gt; span.er { color: #ff0000; font-weight: bold; }
+</style>
+
+</p><h2 id="présentation-du-devoir">Présentation du devoir</h2>
+<p>Nous allons cette semaine expliquer comment résoudre de manière efficace le jeu présenté en introduction du cours. Il s'agissait, pour mémoire, d'explorer une grille de lettres, pour y trouver tous les mots valides en se déplaçant horizontalement, verticalement, ou en diagonale.</p>
+<p>Explorer tous les chemins possibles dans la grille serait pure folie : il y en a tout simplement beaucoup trop. En revanche, en associant chaque déplacement sur la grille à un déplacement dans l'arbre préfixe correspondant, nous nous rendrons compte très vite que la plupart des chemins sur la grille ne correspondent pas à des préfixes des mots du dictionnaire. Ainsi, nous n'aurons que peu de <em>chemins valides</em> à explorer.</p>
+<p>Nous aurons donc besoin des arbres préfixes codés la semaine dernière : ce sujet commence là où celui de la semaine dernière s'arrête.</p>
+
+<h3 id="rappels-de-java">Rappels de Java</h3>
+<p>Nous rappelons que pour itérer sur une structure de données en java, on peut utiliser la syntaxe suivante :</p>
+<pre class="sourceCode java"><code class="sourceCode java">LinkedList&lt;T&gt; l = ...;
+<span class="kw">for</span> (T x: l) {
+  <span class="co">// faire quelque chose avec x</span>
+}</code></pre>
+<p>Nous rappelons également deux instructions de contrôle de boucle : dans le corps d'une boucle, l'instruction <code>continue</code> permet de passer directement à l'itération suivante d'une boucle sans exécuter le reste du corps de la boucle ; l'instruction <code>break</code> permet de terminer la boucle prématurément.</p>
+<h3 id="données-de-lexercice">Données de l'exercice</h3>
+<p>Cet exercice fait intervenir un dictionnaire des mots du français. Le script java, lorsqu'il est lancé, s'attend à être lancé depuis un <em>dossier courant</em> contenant le fichier <code>dico.txt</code>, fourni dans l'archive.  Si vous utilisez un IDE, vous devez impérativement apprendre à la configurer pour être certain que votre programme s'exécutera dans le bon <em>working directory</em> (dossier courant). Vous aurez un message d'erreur utile si ça n'est pas le cas. Dans le cas de Netbeans, le fichier dico.txt doit  être placé à la racine du répertoire projet.</p>
+<h2 id="description-de-lalgorithme-extension-des-arbres-préfixes">Description de l'algorithme ; extension des arbres préfixes</h2>
+<p>Importez dans vos sources le fichier <code>Dictionnaire.java</code> que vous avez écrit la semaine dernière. </p>
+<style scoped="" type="text/css">
+  table {
+    font-family: sans-serif;
+    background-color: #eee;
+    border-collapse: collapse;
+    margin-left: 1em;
+  }
+
+  caption {
+    width: 100%;
+    font-style: italic;
+    text-align: left;
+    margin-left: -1em;
+    margin-bottom: .5em;
+  }
+
+  td {
+    border: 1px solid black;
+  }
+
+  col {
+    width: 3em;
+  }
+
+  td {
+    padding: .5em;
+    text-align: center;
+  }
+
+  td em {
+    border: 2px solid #da7b7b;
+    border-radius: 50%;
+    padding: 3px;
+  }
+
+  td strong {
+    background-color: #da7b7b;
+    border-radius: 50%;
+    padding: 3px;
+    font-weight: normal;
+  } 
+</style>
+
+<h3 id="fonctionnement-de-lalgorithme">Fonctionnement de l'algorithme</h3>
+<p>Notre algorithme sera amené à parcourir des <em>chemins</em> sur la grille. À chaque chemin sera associé un <em>préfixe</em>.</p>
+<p>Le fonctionnement de l'algorithme est intuitif. Illustrons-le à l'aide d'une grille d'exemple.</p>
+<table>
+<colgroup><col width="11%">
+<col width="11%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p>e</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p>a</p></td>
+<td align="left"><p>s</p></td>
+</tr>
+</tbody>
+</table>
+<p>Imaginons que nous parcourons la grille ci-dessus. Nous pouvons commencer de la parcourir à la lettre <code>a</code>.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p>e</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><em>a</em></p></td>
+<td align="left"><p>s</p></td>
+</tr>
+</tbody>
+</table>
+<p>La question se pose alors : est-ce que <code>a</code> est un préfixe valide ? En d'autres termes, existe-t-il des mots qui commencent par la lettre <code>a</code> ? Si ça n'est pas le cas, autant arrêter de suite ! Fort heureusement, la réponse est oui. Le <em>chemin</em> constitué de la seule case inférieure gauche est donc valide ; son <em>préfixe associé</em> est <code>a</code>.</p>
+<p>Profitons-en pour nous demander si <code>a</code> est un mot valide : la réponse est oui également («&nbsp;il <strong>a</strong> fini son devoir&nbsp;»). Nous avons trouvé notre premier mot.</p>
+<p>Les déplacements valides pour ce jeu sont les déplacements d'une case en diagonale, à l'horizontale, ou à la verticale. Nous pouvons donc nous déplacer ou bien vers la lettre <code>l</code>, la lettre <code>e</code>, ou la lettre <code>s</code>. Déplaçons-nous vers la lettre <code>s</code>. Nous <em>explorerons</em> les autres choix plus tard.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p>e</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><em>s</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Le préfixe <code>as</code> est-il un préfixe valide ? La réponse est oui. Le chemin constitué de la case <code>a</code> puis de la case <code>s</code>, associé au préfixe <code>as</code>, est donc valide. Il se trouve également que <code>as</code> est un mot valide («&nbsp;<strong>as</strong> de pique&nbsp;»). Nous avons trouvé notre deuxième mot.</p>
+<p>Déplaçons-nous vers la lettre <code>e</code>. Nous verrons ce que donne un déplacement vers la lettre <code>l</code> <em>plus tard</em>.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p><em>e</em></p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><strong>s↑</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p>Le préfixe <code>ase</code> est un préfixe valide («&nbsp;<strong>ase</strong>ptiser&nbsp;»), mais ne constitue pas un mot. Le seul déplacement autorisé reste alors la lettre <code>l</code>.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p><em>l</em></p></td>
+<td align="left"><p><strong>←e</strong></p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><strong>s↑</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p><code>asel</code> n'est pas un mot : nous abandonnons de suite.</p>
+<p>Ici, nous n'avons absolument pas terminé. Il nous faut en effet <em>revenir en arrière</em>.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p><em>e</em></p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><strong>s↑</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p>Lorsque nous étions à l'étape ci-dessus, y avait-il d'autres possibilités de déplacement sur la grille que nous n'aurions pas traitées ? La lettre <code>l</code> était notre seul choix. Revenons d'encore un pas en arrière.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p>e</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><em>s</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Ici, nous avons exploré un déplacement vers la lettre <code>e</code>, mais pas vers la lettre <code>l</code>. Il est temps de le faire.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p><em>l</em></p></td>
+<td align="left"><p>e</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><strong>↖s</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p><code>asl</code> n'est pas un préfixe valide : nous nous rendons compte qu'il n'est <em>pas la peine de pousser plus loin l'exploration</em>. En effet, l'arbre préfixe nous informe que nous ne trouverons aucune solution qui commence par <code>asl</code>. Nous abandonnons donc cette voie, et n'explorons pas de chemins plus longs.</p>
+<p>On voit ici l'intérêt de l'arbre préfixe : sans arbre préfixe, nous aurions envisagé bon nombre de chemins inutiles.</p>
+<p>Revenons d'un pas en arrière.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p>e</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><em>s</em></p></td>
+</tr>
+</tbody>
+</table>
+<p>Nous avons exploré <code>e</code> et <code>l</code> : il ne nous reste plus rien à effectuer ici. Revenons d'encore un pas en arrière.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p>e</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><em>a</em></p></td>
+<td align="left"><p>s</p></td>
+</tr>
+</tbody>
+</table>
+<p>Ici, nous avons exploré uniquement à partir de la lettre <code>s</code>. Il faut encore explorer la lettre <code>l</code> (nous trouvons <code>ale</code> et <code>ales</code>, un style de bière) et la lettre <code>e</code> (nous ne trouvons rien).</p>
+<p>Si l'on remonte encore d'un cran, il nous faut encore envisager les mots qui commencent en <code>s</code> (nous trouvons <code>se</code>, <code>sel</code>, <code>sa</code>, <code>sale</code>), en <code>e</code> (nous trouvons <code>es</code>) et en <code>l</code> (nous trouvons <code>le</code>, <code>les</code>, <code>lesa</code>, <code>la</code>, <code>las</code>).</p>
+<h3 id="utilisation-efficace-de-larbre-préfixe">Utilisation efficace de l'arbre préfixe</h3>
+<p>À chaque étape de l'algorithme, nous utilisons l'arbre préfixe, pour savoir si une séquence de caractères constitue un préfixe valide.</p>
+<p>La méthode dédiée, que vous avez implémentée pour le devoir précédent, s'appelle <code>public boolean estPrefixe(String m)</code>. Cette méthode parcourt tous les nœuds de l'arbre jusqu'à déterminer si la chaîne passée en argument constitue un préfixe valide.</p>
+<p>Nous avons ici un problème de complexité algorithmique. Appeler <code>estPrefixe</code> à chaque étape de l'algorithme est inefficace : la complexité est quadratique par rapport au nombre de nœuds visités. En effet, notre algorithme a d'abord demandé si <code>ale</code> était un préfixe, puis si <code>ales</code> était un préfixe. On vérifié deux fois que <code>ale</code> était un préfixe. Il aurait été plus efficace de se souvenir que <code>ale</code> était déjà un préfixe, puis de demander : à partir de <code>ale</code>, peut-on obtenir le préfixe <code>ales</code> ?</p>
+<p>Notre algorithme va donc maintenir un <em>pointeur vers un nœud de l'arbre</em> : au moment de se déplacer <em>dans la grille</em>, l'algorithme se déplacera <em>également dans l'arbre préfixe</em>. Au moment de faire un pas en arrière, notre algorithme <em>reviendra d'une case en arrière dans la grille</em>, et <em>remontera d'un nœud dans l'arbre préfixe</em>. En d'autres termes, nous allons effectuer un parcours simultané de l'arbre préfixe et de la grille.</p>
+<h3 id="méthodes-supplémentaires-pour-les-noeuds">Méthodes supplémentaires pour les <code>Noeud</code>s</h3>
+<p>Pour ce faire, nous aurons besoin de méthodes supplémentaires pour les nœuds. Créez la méthode <code>public Noeud trouveFils(char c)</code> qui prend un caractère, et retourne le nœud parmi les enfants correspondant à ce caractère s'il existe, ou <code>null</code> sinon.</p>
+<p>Une fois cette fonction définie, réutilisez là pour implémenter <code>public boolean estMot()</code> qui vous dit si le nœud marque la fin d'un mot, ou non.</p>
+<p>Un petit test vous est fourni pour vérifier que votre fonction fait bien ce qui est demandé. Activez <code>test5</code> et soumettez la partie correspondante.</p>
+<h2 id="présentation-de-lalgorithme-et-squelette-de-code">Présentation de l'algorithme et squelette de code</h2>
+<p>Voyons maintenant un peu plus en détail comment implémenter cet algorithme.</p>
+<h3 id="spécification-de-lalgorithme">Spécification de l'algorithme</h3>
+<p>Nous aurons une <em>grille</em>, de forme carrée. Les déplacements autorisés sont expliqués dans la vidéo : horizontalement, verticalement, en diagonale. Il est bien évidemment interdit de passer deux fois sur une même case ; tous les déplacements se feront d'au plus une case sur chaque axe.</p>
+<p>L'algorithme maintiendra un <em>état</em>, c'est-à-dire un ensemble de variables qui représentent la progression de l'algorithme. Un état sera constitué des variables suivantes :</p>
+<ul>
+<li>un <em>chemin courant</em> (implicite) : l'ensemble des cases parcourues précédemment ;</li>
+<li>un <em>préfixe courant</em>, c'est-à-dire l'ensemble des caractères trouvés sur le <em>chemin courant</em> (en fond <span style="background-color: #da7b7b; border-radius:
+  50%">rouge</span> sur les exemples) ;</li>
+<li>un <em>masque courant</em>, c'est-à-dire une grille de booléens, qui permet de savoir si une case a été visitée ou pas,</li>
+<li>une <em>liste de mots trouvés</em>.</li>
+</ul>
+<p>L'algorithme s'appellera récursivement, en prenant les paramètres suivants :</p>
+<ul>
+<li>un <em>nœud courant</em>, c'est-à-dire un nœud de l'arbre préfixe correspondant au préfixe courant ;</li>
+<li>une <em>position désirée</em>, c'est-à-dire une case de la grille, représentée par ses coordonnées (lettre entourée en <span style="border: 2px solid #da7b7b;
+  border-radius: 50%; display: inline-block;">rouge</span> sur les exemples).</li>
+</ul>
+<p>Voici un état de l'exploration, tiré de l'exemple vu précédemment.</p>
+<table>
+<colgroup><col width="12%">
+<col width="12%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p><em>e</em></p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><strong>a→</strong></p></td>
+<td align="left"><p><strong>s↑</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p>L'arbre préfixe correspondant est le suivant :</p>
+<pre>        +---+
+        | <span style="background-color: #da7b7b; border-radius: 50%; padding: 0 3px; margin: 0 -3px;">a</span> |
+        +---+
+     ↙    ↓    ↘ 
++---+   +---+   +---+  
+| * | … | <span style="background-color: #da7b7b; border-radius: 50%; padding: 0 3px; margin: 0 -3px;">s</span> | … | z |
++---+   +---+   +---+
+     ↙    ↓    ↘      ↘  
++---+   +---+   +---+   …
+| * | … | e | … | y |
++---+   +---+   +---+
+</pre>
+
+<p>Voici l'état de l'algorithme :</p>
+<ul>
+<li>Le préfixe courant est <code>as</code>.</li>
+<li>Le nœud courant est le nœud <code>s</code> de l'arbre préfixe.</li>
+<li>Le masque courant est :</li>
+</ul>
+<table>
+<colgroup><col width="11%">
+<col width="11%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>false</p></td>
+<td align="left"><p>false</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p>true</p></td>
+<td align="left"><p>true</p></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>La position désirée est le <code>e</code>.</li>
+<li>Les mots trouvés sont <code>a</code> et <code>as</code>.</li>
+</ul>
+<p>Attention, c'est bien vers le nœud <code>s</code> de l'arbre préfixe que nous maintenons un pointeur : ce pointeur correspond à la fin du chemin parcouru. La lettre <code>e</code> constitute la <em>position souhaitée</em> : nous ne l'avons pas encore visitée !</p>
+<p>En effet, si l'algorithme désire aller à la position <code>p</code>, il faut :</p>
+<ul>
+<li>vérifier si ajouter le caractère <code>c</code> à la position <code>p</code> au préfixe courant est possible ; si oui :
+<ul>
+<li>ajouter <code>c</code> au préfixe courant, et</li>
+<li>mettre à jour le nœud courant pour pointer vers le caractère <code>c</code>, et</li>
+<li>se souvenir que nous nous sommes déplacés vers la case <code>p</code> en modifiant le masque ;</li>
+</ul></li>
+<li>vérifier si le nouveau nœud courant marque la fin d'un mot et, le cas échéant, étendre la liste de mots trouvés ;</li>
+<li>faire la liste des déplacements autorisés à partir de la position <code>p</code>, et s'appeler récursivement pour chacune des positions trouvées ;</li>
+<li>restaurer le masque et le préfixe.</li>
+</ul>
+<p>Nous allons implémenter pas à pas cet algorithme.</p>
+<h3 id="classes-exploration-et-position">Classes <code>Exploration</code> et <code>Position</code></h3>
+<p>Créez le fichier <code>Exploration.java</code> et créez les deux classes suivantes.</p>
+<h4 id="classe-exploration">Classe <code>Exploration</code></h4>
+<p>Nous allons créer une classe <code>Exploration</code> ; une instance de cette classe sera créée pour chaque grille que nous souhaiterons explorer.</p>
+<p>La classe <code>Exploration</code> contiendra des données immutables, qui sont les données de l'algorithme. Ces données ne changeront pas au cours de l'exploration. Ajoutez ainsi les variables membres suivantes :</p>
+<pre class="sourceCode java"><code class="sourceCode java">  <span class="dt">final</span> <span class="dt">char</span>[][] grille;
+  <span class="dt">final</span> <span class="dt">int</span> dim;
+  <span class="dt">final</span> Dictionnaire d;</code></pre>
+<p>Le mot-clé <code>final</code> indique que ces variables seront initialisées dans le constructeur, et ne seront plus modifiées par la suite. L'entier <code>dim</code> représente la dimension de la grille (carrée) et le dictionnaire <code>d</code> vous sera fourni. La grille est représentée par un tableau de <code>char</code>. Implémentez le constructeur <code>Exploration (char[][] grille, int dim, Dictionnaire d)</code>.</p>
+<p>Une instance de la classe exploration va représenter l'état dont nous avons parlé précédemment. Ajoutez donc les variables membres suivantes à votre classe. Ces variables seront modifiées au fur et à mesure que l'exploration progresse.</p>
+<pre class="sourceCode java"><code class="sourceCode java">  <span class="co">// Variables représentant l'état de l'exploration, modifiées par les fonctions</span>
+  <span class="co">// "explore" et "exploreTout". Elles seront initialisées par la fonction</span>
+  <span class="co">// "exploreTout`"</span>
+  <span class="dt">boolean</span>[][] masque;
+  LinkedList&lt;Character&gt; prefix;
+  LinkedList&lt;String&gt; motsTrouves;</code></pre>
+<h4 id="classe-position">Classe <code>Position</code></h4>
+<p>La classe <code>Position</code> représente une position dans la grille. La position aura besoin de faire référence aux données de l'<code>Exploration</code> en cours. Vous devrez donc implémenter un constructeur <code>public Position(Exploration e, int x, int y)</code>. De même, la classe <code>Position</code> devra stocker ces trois paramètres dans des variables membres.</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> Position {
+  <span class="dt">final</span> <span class="dt">int</span> x, y;
+  <span class="dt">final</span> Exploration e;
+  ...</code></pre>
+<h2 id="recherche-des-déplacements-autorisés">Recherche des déplacements autorisés</h2>
+<p>Modifiez la classe <code>Position</code>, et ajoutez la méthode <code>private boolean estLegal()</code>. Une position est légale si elle se situe dans la grille et si la case n'a pas déjà été visitée.</p>
+<p>Ajoutez ensuite la méthode <code>public List&lt;Position&gt; deplacementsLegaux()</code> à la classe. Appeler <code>p.deplacementsLegaux()</code> renvoie une liste de positions <code>p'</code>, tel que chaque <code>p'</code> est un déplacement légal accessible à partir de <code>p</code>.</p>
+<p>Un test très simple vous est fourni pour vous aider à vérifier votre code. Activez <code>test6</code> et soumettez la partie correspondante.</p>
+<h2 id="implémentation-de-la-recherche">Implémentation de la recherche</h2>
+<h3 id="échauffement">Échauffement</h3>
+<p>Nous allons commencer par implémenter le point d'entrée de l'algorithme : la méthode <code>public LinkedList&lt;String&gt; exploreTout()</code>. Vous aurez peut-être besoin de <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedList.html">documentation</a> pour la classe <code>LinkedList</code> pour cette partie.</p>
+<h4 id="méthode-explore1">Méthode <code>explore1</code></h4>
+<p>Commencez par implémenter la methode <code>public void explore1(Position p, Noeud n)</code>. Cette méthode est une version simplifiée de la future méthode <code>explore</code> que nous écrirons dans peu de temps : elle n'explore qu'un seul caractère, et ne s'appelle pas récursivement.</p>
+<p>Cette fonction prend une <code>Position</code> désirée <code>p</code>, et le <code>Noeud</code> courant <code>n</code>. Cette fonction doit :</p>
+<ul>
+<li>prendre le caractère <code>c</code> à la position <code>p</code> ;</li>
+<li>vérifier si ajouter <code>c</code> au préfixe courant <code>this.prefix</code> est possible ; si oui :
+<ul>
+<li>ajouter <code>c</code> au préfixe courant <code>this.prefix</code>, et</li>
+<li>se souvenir que nous nous sommes déplacés vers la case <code>p</code> en modifiant le masque ;</li>
+</ul></li>
+<li>vérifier si le nouveau nœud courant marque la fin d'un mot et, le cas échéant, étendre la liste de mots trouvés.</li>
+</ul>
+<p>Pour vérifier si ajouter <code>c</code> au préfixe courant est possible, il suffit de faire appel à la méthode <code>trouveFils</code> du nœud courant <code>n</code> : si <code>trouveFils</code> renvoie <code>null</code>, alors il n'est pas possible de continuer le parcours, et il faut abandonner. Si <code>trouveFils</code> renvoie un nouveau nœud, alors on étend le préfixe.</p>
+<p>Une fois le nouveau nœud obtenu, vous pourrez utiliser la nouvelle méthode <code>estMot()</code> pour déterminer si le nœud correspond à un mot. Si c'est le cas, vous devrez ajouter le préfixe à la liste des mots trouvés.</p>
+<p>Vous aurez besoin de la fonction suivante pour convertir le préfixe qui est une <code>LinkedList&lt;Character&gt;</code> en <code>String</code>, avant de l'ajouter à <code>this.motsTrouves</code>.</p>
+<pre class="sourceCode java"><code class="sourceCode java">  <span class="kw">public</span> <span class="dt">static</span> String <span class="fu">versChaine</span>(LinkedList&lt;Character&gt; l) {
+    StringBuilder sb = <span class="kw">new</span> StringBuilder();
+    <span class="kw">for</span> (Character c: l)
+      sb.<span class="fu">append</span>(c);
+    <span class="kw">return</span> sb.<span class="fu">toString</span>();
+  }</code></pre>
+<h4 id="méthode-exploretout">Méthode <code>exploreTout</code></h4>
+<p>Une fois <code>explore1</code> écrite, écrivez <code>public LinkedList&lt;String&gt; exploreTout()</code>. Cette méthode commence par initialiser les trois variables d'état <code>masque</code>, <code>motsTrouves</code> et <code>prefix</code> mentionnées précédemment, puis parcourt toutes les cases de la grille ; pour chacune des cases, elle lance une exploration à partir de cette case à l'aide de la méthode <code>explore1</code>.</p>
+<p>Une fois les explorations terminées, la fonction renvoie la variable membre <code>this.motsTrouves</code>.</p>
+<p>Nous fournissons une fonction de test sur la grille suivante :</p>
+<table>
+<colgroup><col width="5%">
+<col width="5%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>l</p></td>
+<td align="left"><p>y</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p>a</p></td>
+<td align="left"><p>s</p></td>
+</tr>
+</tbody>
+</table>
+<p>Les seuls mots à une lettre contenus dans cette grille sont <code>y</code> et <code>a</code> («&nbsp;Il <strong>y</strong> <strong>a</strong>...&nbsp;»). Votre fonction <code>test7()</code> doit afficher :</p>
+<pre><code>test7 [y, a] end</code></pre>
+<p>ou bien :</p>
+<pre><code>test7 [a, y] end</code></pre>
+<p>selon l'ordre dans lequel vous présentez la liste des déplacements possibles.</p>
+<p><strong>Pas la peine de soumettre</strong> <code>test7</code> pour l'instant, nous allons améliorer progressivement la sortie produite par cette fonction jusqu'au résultat final. Vous pourrez alors soumettre vos résultats.</p>
+<h4 id="backtracking">Backtracking</h4>
+<p>Vous avez peut-être des mots de plus d'une lettre qui s'affichent dans le test ci-dessus. Si c'est le cas, alors vous avez un problème de <em>backtracking</em>. En effet, la variable <code>prefix</code> est partagée : c'est la même liste qui est utilisée par tous les appels à la fonction <code>explore1</code>. Vous devez donc écrire <code>explore1</code> <em>de manière à garantir qu'elle laisse la variable membre <code>prefix</code> dans l'état où elle l'a trouvé</em>.</p>
+<p>Affichez le masque la fin de la méthode <code>exploreTout</code> (un simple <code>System.out.println</code> devrait donner un affichage lisible). Si votre masque n'est pas revenu dans l'état initial (toutes les cases à <code>false</code>), vous avez le même problème. Modifiez <code>explore1</code> en conséquence.</p>
+<h3 id="exploration-générale">Exploration générale</h3>
+<p>Écrivez maintenant la méthode <code>public void explore(Position p, Noeud n)</code>. Son code est identique à la méthode <code>explore1</code>, si ce n'est qu'elle parcourt la liste des déplacements <code>p'</code> possibles à partir de <code>p</code>, et s'appelle récursivement avec chaque déplacement <code>p'</code> et le <em>nouveau nœud courant</em>.</p>
+<p>Modifiez <code>exploreTout</code> pour qu'elle utilise <code>explore</code> et non plus <code>explore1</code>.</p>
+<p>Votre fonction <code>test7</code> doit maintenant vous donner quelque chose comme (l'ordre, encore une fois, dépendra de vos choix d'exploration) :</p>
+<pre><code>test7 [lys, lysa, la, las, y, a, as, sa] end</code></pre>
+<p><strong>Ça n'est toujours pas nécessaire de soumettre</strong> la fonction <code>test7</code>.</p>
+<h2 id="tri-des-résultats-de-lexploration">Tri des résultats de l'exploration</h2>
+<p>Nous vous demandons, pour finir, de trier les résultats de l'exploration à l'aide de l'ordre naturel sur le couple <code>(longueur du mot, mot)</code>. En d'autres termes, votre fonction <code>test7</code> doit maintenant donner :</p>
+<pre><code>test7 [a, y, as, la, sa, las, lys, lysa] end</code></pre>
+<p>Vous pouvez maintenant soumettre <code>test7</code>.</p>
+<p>Les fonctions <code>test8</code> jusqu'à <code>test11</code> testent votre code sur d'autres grilles de test. Soumettez leurs résultats pour avoir les points. Attention : si un mot est présent plusieurs fois, il doit apparaître plusieurs fois dans votre sortie. La grille suivante doit donner <code>[a, a, a, a]</code>.</p>
+<p>Ces fonctions utilisent des grilles plus larges. Si vous avez des problèmes de performance, vous avez certainement un problème de complexité algorithmique.</p>
+<table>
+<colgroup><col width="5%">
+<col width="5%">
+</colgroup><tbody>
+<tr class="odd">
+<td align="left"><p>a</p></td>
+<td align="left"><p>a</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p>a</p></td>
+<td align="left"><p>a</p></td>
+</tr>
+</tbody>
+</table>
+<p>Pour avoir les points, les résultats devront être triés de la même manière que pour <code>test7</code>.</p><p></p>
+<script type="text/x-mathjax-config;executed=true">
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  
+  styleSheets: [],
+  styles: {},
+
+  jax: ["input/TeX"],
+  
+  extensions: ["tex2jax.js"],
+
+  preJax: null,
+  postJax: null,
+
+  preRemoveClass: "MathJax_Preview",
+
+  showProcessingMessages: true,
+
+  messageStyle: "none",
+  
+  displayAlign: "center",
+  displayIndent: "0em",
+  
+  delayStartupUntil: "none",
+
+  skipStartupTypeset: false,
+  
+  elements: [],
+  
+  tex2jax: {
+	    inlineMath: [
+	                 ['$$','$$'],      // uncomment this for standard TeX math delimiters
+	                 ['\\(','\\)']
+	                 ],
+
+	                 displayMath: [
+	                 ['\\[','\\]']
+	                 ],
+
+    skipTags: ["script","noscript","style","textarea","pre","code"],
+    ignoreClass: "tex2jax_ignore",
+    processClass: "tex2jax_process",
+    processEscapes: false,
+    processEnvironments: true,
+    preview: "TeX"
+    
+  },
+  
+  mml2jax: {
+    preview: "alttext"
+    
+  },
+  
+  jsMath2jax: {
+    preview: "TeX"
+    
+  },
+
+  TeX: {
+    TagSide: "right",
+    TagIndent: ".8em",
+    MultLineWidth: "85%",
+    Macros: {},
+
+    extensions: ["AMSmath.js", "AMSsymbols.js"]
+    
+  },
+
+  //============================================================================
+  //
+  //  These parameters control the MathML inupt jax.
+  //
+  MathML: {
+    //
+    //  This specifies whether to use TeX spacing or MathML spacing when the
+    //  HTML-CSS output jax is used.
+    //
+    useMathMLspacing: false
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the HTML-CSS output jax.
+  //
+  "HTML-CSS": {
+    
+    scale: 100,
+    
+    availableFonts: ["STIX","TeX"],
+    
+    preferredFont: "TeX",
+    
+    webFont: "TeX",
+    
+    imageFont: "TeX",
+    
+    undefinedFamily: "STIXGeneral,'Arial Unicode MS',serif",
+      
+    showMathMenu: true,
+
+    styles: {},
+    
+    tooltip: {
+      delayPost: 600,          // milliseconds delay before tooltip is posted after mouseover
+      delayClear: 600,         // milliseconds delay before tooltip is cleared after mouseout
+      offsetX: 10, offsetY: 5  // pixels to offset tooltip from mouse position
+    }
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the NativeMML output jax.
+  //
+  NativeMML: {
+
+    scale: 100,
+
+    showMathMenu: true,
+    showMathMenuMSIE: true,
+
+    styles: {}
+  },
+  
+  MathMenu: {
+    delay: 400,
+    
+    helpURL: "http://www.mathjax.org/help/user/",
+
+    showRenderer: true,
+    showFontMenu: false,
+    showContext:  false,
+
+    windowSettings: {
+      status: "no", toolbar: "no", locationbar: "no", menubar: "no",
+      directories: "no", personalbar: "no", resizable: "yes", scrollbars: "yes",
+      width: 100, height: 50
+    },
+    
+    styles: {}
+    
+  },
+
+  MMLorHTML: {
+    prefer: {
+      MSIE:    "MML",
+      Firefox: "HTML",
+      Opera:   "HTML",
+      other:   "HTML"
+    }
+  }
+});
+</script>
+</div></div>

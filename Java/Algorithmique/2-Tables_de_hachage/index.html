@@ -1,0 +1,340 @@
+<html itemtype="http://schema.org" xmlns:fb="http://ogp.me/ns/fb#" class="supports-svg"><head><meta content="IE=Edge,chrome=IE7" http-equiv="X-UA-Compatible"><meta content="!" name="fragment"><meta content="NOODP" name="robots"><meta charset="utf-8"><meta content="Coursera" property="og:title"><meta content="website" property="og:type"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" property="og:image"><meta content="https://www.coursera.org/assignment/view?assignment_id=11" property="og:url"><meta content="Coursera" property="og:site_name"><meta content="en_US" property="og:locale"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." property="og:description"><meta content="727836538,4807654" property="fb:admins"><meta content="274998519252278" property="fb:app_id"><meta content="Coursera" name="twitter:site"><meta content="Coursera" name="twitter:app:name:iphone"><meta content="Coursera" name="twitter:app:name:ipad"><meta content="Coursera" name="twitter:app:name:googleplay"><meta content="id736535961" name="twitter:app:id:iphone"><meta content="id736535961" name="twitter:app:id:ipad"><meta content="org.coursera.android" name="twitter:app:id:googleplay"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." name="description"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" name="image"><meta content="app-id=736535961" name="apple-itunes-app"><title>Assignment Details | Coursera</title>    <link type="text/css" rel="stylesheet" href="https://dw0ugk4msqulk.cloudfront.net/d46360155a05cf6b222ae3e8c8df91df805e1b48/css/spark.main.css">
+      <link type="text/css" rel="stylesheet" href="https://www.coursera.org/maestro/api/course/973093/course.css">
+    <link rel="icon" href="https://spark-public.s3.amazonaws.com/algoprog/static/images/favicon.ico">
+<div style="padding-left:5%;padding-right:5%" role="main"><div style="display: block;" id="spark" class="hide"><h2 class="course-page-header">
+  <span>Tables de hachage: Instructions</span>
+
+</h2>
+
+<p>
+<!-- pandoc --mathjax index.markdown > index.html -->
+<style type="text/css">blockquote p {font-size:10.5pt; font-weight:normal;}</style>
+<style type="text/css">
+  table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+    margin: 0; padding: 0; vertical-align: baseline; border: none; }
+  table.sourceCode { width: 100%; }
+  td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+  td.sourceCode { padding-left: 5px; }
+  code &amp;gt; span.kw { color: #007020; font-weight: bold; }
+  code &amp;gt; span.dt { color: #902000; }
+  code &amp;gt; span.dv { color: #40a070; }
+  code &amp;gt; span.bn { color: #40a070; }
+  code &amp;gt; span.fl { color: #40a070; }
+  code &amp;gt; span.ch { color: #4070a0; }
+  code &amp;gt; span.st { color: #4070a0; }
+  code &amp;gt; span.co { color: #60a0b0; font-style: italic; }
+  code &amp;gt; span.ot { color: #007020; }
+  code &amp;gt; span.al { color: #ff0000; font-weight: bold; }
+  code &amp;gt; span.fu { color: #06287e; }
+  code &amp;gt; span.er { color: #ff0000; font-weight: bold; }
+</style>
+
+
+
+</p><h2 id="devoir-2-tables-de-hachage">Tables de hachage</h2>
+<p>D. Rossin vous a présenté à l'aide d'une vidéo le concept de <em>tables de hachage</em>. Dans ce devoir, nous allons implémenter une table de hachage qui utilise des listes chaînées pour gérer les collisions ; notre implémentation ne prendra pas en compte le redimensionnement de la table lorsque le taux de collisions devient trop élevé.</p>
+<h3 id="structure-de-ce-devoir">Structure de ce devoir</h3>
+<p>Nous travaillerons dans un premier temps sur les fonctions de hachage. Ce sera pour vous l'occasion d'implémenter la fonction standard de Java, qui utilise la constante <code>31</code>, mais aussi d'implémenter une autre fonction de hachage. Nous parlerons brièvement de collisions.</p>
+<p>Les tables de hachage, pour gérer les collisions, utilisent des listes chaînées. Bien que la bibliothèque standard de Java fournisse déjà des listes chaînées, nous vous demanderons pour ce sujet de les réimplémenter. Cette partie est relativement facile, et vous permettra, si vous ne l'avez jamais fait, de voir comment on implémente une telle structure de données.</p>
+<p>Enfin, nous nous intéresserons à l'implémentation d'une table de hachage à proprement parler : pour ce faire, nous combinerons les deux premières parties. La présence de multiples fonctions de hachage vous permettra de comparer leurs performances relatives : en effet, la fonction de hachage ultime n'existe pas, et nous verrons que certaines donnent lieu à moins de collisions que d'autres.</p>
+<p>Ce sujet est, comparé au précédent, relativement facile. </p>
+<blockquote>
+<p>Certains paragraphes constituent des digressions qui ne sont pas indispensables pour suivre la progression du sujet : ils sont notés de cette manière.</p>
+</blockquote>
+
+<h2 id="des-objets-et-des-haches">Des objets et des haches</h2>
+<p>L'idée de ce devoir est d'illustrer comment fonctionne le principe des tables de hachage. Une table de hachage stocke des <em>objets</em> ; ces objets ont eux-mêmes un <em>hash</em>, c'est-à-dire une valeur unique qui leur est associée.</p>
+<p>Puisque nous voulons comprendre comme fonctionne le mécanisme de hachage, nous n'allons pas réutiliser le mécanisme de hachage standard de Java (la fonction <code>hashCode()</code>). Nous allons au contraire définir une classe <code>Objet</code>, qui sera la classe des objets allant dans la table de hachage.</p>
+<p>Voici la définition de la classe <code>Objet</code> :</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> Objet {
+  <span class="kw">abstract</span> <span class="dt">int</span> <span class="fu">hash</span>();
+  <span class="kw">abstract</span> String <span class="fu">nom</span>();
+}</code></pre>
+<p>Cette classe est <em>abstraite</em>, c'est-à-dire qu'elle ne peut pas être instanciée à l'aide de l'opérateur <code>new</code> : si vous essayez d'écrire <code>Objet o = new Object();</code>, ce code sera rejeté par le compilateur Java. En effet, les méthodes <code>hash()</code> et <code>nom()</code> sont abstraites : elles n'ont pas d'implémentation.</p>
+<p>Votre rôle ici sera de créer des classes concrètes qui <em>héritent</em> de la classe <code>Objet</code> et qui fournissent des implémentations pour les deux méthodes abstraites. Ainsi, vous pourrez créer <code>Objet1</code> qui hérite de <code>Objet</code>, puis écrire :</p>
+<pre class="sourceCode java"><code class="sourceCode java">Objet o = <span class="kw">new</span> <span class="fu">Objet1</span>();</code></pre>
+<p>Du point de vue fonctionnel, un <code>Objet</code> est simplement une classe qui stocke un nom, et qui offre une méthode pour calculer le hash associé à l'<code>Objet</code>.</p>
+<p>Ici, pour les besoins de l'exercice, notre fonction s'appelle <code>hash</code>.</p>
+<p>Commencez par créer le fichier <code>Objet1.java</code>. La première ligne du fichier sera certainement <code>public class Objet1 extends Objet {</code>.</p>
+<blockquote>
+<p>Parlons un peu plus de la vie réelle. Dans un programme Java classique, vous utiliseriez <code>java.util.Hashtable&lt;K,V&gt;</code>, la classe de la bibliothèque standard Java qui fournit une implémentation des tables de hachage. Celle-ci est paramétrée par le type <code>K</code> des clés et le type <code>V</code> des valeurs.</p>
+</blockquote>
+<blockquote>
+<p>La question cruciale est : comment comparer des objets ? En effet, dans ce TD, le table de hachage <em>sait</em> que les éléments sont des <code>Objet</code>s, et qu'ils ont un champ <code>nom</code>, qui permet de comparer un objet à un autre. On casse ainsi les frontières de l'abstraction au bénéfice d'un TD plus simple. Une vraie implémentation comme celle de la bibliothèque standard se doit d'être <em>générique</em>, c'est-à-dire de fonctionner pour n'importe quel type <code>V</code> des éléments. Comment fait-on pour comparer des éléments de type <code>V</code> alors qu'on n'a, par définition, aucune information sur la nature de <code>V</code> ? Il suffit d'exiger que <code>V</code> fournisse une méthode <code>equals</code> qui implémente la comparaison. C'est vrai de toute classe Java : en effet, chaque classe Java hérite de la classe de base <code>Object</code>, qui fournit une fonction <code>equals</code>.</p>
+</blockquote>
+<blockquote>
+<p>L'implémentation par défaut de la fonction <code>equals</code> utilise l'adresse de l'objet : un objet est, par défaut, égal seulement à lui-même. En pratique, on veut faire mieux : si, comme dans la vidéo introductive, vous avez des listes de personnes, on voudra dire que deux personnes sont égales du moment que les noms, prénoms, et adresses email sont égales. Ainsi, deux objets distincts en mémoire pourront être considérés <em>structurellement</em> égaux.</p>
+</blockquote>
+<blockquote>
+<p>Pour cette raison, dans la vie réelle, avant de ranger vos <code>Objet</code>s dans la table de hachage, vous devrez implémenter une fonction <code>equals</code> correcte. Sans cela, le code suivant afficherait <code>false</code>:</p>
+</blockquote>
+<pre class="sourceCode java"><code class="sourceCode java">Hashtable&lt;String, Objet&gt; h = <span class="kw">new</span> Hashtable&lt;String, Objet&gt;();
+h.<span class="fu">put</span>(<span class="kw">new</span> <span class="fu">Objet1</span>(<span class="st">"coucou"</span>));
+System.<span class="fu">out</span>.<span class="fu">println</span>(h.<span class="fu">contains</span>(<span class="kw">new</span> <span class="fu">Objet1</span>(<span class="st">"coucou"</span>)));</code></pre>
+<blockquote>
+<p>Parlons maintenant de la relation entre <code>equals</code> et <code>hashCode</code>.</p>
+</blockquote>
+<blockquote>
+<p>La classe <code>Objet</code> fournit aussi une implémentation par défaut de <code>hashCode</code>, qui se base également sur l'adresse mémoire. Imaginons un instant que nous redéfinissions <code>equals</code> sans redéfinir <code>hashCode</code>. Deux objets distincts en mémoire pourraient ainsi être égaux, sans pour autant avoir le même hash. Il serait alors possible d'ajouter chaque objet séparément dans la table de hachage, car ils finiraient dans des listes distinctes. On aurait ainsi violé l'invariant de la table de hachage.</p>
+</blockquote>
+<blockquote>
+<p>Il est donc essentiel, dès lors que l'on modifie <code>equals</code>, de modifier la fonction <code>hashCode</code> de manière à garantir l'invariant suivant : <strong>deux objets égaux ont nécessairement le même hash</strong>.</p>
+</blockquote>
+<blockquote>
+<p>Cet invariant est explicitement spécifié dans la <a href="http://docs.oracle.com/javase/1.4.2/docs/api/java/lang/Object.html#hashCode%28%29">documentation java</a>.</p>
+</blockquote>
+<blockquote>
+<p>Dans un programme Java réel, vous écririez :</p>
+</blockquote>
+<pre class="sourceCode java"><code class="sourceCode java">@Override
+<span class="kw">public</span> <span class="dt">int</span> <span class="fu">hashCode</span>() {
+  ...
+}
+
+@Override
+<span class="kw">public</span> <span class="dt">int</span> <span class="fu">equals</span>() {
+}</code></pre>
+<h3 id="constructeur">Constructeur</h3>
+<p>Les objets peuvent être construits à l'aide du constructeur <code>Objet1(String nom)</code>. Commencez par implémenter ce constructeur, puis écrivez la fonction <code>public String nom()</code> qui retourne le nom qui a été fourni auparavant via le constructeur.</p>
+<h3 id="fonction-de-hash-standard">Fonction de hash standard</h3>
+<p>Nous allons d'abord implémenter la fonction de hachage standard de Java. Si s est la chaîne de caractères, alors son hachage est défini par :</p>
+<p><span class="MathJax_Preview"></span></p><div style="text-align: center;" aria-readonly="true" role="textbox" class="MathJax_Display"><span style="" id="MathJax-Element-1-Frame" class="MathJax"><nobr><span id="MathJax-Span-1" class="math"><span style="display: inline-block; position: relative; width: 220px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(0.768em, 1000em, 4.017em, -0.462em); top: -2.652em; left: 0em;"><span id="MathJax-Span-2" class="mrow"><span id="MathJax-Span-3" class="texatom"><span id="MathJax-Span-4" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-5" class="mi">h</span><span style="font-family: MathJax_Main;" id="MathJax-Span-6" class="mi">a</span><span style="font-family: MathJax_Main;" id="MathJax-Span-7" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-8" class="mi">h</span></span></span><span style="font-family: MathJax_Main;" id="MathJax-Span-9" class="mo">(</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-10" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-11" class="mo">)</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-12" class="mo">=</span><span style="padding-left: 0.278em;" id="MathJax-Span-13" class="munderover"><span style="display: inline-block; position: relative; width: 1.461em; height: 0px;"><span style="position: absolute; clip: rect(2.621em, 1000em, 4.346em, -0.432em); top: -3.734em; left: 0em;"><span style="font-family: MathJax_Size2; vertical-align: 0em;" id="MathJax-Span-14" class="mo">∑</span><span style="display: inline-block; width: 0px; height: 3.734em;"></span></span><span style="position: absolute; clip: rect(1.91em, 1000em, 2.821em, -0.472em); top: -1.456em; left: 0.135em;"><span id="MathJax-Span-15" class="texatom"><span id="MathJax-Span-16" class="mrow"><span style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-17" class="mi">i</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-18" class="mo">=</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-19" class="mn">0</span></span></span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span><span style="position: absolute; clip: rect(1.81em, 1000em, 2.713em, -0.472em); top: -3.693em; left: 0.054em;"><span id="MathJax-Span-20" class="texatom"><span id="MathJax-Span-21" class="mrow"><span style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-22" class="mi">n</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-23" class="mo">−</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-24" class="mn">1</span></span></span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.167em;" id="MathJax-Span-25" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-26" class="mo">[</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-27" class="mi">i</span><span style="font-family: MathJax_Main;" id="MathJax-Span-28" class="mo">]</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-29" class="mo">×</span><span style="padding-left: 0.222em;" id="MathJax-Span-30" class="msubsup"><span style="display: inline-block; position: relative; width: 3.214em; height: 0px;"><span style="position: absolute; clip: rect(1.823em, 1000em, 2.836em, -0.445em); top: -2.652em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-31" class="mn">31</span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span><span style="position: absolute; top: -2.956em; left: 0.974em;"><span id="MathJax-Span-32" class="texatom"><span id="MathJax-Span-33" class="mrow"><span style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-34" class="mi">n</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-35" class="mo">−</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-36" class="mn">1</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-37" class="mo">−</span><span style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-38" class="mi">i</span></span></span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 4.003em; vertical-align: -1.66em;"></span></span></nobr></span></div><script id="MathJax-Element-1" type="math/tex; mode=display">
+\mathrm{hash}(s) = \sum_{i=0}^{n-1}s[i]\times 31^{n-1-i}
+</script><p></p>
+<p>En d'autres termes,</p>
+<p><span class="MathJax_Preview"></span></p><div style="text-align: center;" aria-readonly="true" role="textbox" class="MathJax_Display"><span style="" id="MathJax-Element-2-Frame" class="MathJax"><nobr><span id="MathJax-Span-39" class="math"><span style="display: inline-block; position: relative; width: 429px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.605em, 1000em, 3.064em, -0.462em); top: -2.652em; left: 0em;"><span id="MathJax-Span-40" class="mrow"><span id="MathJax-Span-41" class="texatom"><span id="MathJax-Span-42" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-43" class="mi">h</span><span style="font-family: MathJax_Main;" id="MathJax-Span-44" class="mi">a</span><span style="font-family: MathJax_Main;" id="MathJax-Span-45" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-46" class="mi">h</span></span></span><span style="font-family: MathJax_Main;" id="MathJax-Span-47" class="mo">(</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-48" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-49" class="mo">)</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-50" class="mo">=</span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.278em;" id="MathJax-Span-51" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-52" class="mo">[</span><span style="font-family: MathJax_Main;" id="MathJax-Span-53" class="mn">0</span><span style="font-family: MathJax_Main;" id="MathJax-Span-54" class="mo">]</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-55" class="mo">×</span><span style="padding-left: 0.222em;" id="MathJax-Span-56" class="msubsup"><span style="display: inline-block; position: relative; width: 2.402em; height: 0px;"><span style="position: absolute; clip: rect(1.823em, 1000em, 2.836em, -0.445em); top: -2.652em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-57" class="mn">31</span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span><span style="position: absolute; top: -2.956em; left: 0.974em;"><span id="MathJax-Span-58" class="texatom"><span id="MathJax-Span-59" class="mrow"><span style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-60" class="mi">n</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-61" class="mo">−</span><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-62" class="mn">1</span></span></span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-63" class="mo">+</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-64" class="mo">…</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-65" class="mo">+</span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.222em;" id="MathJax-Span-66" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-67" class="mo">[</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-68" class="mi">n</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-69" class="mo">−</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-70" class="mn">2</span><span style="font-family: MathJax_Main;" id="MathJax-Span-71" class="mo">]</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-72" class="mo">×</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-73" class="mn">31</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-74" class="mo">+</span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.222em;" id="MathJax-Span-75" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-76" class="mo">[</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-77" class="mi">n</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-78" class="mo">−</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-79" class="mn">1</span><span style="font-family: MathJax_Main;" id="MathJax-Span-80" class="mo">]</span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.64em; vertical-align: -0.401em;"></span></span></nobr></span></div><script id="MathJax-Element-2" type="math/tex; mode=display">
+\mathrm{hash}(s) = s[0]\times 31^{n-1} + \ldots + s[n-2]\times 31 + s[n-1]
+</script><p></p>
+<p>Cette fonction peut s'implémenter à l'aide d'une simple boucle <code>for</code> <strong>sans utiliser autre chose que des additions ou des multiplications</strong>. Si vous utilisez <code>BigInteger</code> ou <code>Math.pow</code>, vous allez avoir des problèmes de conversion entre flottants et nombres entiers, et vous serez de surcroît inefficace.</p>
+<p>Implémentez la méthode <code>hash()</code> de la classe <code>Objet1</code>. Nous rappelons que que le i-caractère de la chaîne <code>s</code> s'obtient avec <code>s.charAt(i)</code>.</p>
+<blockquote>
+<p>Il est important de comprendre les règles de promotion en Java. La <a href="http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html">référence complète</a> est un peu aride, voici donc un résumé de ce qui vous concerne pour cette question. Une conversion a lieu quand on opérateur binaire est appliqué à deux opérandes qui n'ont pas la même taille. Par exemple, si <code>c</code> est un caractère (type <code>char</code>) et que <code>h</code> est un entier (type <code>int</code>), l'opération <code>c + h</code> est une opération binaire (le <code>+</code>) appliquée à deux opérandes (<code>c</code> et <code>h</code>) qui n'ont pas la même taille. En effet, en Java, <code>c</code> occupe 16 bits, c'est un <em>codepoint</em> UCS-2, tandis que <code>h</code> est un entier 32 bits, par définition. Dans cette situation, un <em>élargissement</em> a lieu : <code>c</code> est <strong>automatiquement</strong> converti en entier 32 bits de manière à garantir que l'opération ne donne pas lieu à une perte de précision. En clair : <strong>vous n'avez pas besoin d'écrire de casts pour implémenter <code>hash</code></strong>.</p>
+</blockquote>
+<p>Cette fonction de hash dépassera rapidement l'entier maximum représentable dans le type java <code>int</code> (entiers signés 31 bits). Il se produira alors un dépassement de capacité, et le code de hash deviendra négatif. C'est le comportement attendu. Le type <code>int</code> a l'avantage de faire la même taille sur les machines 32 et 64 bits ; les résultats des tests ne dépendront donc pas de votre architecture.</p>
+<p>Testez votre fonction de hachage : le hash de la chaîne <code>"coucou"</code> est <code>-1354586272</code>. Le hash de la chaîne "Bonjour Coursera" est <code>-1895827609</code>. La définition ci-dessus est bien définie pour la chaîne vide ! Quel doit être son hash ?</p>
+<p>Activez la fonction <code>test1a</code> et soumettez la première partie.</p>
+<h3 id="fonction-de-hash-alternative">Fonction de hash alternative</h3>
+<p>Il existe tout un folklore de fonctions de hachage : la plupart ont été élaborées de manière empirique, utilisent des constantes qui, en pratique, donnent une bonne distribution, et sont le fruit de beaucoup d'essais / erreurs. Une fonction de hachage doit bien distribuer les bits de son entrée ; une manière classique de le faire est à l'aide d'un processus itératif qui combine une valeur initiale avec les caractères de la chaîne.</p>
+<p>Voici une deuxième fonction de hachage, que nous vous proposons d'implémenter. Elle combine le i-ième caractère avec le hash <code>h</code> de manière différente.</p>
+<p><span class="MathJax_Preview"></span></p><div style="text-align: center;" aria-readonly="true" role="textbox" class="MathJax_Display"><span style="" id="MathJax-Element-3-Frame" class="MathJax"><nobr><span id="MathJax-Span-81" class="math"><span style="display: inline-block; position: relative; width: 261px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.672em, 1000em, 3.064em, -0.462em); top: -2.652em; left: 0em;"><span id="MathJax-Span-82" class="mrow"><span id="MathJax-Span-83" class="texatom"><span id="MathJax-Span-84" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-85" class="mi">h</span><span style="font-family: MathJax_Main;" id="MathJax-Span-86" class="mi">a</span><span style="font-family: MathJax_Main;" id="MathJax-Span-87" class="mi">s</span><span id="MathJax-Span-88" class="msup"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.795em, 1000em, 2.814em, -0.462em); top: -2.652em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-89" class="mi">h</span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span><span style="position: absolute; top: -2.964em; left: 0.541em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-90" class="mo">′</span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span></span></span><span style="font-family: MathJax_Main;" id="MathJax-Span-91" class="mo">(</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-92" class="mi">i</span><span style="font-family: MathJax_Main;" id="MathJax-Span-93" class="mo">)</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-94" class="mo">=</span><span style="padding-left: 0.278em;" id="MathJax-Span-95" class="texatom"><span id="MathJax-Span-96" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-97" class="mi">h</span><span style="font-family: MathJax_Main;" id="MathJax-Span-98" class="mi">a</span><span style="font-family: MathJax_Main;" id="MathJax-Span-99" class="mi">s</span><span id="MathJax-Span-100" class="msup"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.795em, 1000em, 2.814em, -0.462em); top: -2.652em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-101" class="mi">h</span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span><span style="position: absolute; top: -2.964em; left: 0.541em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-102" class="mo">′</span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span></span></span><span style="font-family: MathJax_Main;" id="MathJax-Span-103" class="mo">(</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-104" class="mi">i</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-105" class="mo">−</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-106" class="mn">1</span><span style="font-family: MathJax_Main;" id="MathJax-Span-107" class="mo">)</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-108" class="mo">∗</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-109" class="mn">33</span><span style="font-family: MathJax_Main; padding-left: 0.222em;" id="MathJax-Span-110" class="mo">⊕</span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.222em;" id="MathJax-Span-111" class="mi">s</span><span style="font-family: MathJax_Main;" id="MathJax-Span-112" class="mo">[</span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-113" class="mi">i</span><span style="font-family: MathJax_Main;" id="MathJax-Span-114" class="mo">]</span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.551em; vertical-align: -0.401em;"></span></span></nobr></span></div><script id="MathJax-Element-3" type="math/tex; mode=display">
+\mathrm{hash'}(i) = \mathrm{hash'}(i-1) * 33 \oplus s[i]
+</script> <span class="MathJax_Preview"></span><div style="text-align: center;" aria-readonly="true" role="textbox" class="MathJax_Display"><span style="" id="MathJax-Element-4-Frame" class="MathJax"><nobr><span id="MathJax-Span-115" class="math"><span style="display: inline-block; position: relative; width: 144px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.672em, 1000em, 3.064em, -0.462em); top: -2.652em; left: 0em;"><span id="MathJax-Span-116" class="mrow"><span id="MathJax-Span-117" class="texatom"><span id="MathJax-Span-118" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-119" class="mi">h</span><span style="font-family: MathJax_Main;" id="MathJax-Span-120" class="mi">a</span><span style="font-family: MathJax_Main;" id="MathJax-Span-121" class="mi">s</span><span id="MathJax-Span-122" class="msup"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.795em, 1000em, 2.814em, -0.462em); top: -2.652em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-123" class="mi">h</span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span><span style="position: absolute; top: -2.964em; left: 0.541em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-124" class="mo">′</span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span></span></span><span style="font-family: MathJax_Main;" id="MathJax-Span-125" class="mo">(</span><span style="font-family: MathJax_Main;" id="MathJax-Span-126" class="mo">−</span><span style="font-family: MathJax_Main;" id="MathJax-Span-127" class="mn">1</span><span style="font-family: MathJax_Main;" id="MathJax-Span-128" class="mo">)</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-129" class="mo">=</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-130" class="mn">5381</span><span style="font-family: MathJax_Main;" id="MathJax-Span-131" class="mo">;</span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.551em; vertical-align: -0.401em;"></span></span></nobr></span></div><script id="MathJax-Element-4" type="math/tex; mode=display">
+\mathrm{hash'}(-1) = 5381;
+</script><p></p>
+<p>L'opérateur mathématique ⊕ est le « ou exclusif » ; il est disponible en Java via l'opérateur <code>^</code>. Cette définition se prête naturellement à un calcul itératif ; implémentez la classe <code>Objet2</code> qui est en tous points similaire à la classe <code>Objet1</code>, si ce n'est que sa fonction <code>hash</code> utilise la fonction de hash alternative.</p>
+<p>Testez votre fonction de hachage : le hash de la chaîne <code>"coucou"</code> est <code>1544958309</code>.</p>
+<p>Activez la fonction <code>test1b</code> et soumettez la deuxième partie.</p>
+<h3 id="fonction-de-hash-fournie">Fonction de hash fournie</h3>
+<p>Nous fournissons une classe <code>Objet3</code> qui implémente une troisième fonction de hachage, et qui sera utile lors de la troisième partie.</p>
+<blockquote>
+<p>De nombreux ouvrages d'algorithmique traitent de la question des fonctions de hachage. On pourra se référer, au besoin, aux ouvrages de D. Knuth, ou de T. Cormen.</p>
+</blockquote>
+<h2 id="listes-simplement-chaînées">Listes simplement chaînées</h2>
+<p>Nous avons maintenant besoin de listes pour stocker les éléments qui possèdent le même hash. Des listes simplement chaînées suffisent. L'objet de cette partie est d'implémenter des listes impératives ; pour ne pas compliquer inutilement le sujet, nos listes ne seront <strong>pas</strong> génériques : vous pouvez faire l'hypothèse que les éléments de la liste sont des <code>Objet</code>s.</p>
+<h3 id="rappel-sur-les-fonctionnement-des-listes-impératives">Rappel sur les fonctionnement des listes impératives</h3>
+<p>Une liste simplement chaînée est constituée d'une successions de cellules ; chaque cellule pointe vers la suivante, et la dernière cellule ne pointe vers rien, c'est-à-dire que son champ <code>suivant</code> vaut <code>null</code>.</p>
+<p>Nous voulons ici une structure de données impérative. Si ma liste s'appelle <code>l</code> et que je souhaite y ajouter l'objet <code>o</code>, écrire <code>l.ajouterTete(o);</code> a pour <em>effet</em> de modifier <code>l</code> <em>en place</em>. Après cette ligne, <code>l</code> a changé et contient désormais <code>o</code>.</p>
+<blockquote>
+<p>Les structures de données impératives s'opposent aux structures fonctionnelles, ou persistentes : une autre approche aurait consisté à <em>renvoyer une nouvelle liste</em>. Ainsi, on aurait pu écrire <code>Liste l2 = l.ajouterTete(o);</code>. Dans ce cas-là, <code>l2</code> aurait contenu la nouvelle liste, tandis que <code>l</code> aurait toujours contenu l'ancienne liste.</p>
+</blockquote>
+<p>Pour implémenter facilement une liste impérative, on peut créer, en plus de la classe <code>Cellule</code>, une classe <code>Liste</code>, qui contient une référence vers la tête de la liste. Ainsi, <code>Liste</code> aura un champ <code>private Cellule tete;</code>. Ce champ sera modifié au fur et à mesure des appels à <code>ajouterTete</code> et <code>supprimerTete</code> : c'est donc bien une structure de données impératives.</p>
+<p>Nous imposons dans ce sujet une contrainte supplémentaire : les fonctions d'ajout et de suppression <em>renvoient l'objet liste lui-même</em>. Ceci permet de chaîner les appels, comme dans par exemple <code>l.ajouterTete(o1).ajouterTete(o2);</code>.</p>
+<p>Créez le fichier <code>Liste.java</code>.</p>
+<h3 id="implémentation-attendue">Implémentation attendue</h3>
+<p>Vous êtes libre de choisir la représentation que vous voulez pour les cellules. En revanche, vos listes chaînées doivent implémenter la classe appelée <code>Liste</code> et offrir les fonctions suivantes :</p>
+<ul>
+<li><code>Liste()</code>, le constructeur par défaut;</li>
+<li><code>public Liste ajouteTete(Objet val)</code>, qui ajoute <code>val</code> en tête de la liste, et renvoie la liste elle-même ;</li>
+<li><code>public Liste supprimeTete()</code>, qui lance une exception <code>java.util.NoSuchElementException</code> si la liste est vide, ou supprime l'élément en tête de la liste, et renvoie la liste elle-même sinon ;</li>
+<li><code>public boolean contient(Objet o)</code>, qui renvoie <code>true</code> si la liste contient un élément portant le même nom que <code>o</code> (attention, les chaînes de caractères <code>s1</code> et <code>s2</code> se comparent avec <code>if (s1.equals(s2)) ...</code>) ;</li>
+<li><code>public int longueur()</code> qui renvoie la longueur de la liste.</li>
+</ul>
+<p>Vous devrez probablement importer <code>java.util.NoSuchElementException</code> en tête de votre fichier.</p>
+<h3 id="tests">Tests</h3>
+<p>Vérifiez bien que vos fonctions ont la sémantique attendue. N'oubliez pas que le code suivante doit réussir, car on compare les objets de manière <em>structurelle</em> : c'est le nom des objets qui est comparé, et pas l'adresse de l'objet. Votre code de <code>Liste</code> doit donc tenir compte de ce fait.</p>
+<pre class="sourceCode java"><code class="sourceCode java">Liste l = <span class="kw">new</span> <span class="fu">Liste</span>();
+l.<span class="fu">ajouteTete</span>(<span class="kw">new</span> <span class="fu">Objet1</span>(<span class="st">"toto"</span>));
+assert l.<span class="fu">contient</span>(<span class="kw">new</span> <span class="fu">Objet1</span>(<span class="st">"toto"</span>));</code></pre>
+<blockquote>
+<p>Un programme java idiomatique aurait ici écrasé la méthode par défaut <code>equals</code> de la classe <code>Objet</code>.</p>
+</blockquote>
+<h3 id="soumission">Soumission</h3>
+<p>Activez la fonction <code>test2</code> et soumettez la troisième partie.</p>
+<h2 id="tables-de-hachage">Tables de hachage</h2>
+<p>Il s'agit maintenant de combiner le travail effectué dans les deux premières parties pour implémenter des tables de hachage.</p>
+<p>La table de hachage contiendra un tableau de <code>Liste</code>s à usage interne, et fera appel aux méthodes <code>hash()</code> des <code>Objet</code>s stockés. Encore une fois, la table de hachage ne sera pas générique : vous pouvez donc faire l'hypothèse que tous les objets que vous manipulez sont des <code>Objet</code>s. Ceci sera particulièrement utile lors de la gestion des collisions.</p>
+<p>Voici la description de la classe <code>TableDeHachage</code> que vous devez écrire.</p>
+<ul>
+<li><code>TableDeHachage(int n)</code>, constructeur qui prend la taille initiale de la table (nombre de listes utilisées en interne).</li>
+<li><code>public void ajoute(Objet o)</code>, pour ajouter un élément dans la table.</li>
+<li><code>public boolean contient(Objet o)</code>, pour tester si la table contient un élément.</li>
+</ul>
+<p>Nous vous demandons d'écrire une fonction supplémentaire par rapport à l'interface standard des tables de hachage. Cette fonction nous permettra de tester que votre code se comporte correctement.</p>
+<ul>
+<li><code>public int[] remplissageMax()</code>: cette fonction trouve la <code>Liste</code> qui est la plus remplie, et renvoie un tableau de deux entiers. Le premier entier est l'index de cette liste dans le tableau interne, et le second est le nombre d'éléments dans la liste. Dans le cas où plusieurs listes ont le même remplissage, cette fonction doit renvoyer la "première" liste, c'est-à-dire celle dont l'index est le plus petit dans la table. Dit encore différemment, celle qui a le plus petit hash <em>après</em> modulo.</li>
+</ul>
+<p>Copiez le code de <code>test4</code> dans une fonction à vous, et comparez les remplissages maximaux pour les <code>Objet1</code>, <code>Objet2</code> et <code>Objet3</code>. Quelle est la meilleure fonction de hachage ?</p>
+<p>Testez votre code avec une fonction de hachage idiote, qui renvoie tout le temps la même valeur. Vous vous retrouverez avec la pire complexité, mais vous pourrez tester facilement votre gestion des collisions.</p>
+<p>Attention : nous avons mentionné qu'un hash peut être négatif. Vous aurez besoin de faire appel à l'opérateur modulo pour ramener un hash dans les dimensions de la table interne. Quel est comportement de l'opérateur modulo sur les nombres négatifs en Java ?</p>
+<p>Une fois le problème ci-dessus compris, nous vous demandons d'y remédier en <em>additionant la taille de la table au modulo négatif</em>. En clair, si <code>m</code> est votre modulo, écrivez <code>if (m &lt; 0) m += table.length</code>.</p>
+<p>Activez la fonction <code>test3</code>, et soumettez la quatrième partie. Vérifiez que votre table de hachage a bien le comportement attendu sur ce test. Les deux chaînes utilisées n'ont pas été choisies au hasard. Quelle est leur particularité ?</p>
+<p>Une fois cette étape validée, activez la fonction <code>test4</code>, et soumettez la dernière partie.</p>
+<h2 id="questions-facultatives">Questions facultatives</h2>
+<p>Si ce sujet vous semble trop court ou trop facile, voici quelques questions bonus. Elles ne sont pas notées.</p>
+<ul>
+<li>Implémentez une opération de suppression d'un élément dans la table de hachage. Vous devrez implémenter la suppression <em>en place</em> d'un élément dans une liste.</li>
+<li>Implémentez le redimensionnement de la table. Commencez par garder un compteur du nombre d'éléments dans la table. À chaque ajout, si le taux de remplissage dépasse <code>0.5</code>, créez un tableau interne deux fois plus grand, et ajoutez de nouveau tous les éléments dans le tableau.</li>
+</ul><p></p>
+<script type="text/x-mathjax-config;executed=true">
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  
+  styleSheets: [],
+  styles: {},
+
+  jax: ["input/TeX"],
+  
+  extensions: ["tex2jax.js"],
+
+  preJax: null,
+  postJax: null,
+
+  preRemoveClass: "MathJax_Preview",
+
+  showProcessingMessages: true,
+
+  messageStyle: "none",
+  
+  displayAlign: "center",
+  displayIndent: "0em",
+  
+  delayStartupUntil: "none",
+
+  skipStartupTypeset: false,
+  
+  elements: [],
+  
+  tex2jax: {
+	    inlineMath: [
+	                 ['$$','$$'],      // uncomment this for standard TeX math delimiters
+	                 ['\\(','\\)']
+	                 ],
+
+	                 displayMath: [
+	                 ['\\[','\\]']
+	                 ],
+
+    skipTags: ["script","noscript","style","textarea","pre","code"],
+    ignoreClass: "tex2jax_ignore",
+    processClass: "tex2jax_process",
+    processEscapes: false,
+    processEnvironments: true,
+    preview: "TeX"
+    
+  },
+  
+  mml2jax: {
+    preview: "alttext"
+    
+  },
+  
+  jsMath2jax: {
+    preview: "TeX"
+    
+  },
+
+  TeX: {
+    TagSide: "right",
+    TagIndent: ".8em",
+    MultLineWidth: "85%",
+    Macros: {},
+
+    extensions: ["AMSmath.js", "AMSsymbols.js"]
+    
+  },
+
+  //============================================================================
+  //
+  //  These parameters control the MathML inupt jax.
+  //
+  MathML: {
+    //
+    //  This specifies whether to use TeX spacing or MathML spacing when the
+    //  HTML-CSS output jax is used.
+    //
+    useMathMLspacing: false
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the HTML-CSS output jax.
+  //
+  "HTML-CSS": {
+    
+    scale: 100,
+    
+    availableFonts: ["STIX","TeX"],
+    
+    preferredFont: "TeX",
+    
+    webFont: "TeX",
+    
+    imageFont: "TeX",
+    
+    undefinedFamily: "STIXGeneral,'Arial Unicode MS',serif",
+      
+    showMathMenu: true,
+
+    styles: {},
+    
+    tooltip: {
+      delayPost: 600,          // milliseconds delay before tooltip is posted after mouseover
+      delayClear: 600,         // milliseconds delay before tooltip is cleared after mouseout
+      offsetX: 10, offsetY: 5  // pixels to offset tooltip from mouse position
+    }
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the NativeMML output jax.
+  //
+  NativeMML: {
+
+    scale: 100,
+
+    showMathMenu: true,
+    showMathMenuMSIE: true,
+
+    styles: {}
+  },
+  
+  MathMenu: {
+    delay: 400,
+    
+    helpURL: "http://www.mathjax.org/help/user/",
+
+    showRenderer: true,
+    showFontMenu: false,
+    showContext:  false,
+
+    windowSettings: {
+      status: "no", toolbar: "no", locationbar: "no", menubar: "no",
+      directories: "no", personalbar: "no", resizable: "yes", scrollbars: "yes",
+      width: 100, height: 50
+    },
+    
+    styles: {}
+    
+  },
+
+  MMLorHTML: {
+    prefer: {
+      MSIE:    "MML",
+      Firefox: "HTML",
+      Opera:   "HTML",
+      other:   "HTML"
+    }
+  }
+});
+</script>
+</div></div>

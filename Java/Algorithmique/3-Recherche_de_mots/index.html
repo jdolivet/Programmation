@@ -1,0 +1,292 @@
+<html itemtype="http://schema.org" xmlns:fb="http://ogp.me/ns/fb#" class="supports-svg"><head><meta content="IE=Edge,chrome=IE7" http-equiv="X-UA-Compatible"><meta content="!" name="fragment"><meta content="NOODP" name="robots"><meta charset="utf-8"><meta content="Coursera" property="og:title"><meta content="website" property="og:type"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" property="og:image"><meta content="https://www.coursera.org/assignment/view?assignment_id=11" property="og:url"><meta content="Coursera" property="og:site_name"><meta content="en_US" property="og:locale"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." property="og:description"><meta content="727836538,4807654" property="fb:admins"><meta content="274998519252278" property="fb:app_id"><meta content="Coursera" name="twitter:site"><meta content="Coursera" name="twitter:app:name:iphone"><meta content="Coursera" name="twitter:app:name:ipad"><meta content="Coursera" name="twitter:app:name:googleplay"><meta content="id736535961" name="twitter:app:id:iphone"><meta content="id736535961" name="twitter:app:id:ipad"><meta content="org.coursera.android" name="twitter:app:id:googleplay"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." name="description"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" name="image"><meta content="app-id=736535961" name="apple-itunes-app"><title>Assignment Details | Coursera</title>    <link type="text/css" rel="stylesheet" href="https://dw0ugk4msqulk.cloudfront.net/d46360155a05cf6b222ae3e8c8df91df805e1b48/css/spark.main.css">
+      <link type="text/css" rel="stylesheet" href="https://www.coursera.org/maestro/api/course/973093/course.css">
+    <link rel="icon" href="https://spark-public.s3.amazonaws.com/algoprog/static/images/favicon.ico">
+<div style="padding-left:5%;padding-right:5%" role="main"><div style="display: block;" id="spark" class="hide"><h2 class="course-page-header">
+  <span>Recherche de mots dans une grille: Instructions</span>
+
+</h2>
+
+<p>
+<style type="text/css">blockquote p {font-size:10.5pt; font-weight:normal;}</style>
+<style type="text/css">
+  table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+    margin: 0; padding: 0; vertical-align: baseline; border: none; }
+  table.sourceCode { width: 100%; }
+  td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+  td.sourceCode { padding-left: 5px; }
+  code &gt; span.kw { color: #007020; font-weight: bold; }
+  code &gt; span.dt { color: #902000; }
+  code &gt; span.dv { color: #40a070; }
+  code &gt; span.bn { color: #40a070; }
+  code &gt; span.fl { color: #40a070; }
+  code &gt; span.ch { color: #4070a0; }
+  code &gt; span.st { color: #4070a0; }
+  code &gt; span.co { color: #60a0b0; font-style: italic; }
+  code &gt; span.ot { color: #007020; }
+  code &gt; span.al { color: #ff0000; font-weight: bold; }
+  code &gt; span.fu { color: #06287e; }
+  code &gt; span.er { color: #ff0000; font-weight: bold; }
+</style>
+</p><h2 id="présentation-du-devoir">Présentation du devoir</h2>
+<p>Cet exercice est le premier pas vers la résolution du jeu donné en vidéo d'introduction du cours. Pour mémoire, il s'agissait de trouver le plus grand nombre possible de mots dans une grille de lettres, en se déplaçant horizontalement, verticalement ou en diagonale.</p>
+<p>Cette semaine, nous implémentons la structure de données nécessaire pour représenter un dictionnaire efficacement : un <em>arbre préfixe</em>. La semaine prochaine, nous reprendrons ce sujet et utiliserons les arbres préfixes que vous avez codés pour trouver les mots dans une grille. Il est donc essentiel de terminer ce sujet pour pouvoir faire le suivant.</p>
+<h3 id="rappels-de-java">Rappels de Java</h3>
+<p>Nous rappelons que pour itérer sur une structure de données en java, on peut utiliser la syntaxe suivante :</p>
+<pre class="sourceCode java"><code class="sourceCode java">LinkedList&lt;T&gt; l = ...;
+<span class="kw">for</span> (T x: l) {
+  <span class="co">// faire quelque chose avec x</span>
+}</code></pre>
+<p>Nous rappelons également deux instructions de contrôle de boucle : dans le corps d'une boucle, l'instruction <code>continue</code> permet de passer directement à l'itération suivante d'une boucle sans exécuter le reste du corps de la boucle ; l'instruction <code>break</code> permet de terminer la boucle prématurément.</p>
+<h2 id="principe-des-arbres-préfixes">Principe des <em>arbres préfixes</em></h2>
+<p>Dans cet exercice nous nous proposons de coder un dictionnaire, c'est à dire une structure de données efficace permettant de stocker un ensemble de mots. Le dictionnaire nous permettra de déterminer si une suite de lettres est préfixe ou non d'un mot de cet ensemble. Réaliser cette opération de manière efficace est crucial pour trouver les solutions du jeu posé en introduction.</p>
+<p>Prenons comme exemple les mots suivants :</p>
+<ul>
+<li><code>lapin</code></li>
+<li><code>laper</code></li>
+<li><code>lupin</code></li>
+<li><code>lopin</code></li>
+<li><code>louve</code></li>
+<li><code>loup</code></li>
+<li><code>loupe</code></li>
+<li><code>ma</code></li>
+</ul>
+<p>Il nous faudra coder une structure permettant de stocker ces mots et de répondre à une question du type :</p>
+<ul>
+<li>Le mot <code>loup</code> appartient-il à cet ensemble ?</li>
+<li>Existe-t-il des mots commençant par <code>lap</code> et si oui, quelles sont les lettres possibles suivant le <code>p</code> ?</li>
+</ul>
+<p>Pour réaliser ces opérations nous utiliserons un <em>codage par arbres n-aires</em>.</p>
+<p>Bien entendu, nous aurions pu stocker nos mots dans un tableau trié. Cette solution pose néanmoins deux problèmes : d'une part ce stockage nécessiterait beaucoup de place, et d'autre part l'ajout d'un élément dans le dictionnaire serait linéaire.</p>
+<p>Le principe de codage par un arbre n-aire est très simple. Sur notre exemple précédent nous pouvons représenter notre ensemble de mots par l'arbre suivant :</p>
+<img style="width:100%; max-width: 1000px" src="src/algoprog%2Fimages%2FTD3%2FDessinTD3.001.jpg">
+<h3 id="gestion-de-la-fin-de-mot">Gestion de la fin de mot</h3>
+<p>Le problème du codage précédent est qu'il est difficile de distinguer les mots. Par exemple, comment savoir que le mot <code>loup</code> est bien un mot de mon ensemble ? Pour corriger ce défaut, nous pouvons ou bien utiliser un marqueur de fin de mot noté <code>*</code>, ou bien créer deux types de nœuds dans l'arbre : le premier servirait à représenter les lettres en milieu de mot, tandis que le second représenterait la fin d'un mot.</p>
+<p>Voici les deux exemples mis côte à côte. Notez que dans nos arbres, un nœud n'a qu'un seul fils étiqueté par la même lettre.</p>
+<img style="width:100%; max-width: 1000px" src="src/algoprog%2Fimages%2FTD3%2FDessinTD3.002.jpg">
+<h3 id="écriture-de-la-classe-noeud">Écriture de la classe <code>Noeud</code></h3>
+<p>Nous vous proposons ici de coder les arbres en utilisant le marqueur <code>*</code>.</p>
+<p>Les classes <code>Noeud</code> et <code>Dictionnaire</code> sont écrites dans le fichier <code>Dictionnaire.java</code>.</p>
+<p>Complétez la classe <code>Noeud</code> et plus spécifiquement son constructeur <code>Noeud(char c)</code>. Notez en effet que chaque sommet contient un caractère. Par défaut le nœud créé n'aura pas d'enfants. Munissez votre classe d'une méthode <code>public void ajouteFils(Noeud a)</code> qui ajoute un fils au nœud courant. Voici un petit exemple d'utilisation de votre classe:</p>
+<pre class="sourceCode java"><code class="sourceCode java">Noeud a1 = <span class="kw">new</span> <span class="fu">Noeud</span>('*');
+Noeud a2 = <span class="kw">new</span> <span class="fu">Noeud</span>('*');
+Noeud a3 = <span class="kw">new</span> <span class="fu">Noeud</span>('*');
+Noeud b = <span class="kw">new</span> <span class="fu">Noeud</span>('l');
+Noeud c = <span class="kw">new</span> <span class="fu">Noeud</span>('e');
+Noeud d = <span class="kw">new</span> <span class="fu">Noeud</span>('a');
+Noeud e = <span class="kw">new</span> <span class="fu">Noeud</span>('s');
+b.<span class="fu">ajouteFils</span>(c);
+b.<span class="fu">ajouteFils</span>(d);
+c.<span class="fu">ajouteFils</span>(e);
+c.<span class="fu">ajouteFils</span>(a1);
+d.<span class="fu">ajouteFils</span>(a2);
+e.<span class="fu">ajouteFils</span>(a3);</code></pre>
+<p>Remarquez que le code précédent construit l'ensemble de mots <code>le</code>, <code>la</code>, <code>les</code>.</p>
+<p>Quelle est la structure de données adaptée pour représenter la liste des enfants d'un nœud ?</p>
+<p>Pour vous assurer que vos nœuds sont bien implémentés, vous pouvez ajouter une méthode d'affichage des nœuds. Implémentez <code>public String toString()</code>, de manière à ce que vous puissiez rajouter, à la fin de l'exemple ci-dessus:</p>
+<pre class="sourceCode java"><code class="sourceCode java">System.<span class="fu">out</span>.<span class="fu">println</span>(b);</code></pre>
+<p>Avec, par exemple, une sortie du type :</p>
+<pre><code>l(e(s(*), *), a(*))</code></pre>
+<p>Ce code n'est pas noté, mais vous permet de vérifier que votre structure a bien le comportement attendu. Vous en aurez certainement besoin pour trouver des erreurs dans vos programmes ensuite.</p>
+<h2 id="gestion-dun-ensemble-de-mots-le-dictionnaire">Gestion d'un ensemble de mots : le dictionnaire</h2>
+<p>Cette classe nœud créée, nous allons maintenant nous intéresser à la classe <code>Dictionnaire</code> située dans le même fichier <code>Dictionnaire.java</code>. Cette classe va simplement représenter un dictionnaire.</p>
+<p>Dans nos illustrations, vous remarquerez que nous avons laissé un nœud racine, qui ne contient aucun caractère, et qui permet simplement de commencer à parcourir l'arbre. Ainsi, un dictionnaire vide sera constitué d'un arbre réduit à un nœud. Nous pourrons par exemple mettre le caractère <code>_</code> (underscore) dans ce nœud. Écrivez la classe <code>Dictionnaire</code> ainsi que son constructeur. Cette classe se contentera de maintenir une référence vers le nœud racine de l'arbre.</p>
+<h3 id="existence-dun-mot">Existence d'un mot</h3>
+<p>Nous voulons maintenant vérifier la présence d'un mot <code>m</code> dans le dictionnaire. Pour cela, nous partons d'un arbre et l'idée est de lire le mot <code>m</code> lettre par lettre et de descendre dans l'arbre si la lettre suivante est un fils du nœud courant. Sur l'arbre dessiné au début du sujet, si l'on regarde le mot <code>lapa</code> alors on regarde le <code>l</code> et on voit que la racine a un fils étiqueté par <code>l</code>. Nous descendons donc dans ce nœud. Puis nous regardons la lettre <code>a</code> et nous descendons donc dans le fils étiqueté par <code>a</code> puis de même pour <code>p</code>. Arrivé à cette lettre le nœud de l'arbre n'a pas de fils étiqueté par <code>a</code> aussi pouvons donc décider que ce mot n'est pas dans l'ensemble. Attention, même si vous pouvez lire tout le mot, ce n'est pas pour cela qu'il est dans le dictionnaire. En effet, si vous lisez pas exemple le mot <code>lo</code> dans votre arbre vous pouvez effectivement lire toutes les lettres mais ce n'est pas pour autant un mot du dictionnaire. Il vous faut aussi vérifier que le nœud d'arrivée a bien un fils étiqueté par <code>*</code>.</p>
+<p>Écrivez la fonction <code>public boolean existeMot(String s)</code> dans la classe <code>Dictionnaire</code>.</p>
+<p>Une méthode est de programmer une fonction récursive dans la classe nœud appelée <code>public boolean existeMotRecursif(String s, int pos)</code> qui verifie si le nœud courant a bien un fils contenant le caractère <code>s.charAt(pos)</code>. Dans ce cas on essaye de lire la suite du mot à partir de ce caractère. Sinon le mot n'est pas présent. Attention de gérer le cas final (<code>pos</code> égal à <code>s.length()</code>)</p>
+<p>Activez la fonction <code>test1</code> et soumettez les résultats de la première partie.</p>
+<h3 id="remplissage-du-dictionnaire">Remplissage du dictionnaire</h3>
+<p>Nous allons maintenant construire le dictionnaire à partir des mots. Pour cela nous allons écrire la fonction <code>public boolean ajouteMot(String s)</code> dans la classe dictionnaire. Cette méthode va être similaire à la fonction <code>estPrefixe</code> à savoir que l'on va descendre dans l'arbre tant que l'on peut lire le début du mot, puis lorsque qu'une lettre ne marche pas, on va construire le bout de l'arbre manquant. Par exemple, reprenons l'arbre du début de l'énoncé et imaginons que nous cherchons à rajouter le mot <code>loutre</code>. Nous allons donc lire successivement le début du mot à savoir <code>lou</code>. Arrivé à la lettre <code>u</code>, on s'aperçoit que la lettre suivante <code>t</code> n'est pas dans l'arbre. Nous sommes donc dans la position suivante.</p>
+<img style="width:100%; max-width: 1000px" src="src/algoprog%2Fimages%2FTD3%2FDessinTD3.003.jpg">
+<p>Arrivés à cette position, nous allons rajouter le bout d'arbre manquant et nous obtenons le nouvel arbre suivant.</p>
+<img style="width:100%; max-width: 1000px" src="src/algoprog%2Fimages%2FTD3%2FDessinTD3.004.jpg">
+<p>Programmez la fonction <code>ajouteMot</code>. Votre fonction devra renvoyer <code>true</code> si le mot a bien été ajouté et <code>false</code> si le mot était déjà présent dans le dictionnaire.</p>
+<p>Activez la fonction <code>test2</code> et soumettez les résultats de la deuxième partie.</p>
+<h3 id="test-de-préfixe">Test de préfixe</h3>
+<p>Écrivez de même la fonction public <code>boolean estPrefixe(String s)</code> qui vérifie si le mot <code>s</code> est préfixe d'un mot du dictionnaire. Nous rappelons qu'être préfixe veut dire être le début d'un mot du dictionnaire.</p>
+<p>Activez la fonction <code>test3</code> et soumettez les résultats de la troisième partie.</p>
+<h3 id="énumération-des-mots-du-dictionnaire">Énumération des mots du dictionnaire</h3>
+<p>Il s'agit maintenant d'énumérer les mots du dictionnaire, dans l'ordre alphabétique. En effet, on peut remarquer qu'en réalisant un parcours de l'arbre, on peut énumérer les mots de celui-ci.</p>
+<p>L'objet de cette partie est d'écrire une méthode <code>public void listeMotsAlphabetique()</code> dans la classe <code>Dictionnaire</code> qui affiche les mots contenus dans le dictionnaire et ce par ordre alphabétique (ordre du dictionnaire, ou ordre lexicographique). Les mots doivent être séparés par des espaces.</p>
+<p>Cette question pose en réalité plusieurs difficultés techniques.</p>
+<h4 id="ordre-alphabétique">Ordre alphabétique</h4>
+<p>La première est que nous n'avons pas parlé d'<em>ordre</em> jusqu'ici. En effet, rien ne garantit que vos listes internes de nœuds sont dans l'ordre alphabétique. Nous allons modifier votre code de manière à garantir l'<em>invariant</em> que les listes de nœuds sont toujours dans l'ordre alphabétique.</p>
+<p>Reprenez votre méthode <code>ajouteMot</code>. Si vous avez utilisé l'approche la plus simple, vous avez certainement une <code>LinkedList&lt;Noeud&gt;</code> qui maintient la liste des enfants du nœud. La manière la plus naturelle d'ajouter un enfant était de faire appel à la méthode <code>add(Noeud n)</code> de la classe <code>LinkedList</code>.</p>
+<p>Modifiez le code de <code>ajouteMot</code> pour garantir que l'ajout d'un <code>Noeud</code> dans la liste des enfants le positionne <em>immédiatement</em> à la bonne position. Pour ce faire, abandonnez l'usage de <code>add(Noeud n)</code> et utilisez <code>add(int index, Noeud n)</code>, qui vous permet d'insérer directement le <code>Noeud n</code> à l'<code>index</code> voulu.</p>
+<p>Nous rappelons que la documentation de <code>LinkedList</code> est disponible <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedList.html">en ligne</a>.</p>
+<p>Il est facile de se tromper dans l'écriture de cette méthode :</p>
+<ul>
+<li>l'ordre demandé est l'ordre du dictionnaire, ou ordre <em>lexicographique</em> : le mot <code>bout</code> vient <em>avant</em> le mot <code>bouteille</code>, par exemple ;</li>
+<li>pensez aux cas limites : cas où le mot doit arriver en premier dans la liste, cas où le mot doit arriver en dernier ;</li>
+<li>testez de tête le code sur des listes de taille 0, 1, ou 2.</li>
+</ul>
+<p>La fonction d'affichage des nœuds que nous vous conseillions d'écrire un peu plus tôt sera certainement utile pour vous assurer que votre code fonctionne correctement.</p>
+<h4 id="pile-de-caractères">Pile de caractères</h4>
+<p>La seconde difficulté technique consiste à garder la liste des caractères déjà vus précédemment afin, lorsqu'on rencontre un <code>*</code>, de pouvoir immédiatement afficher le mot.</p>
+<p>Plusieurs solutions s'offrent à vous. Nous vous proposons de garder une liste chaînée des caractères déjà vus jusque là, de manière à pouvoir, lorsque vous rencontrez un <code>*</code>, immédiatement accéder à la liste des caractères qui vous ont menés jusqu'à cette <code>*</code>.</p>
+<p>Écrivez une méthode <code>public void listeMotsAlphabetique(LinkedList&lt;Character&gt; prefix) {</code> sur la classe <code>Noeud</code>. Cette méthode prend la liste des caractères rencontrés sur le chemin menant au <code>Noeud</code> courant, appelée <code>prefix</code>. Le <code>Dictionnaire</code> appellera cette méthode en lui passant une liste vide. Avant d'effectuer un appel récursif pour descendre dans ses enfants, cette méthode devra <em>étendre</em> la liste avec le caractère courant.</p>
+<p>Cette méthode vous demandera un petit peu de travail annexe. Nous vous demandons d'écrire une routine de conversion d'une <code>LinkedList&lt;Character&gt;</code> en <code>String</code>, à l'aide d'un <code>StringBuilder</code>. Cette dernière classe est assez fréquemment utilisée en Java, et la documentation est disponible <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html">en ligne</a>. Ainsi, vous pourrez facilement afficher vos préfixes.</p>
+<p>L'autre difficulté consiste à gérer le fait que la <code>LinkedList</code> est une liste impérative. En effet, si votre fonction <code>listeMotsAlphabetique</code> se comporte, de manière schématique, de la façon suivante :</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">listMotsAlphabetique</span>(LinkedList&lt;Character&gt; prefix) {
+  ...
+  prefix.<span class="fu">addLast</span>(<span class="kw">this</span>.<span class="fu">lettre</span>);
+  <span class="kw">for</span> (Noeud n: <span class="kw">this</span>.<span class="fu">enfants</span>) {
+    n.<span class="fu">listeMotsAlphabetique</span>(prefix);
+  }
+}</code></pre>
+<p>alors vous allez rencontrer des problèmes. En effet, la <code>LinkedList</code> est une structure de données impérativee. Lors que vous appelez <code>addLast</code>, la liste est modifiée, et c'est cette même liste modifiée que l'appelant manipulera une fois l'appel récursif terminé. Si vous oubliez de remettre la liste <code>prefix</code> dans l'état où vous l'avez trouvée, l'appelant se retrouvera avec une liste « polluée » qui contient encore <code>this.lettre</code>.</p>
+<p>Il est donc important de <em>restaurer</em> (<em>backtracking</em>) la liste <code>prefix</code> avant de sortir de <code>listeMotsAlphabetique</code>. En clair : la méthode <code>listeMotsAlphabetique</code> doit laisser, une fois terminée, le <code>prefix</code> dans l'état où elle l'a trouvé.</p>
+<p>Activez la fonction <code>test4</code> et soumettez les résultats de la quatrième partie.</p><p></p>
+<script type="text/x-mathjax-config;executed=true">
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  
+  styleSheets: [],
+  styles: {},
+
+  jax: ["input/TeX"],
+  
+  extensions: ["tex2jax.js"],
+
+  preJax: null,
+  postJax: null,
+
+  preRemoveClass: "MathJax_Preview",
+
+  showProcessingMessages: true,
+
+  messageStyle: "none",
+  
+  displayAlign: "center",
+  displayIndent: "0em",
+  
+  delayStartupUntil: "none",
+
+  skipStartupTypeset: false,
+  
+  elements: [],
+  
+  tex2jax: {
+	    inlineMath: [
+	                 ['$$','$$'],      // uncomment this for standard TeX math delimiters
+	                 ['\\(','\\)']
+	                 ],
+
+	                 displayMath: [
+	                 ['\\[','\\]']
+	                 ],
+
+    skipTags: ["script","noscript","style","textarea","pre","code"],
+    ignoreClass: "tex2jax_ignore",
+    processClass: "tex2jax_process",
+    processEscapes: false,
+    processEnvironments: true,
+    preview: "TeX"
+    
+  },
+  
+  mml2jax: {
+    preview: "alttext"
+    
+  },
+  
+  jsMath2jax: {
+    preview: "TeX"
+    
+  },
+
+  TeX: {
+    TagSide: "right",
+    TagIndent: ".8em",
+    MultLineWidth: "85%",
+    Macros: {},
+
+    extensions: ["AMSmath.js", "AMSsymbols.js"]
+    
+  },
+
+  //============================================================================
+  //
+  //  These parameters control the MathML inupt jax.
+  //
+  MathML: {
+    //
+    //  This specifies whether to use TeX spacing or MathML spacing when the
+    //  HTML-CSS output jax is used.
+    //
+    useMathMLspacing: false
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the HTML-CSS output jax.
+  //
+  "HTML-CSS": {
+    
+    scale: 100,
+    
+    availableFonts: ["STIX","TeX"],
+    
+    preferredFont: "TeX",
+    
+    webFont: "TeX",
+    
+    imageFont: "TeX",
+    
+    undefinedFamily: "STIXGeneral,'Arial Unicode MS',serif",
+      
+    showMathMenu: true,
+
+    styles: {},
+    
+    tooltip: {
+      delayPost: 600,          // milliseconds delay before tooltip is posted after mouseover
+      delayClear: 600,         // milliseconds delay before tooltip is cleared after mouseout
+      offsetX: 10, offsetY: 5  // pixels to offset tooltip from mouse position
+    }
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the NativeMML output jax.
+  //
+  NativeMML: {
+
+    scale: 100,
+
+    showMathMenu: true,
+    showMathMenuMSIE: true,
+
+    styles: {}
+  },
+  
+  MathMenu: {
+    delay: 400,
+    
+    helpURL: "http://www.mathjax.org/help/user/",
+
+    showRenderer: true,
+    showFontMenu: false,
+    showContext:  false,
+
+    windowSettings: {
+      status: "no", toolbar: "no", locationbar: "no", menubar: "no",
+      directories: "no", personalbar: "no", resizable: "yes", scrollbars: "yes",
+      width: 100, height: 50
+    },
+    
+    styles: {}
+    
+  },
+
+  MMLorHTML: {
+    prefer: {
+      MSIE:    "MML",
+      Firefox: "HTML",
+      Opera:   "HTML",
+      other:   "HTML"
+    }
+  }
+});
+</script>
+</div></div>

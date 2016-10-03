@@ -1,0 +1,30 @@
+Semaine 1 : Tableaux en Java
+La première semaine est l'occasion de reprendre les bases de la programmation et nous étudierons pour cela quelques problèmes simples sur les tableaux. Les vidéos vont de la syntaxe des tableaux en Java jusqu'à la recherche dichotomique. Nous proposerons deux exercices de programmation, dont le second est facultatif mais permettra aux personnes les plus à l'aise d'étudier un problème plus complexe.
+
+Semaine 2 : Structures linéaires
+
+La seconde semaine étudie les structures linéaires et les différentes manière de les coder en Java. Nous verrons ainsi les piles et les files et étudierons les listes chainées ainsi que les tableaux pour leur représentation en Java. Nous introduirons le coût amorti et entamerons une discussion comparée entre les différentes méthodes que nous mettons en oeuvre. Enfin une dernière vidéo vous présentera les tables de hachage que vous aurez à coder en exercice de la semaine.
+
+Semaine 3 : Structures arborescentes
+
+Durant la troisième semaine nous nous intéresserons aux structures arborescentes. Cela sera l'occasion de voir des domaines aussi variés que l'imagerie et le codage efficace de maillages, la représentation de dictionnaire ou encore de files de priorité.
+
+Semaine 4 : Tris
+
+Cette quatrième semaine passera en revue certains algorithmes classiques de tri: tri insertion, tri rapide, tri fusion ... Nous en étudierons les différentes complexité dans le pire des cas et donneront des résultats en moyenne sur le nombre d'opérations.
+
+Semaine 5 : Programmation Dynamique
+
+La programmation dynamique est une technique indispensable pour traiter certains problèmes efficacement. Ces problèmes peuvent être très divers. Nous allons découvrir quand et comment elle fonctionne.
+
+Semaine 6 : Choix  simples et choix plus compliqués
+
+Un programme doit généralement répondre à une question ou trouver une solution à un problème. Dans certains cas, cette solution peut être construite par une succession de choix très simples, dont la somme constitue néanmoins la meilleure solution possible; on parle alors d'approche "gloutonne". Dans d'autres cas, il faut effectuer une recherche plus longue et plus couteuse. Nous allons étudier, et essayer d'apprendre à distinguer les deux situations à travers divers exemples.
+
+Semaine 7 : Parcours et connexité dans les graphes
+
+Les graphes sont des structures extrêmement utiles en programmation, car ils servent à représenter des objets aussi divers que des cartes routières, des réseaux informatiques, le web ou des parties d'échecs. Cette semaine nous allons découvrir comment trouver son chemin dans un graphe, ordonner des tâches, détecter des cycles, en utilisant le parcours dit "en profondeur d'abord".
+
+Semaine 8 : Distances dans les graphes
+
+Lorsque l'on demande à un logiciel de navigation de nous trouver un chemin routier, nous voulons que ce chemin soit aussi court que possible. Nous allons donc étudier diverses situations où entrent en compte les distances dans les graphes : plus court chemin entre deux points, mais aussi trouver le plus petit ensemble de routes pour desservir une région. Ces questions sont traitées en utilisant et modifiant plusieurs des outils vus au cours des semaines précédentes.

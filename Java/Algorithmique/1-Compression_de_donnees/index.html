@@ -1,0 +1,279 @@
+<head><meta content="IE=Edge,chrome=IE7" http-equiv="X-UA-Compatible"><meta content="!" name="fragment"><meta content="NOODP" name="robots"><meta charset="utf-8"><meta content="Coursera" property="og:title"><meta content="website" property="og:type"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" property="og:image"><meta content="https://www.coursera.org/assignment/view?assignment_id=15" property="og:url"><meta content="Coursera" property="og:site_name"><meta content="en_US" property="og:locale"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." property="og:description"><meta content="727836538,4807654" property="fb:admins"><meta content="274998519252278" property="fb:app_id"><meta content="Coursera" name="twitter:site"><meta content="Coursera" name="twitter:app:name:iphone"><meta content="Coursera" name="twitter:app:name:ipad"><meta content="Coursera" name="twitter:app:name:googleplay"><meta content="id736535961" name="twitter:app:id:iphone"><meta content="id736535961" name="twitter:app:id:ipad"><meta content="org.coursera.android" name="twitter:app:id:googleplay"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." name="description"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" name="image"><meta content="app-id=736535961" name="apple-itunes-app"><title>Assignment Details | Coursera</title>    <link type="text/css" rel="stylesheet" href="https://dw0ugk4msqulk.cloudfront.net/d59975fa04707abd602d7f87d0eae218075d7b26/css/spark.main.css">
+      <link type="text/css" rel="stylesheet" href="https://www.coursera.org/maestro/api/course/973093/course.css">
+    <link rel="icon" href="https://spark-public.s3.amazonaws.com/algoprog/static/images/favicon.ico">
+</head>
+
+<div role="main" style="padding-left:5%;padding-right:5%"><div class="hide" id="spark" style="display: block;"><h2 class="course-page-header">
+  <span>Compression de données: Instructions</span>
+
+</h2>
+
+<p>
+</p><h2 id="devoir-1-algorithmes-de-compression">Algorithmes de compression</h2>
+
+<p>La compression de données est une problématique essentielle en informatique: elle consiste à représenter une donnée dans un format compact, qui permet de réduire l'espace occupé. On dit que la donnée est stockée dans un <em>format compressé</em>.</p>
+<p>Les formats compressés sont partout présents. Un DVD contient une vidéo compressée. Votre appareil photo stocke les images dans un format compressé. Votre lecteur audio contient des titres dans un format compressé également. Votre téléphone portable lui aussi compresse les communications audio avant de les transmettre à la tour GSM. Les pages web sont transmises dans un format compressé à votre navigateur. Toutes ces applications seraient infaisables sans algorithmes de compression : en effet, la taille des données brutes, c'est-à-dire non compressées, est tout simplement trop grande pour être stockée sur un DVD, dans votre lecteur audio&nbsp;; pour être transmises à un débit raisonnable au réseau téléphonique ; ou encore pour être transmises via le réseau 3G assez rapidement pour que la page s'affiche sans trop de délai.</p>
+<p>On distinguera plusieurs critères quant au choix d'un algorithme de compression. On pourra vouloir un algorithme de compression <em>sans perte</em> : typiquement, il n'est pas acceptable de dégrader du texte lors de la compression. C'est la raison pour laquelle les pages web, par exemples, sont usuellement compressées avec l'algorithme GZIP ou Deflate, des algorithmes de compression sans perte. Au contraire, pour des images, de la musique, ou des vidéos, il sera généralement acceptable de dégrader quelque peu la qualité du document, dans les limites du raisonnable. Cela permet de faire appel à des algorithmes spécialisés qui offrent un meilleur <em>ratio de compression</em> en utilisant les propriétés sous-jacentes du format : l'algorithme MP3 élimine les fréquences inaudibles par l'oreille humaine, et un algorithme de compression vidéo utilise de la détection de mouvements pour représenter une scène de manière plus compacte.</p>
+<p>Les images, par exemples, peuvent être réprésentées ou bien dans un format sans perte (TIFF) ou dans un format avec perte (JPEG, PNG), en fonction du contexte d'utilisation.</p>
+<p>Un autre critère de choix est la vitesse de décompression : sur des machines aux capacités limitées, comme par exemple des téléphones portables, il n'est pas acceptable de compresser les images dans un format qui nécessite trop de calculs pour être décompressé. Il en résulterait une consommation d'énergie et des délais excessifs.</p>
+<p>Les algorithmes de compression constituent un sujet de recherche qui est encore actif à l'heure actuelle. On cherche actuellement un remplaçant au format JPEG, largement utilisé sur le web mais peu performant en termes de qualité.</p>
+
+<h3 id="structure-du-devoir">Structure du devoir</h3>
+<p>Ce devoir est divisé en deux parties. Dans la première, nous implémenterons l'un des tout premiers algorithmes de compression <em>sans perte</em>, l'algorithme RLE. Ceci permettra de vous familiariser avec la manipulation des tableaux et l'écriture de boucles non-triviales.</p>
+<p>Dans une seconde partie, nous verrons un algorithmique historique, LZ77, précurseur du format LZW. LZW est encore utilisé de nos jours pour compresser les images au format GIF ou TIFF, et les documents PDF. LZ77 est utilisé dans le système de fichiers NTFS de Microsoft, ou encore dans l'algorithme Deflate, en combinaison avec un codage de Huffman.</p>
+<p>Ce devoir est long et relativement difficile. Celui de la semaine suivante sera plus court, et aussi plus simple. Essayez pour cette semaine de répondre au plus grand nombre possible de questions. La première partie, sur l'algorithme RLE, est relativement aisée, et vous devriez arriver à la compléter sans trop de problèmes. Elle vous donnera 20 points, pour un total de 45. Pour avoir la moyenne, il vous faudra donc répondre au moins à la première question de la seconde partie, sur la recherche d'occurrences dans l'algorithme LZ77.</p>
+
+<h3 id="notations">Notations</h3>
+<p>Les algorithmes de compression travaillent sur des séquences de <em>bits</em>. On notera une telle séquence à l'aide d'accolades, par analogie avec la syntaxe Java d'initialisation des tableaux en ligne : <code>{ 0, 1, ... }</code>.</p>
+<h2 id="lalgorithme-rle">L'algorithme RLE</h2>
+<p>L'algorithme RLE est relativement bien adapté aux formats d'image noir-et-blanc. Son fonctionnement peut s'expliquer de manière intuitive : au lieu de représenter <code>{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}</code>, on peut compresser ce tableau de neuf éléments en un tableau de six éléments <code>{0, 5, 1, 1, 0, 5}</code>, qui peut se comprendre comme « répéter <code>0</code> cinq fois, répéter <code>1</code> une fois, répéter <code>0</code> cinq fois ».</p>
+<p>Dans ce devoir, notre critère de compression sera la taille du tableau en Java. Dans une implémentation réelle, on utiliserait probablement une représentation binaire efficace qui minimise la place gaspillée. En effet, dans le second tableau, les éléments <code>0</code> et <code>1</code> ne prennent toujours qu'un seul bit, mais utiliseront autant de place qu'un entier 32-bits. Nous ne traiterons pas dans ce sujet la question du format binaire efficace de stockage.</p>
+<p>Les tests automatiques utilisent des tableaux de grande taille. N'hésitez pas, pour cette section, à tester vos algorithmes sur des tableaux plus petits, afin de vérifier les résultats à la main. Lorsque vous arriverez à la dernière question, il pourra être utile de vérifier manuellement que <code>RLEInverse(RLE(t))</code> est bien égal, en longueur et pour chaque élément, à <code>t</code> lui-même.</p>
+<h3 id="longueur-de-compression">Longueur de compression</h3>
+<p>Créez une classe <code>RLE</code>, et écrivez la méthode statique <code>public static int longueurRLE(int[] t)</code> qui calcule la longueur nécessaire pour représenter au format RLE le tableau de bits <code>t</code>. Dans l'exemple ci-dessus, votre fonction doit renvoyer <code>6</code>.</p>
+<p>Votre fonction devra faire quelque chose d'approprié pour les cas limites. Un tableau de longueur zéro, une fois encodé, restera un tableau de longueur zéro. Un tableau <code>null</code>, en revanche, constitue une entrée invalide : vous pourrez lancer une erreur fatale, comme par exemple <code>IllegalArgumentException</code>. Nous garderons ces conventions tout au long du sujet.</p>
+<p>Ouvrez le fichier <code>Test.java</code>. Décommentez le contenu de <code>testRle1</code>. Exécutez la classe Test et soumettez votre résultat.</p>
+<h3 id="compression">Compression</h3>
+<p>Il s'agit maintenant d'écrire la fonction <code>public static int[] RLE(int[] t)</code> qui compresse <code>t</code> au format RLE et renvoie le résutat. Cette fonction fera naturellement appel à la fonction <code>longueurRLE()</code> pour connaître la taille du tableau de destination à créer, c'est-à-dire le tableau qui contiendra la version compressée.</p>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testRle2()</code>.</p>
+<h3 id="décompression">Décompression</h3>
+<p>Maintenant que votre algorithme est capable de compresser des données correctement au format RLE, il s'agit de les décompresser. Pour ce faire, nous allons procéder de la même manière que pour la compression. Écrivez d'abord <code>public static int longueurRLEInverse(int[] t)</code>. Cette fonction prend un tableau <code>t</code> au format RLE, et calcule la longueur nécessaire pour le stocker une fois décompressé.</p>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testRle3()</code>.</p>
+<p>Enfin, écrivez la fonction <code>public static int[] RLEInverse(int[] t)</code> qui prend un tableau <code>t</code> au format RLE et renvoie sa version décompressée.</p>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testRle4()</code>.</p>
+<h3 id="le-mot-de-la-fin">Le mot de la fin</h3>
+<p>Vous constaterez que pour notre batterie de tests automatiques, il n'est pas clair que les données compressées soient plus courtes que les données brutes. En effet, les données brutes ont été générées aléatoirement, et les successions d'un même bit sont rares. En pratique, RLE est appliqué à des problèmes précis, comme des images noir et blanc. Si un bit représente un pixel, alors l'image sera essentiellement composée de très longues séquences consécutives de <code>0</code> et de <code>1</code>, ce qui en fait un bon candidat pour une compression via RLE.</p>
+<h2 id="lalgorithme-lz77">L'algorithme LZ77</h2>
+<p>LZ77 est un algorithme plus sophistiqué. Il se comporte beaucoup mieux de manière générale, et produit un meilleur ratio de compression. Il est aussi plus difficile à comprendre et à implémenter.</p>
+<p>Nous implémentons une version tout ce qu'il y a de plus standard de l'algorithme LZ77 : n'hésitez donc pas à chercher sur Internet des informations supplémentaires quant au fonctionnement de l'algorithme, si les explications fournies dans le sujet vous semble incomplètes.</p>
+<h3 id="conseils-généraux">Conseils généraux</h3>
+<p>Cet algorithme est délicat. N'hésitez pas à prendre l'initiative, et à écrire des fonctions de débogage pour afficher vos tableaux, ainsi que des fonctions <code>toString</code> pour pouvoir afficher vos différentes classes. Écrivez des tests unitaires sur des tableaux de petite taille, et vérifiez les résultats manuellement.</p>
+<h3 id="fonctionnement-de-lz77">Fonctionnement de LZ77</h3>
+<p>On pourrait résumer LZ77 à l'aide de la maxime « l'histoire se répète ». En d'autres termes, LZ77 va chercher des similitudes entre le <em>futur</em> et le <em>passé</em>. Détaillons un peu ces grandes idées.</p>
+<p>On cherche à compresser un <em>tableau d'entrées</em>. Lorsque l'algorithme est en cours, il maintient une <em>position courante</em> dans le <em>tableau d'entrées</em>. La <em>position courante</em> marque le début des <em>caractères à venir</em> (la partie du <em>tableau d'entrées</em> qui n'a pas encore été compressée) ; la <em>position courante</em> marque également la fin de la <em>fenêtre</em>, qui est constituée des <code>N</code> caractères précédant la <em>position courante</em>.</p>
+<pre><code>
+{ 1, 0, 1, 0, 1, 1, 1 } ← tableau d'entrées
+           ↑
+         position
+         courante</code></pre>
+<p>Dans l'exemple ci-dessus, les <em>caractères à venir</em> sont <code>{ 0, 1, 1, 1 }</code> et la fenêtre, que l'on suppose de taille 100, est <code>{ 1, 0, 1 }</code>, car elle est bornée par le début du <em>tableau d'entrées</em>.</p>
+<p>LZ77 cherche des similitudes entres les <em>caractères à venir</em> et la <em>fenêtre</em>. Par exemple, la séquence <code>{ 0, 1 }</code> est présente à la <em>position courante</em>, mais aussi dans la <em>fenêtre</em>, deux caractères plus tôt. On dit que l'on a trouvé une <em>occurrence</em>. Cette occurrence est caractérisée par sa <em>taille</em>, qui vaut 2, et son <em>retour</em>, c'est-à-dire sa position par rapport à la <em>position courante</em>. Ici, l'<em>occurrence</em> se trouve deux caractères plus tôt que la <em>position courante</em> : elle a donc un <em>retour</em> de deux.</p>
+<p><strong>Quand on dit que l'on cherche une occurrence, on cherche toujours une occurrence qui commence à la position courante.</strong></p>
+<h3 id="structures-de-données">Structures de données</h3>
+<p>Éditez le fichier <code>LZ77.java</code>, et commencez par créer une classe <code>Occurrence</code>, qui se contente d'offrir deux champs <code>taille</code> et <code>retour</code>, ainsi qu'un constructeur <code>Occurrence(int retour, int taille)</code>. N'oubliez pas que la lettre r possède deux occurrences dans le mot occurrences.</p>
+<h3 id="recherche-doccurrence">Recherche d'occurrence</h3>
+<p>Créez la classe <code>LZ77</code>. Il s'agit maintenant d'écrire la fonction suivante :</p>
+<pre><code>  public static Occurrence plusLongueOccurrence(
+      int[] t,
+      int positionCourante,
+      int tailleFenetre
+    ) {</code></pre>
+<p>Cette fonction prend un <em>tableau d'entrées</em> <code>t</code>, la <em>position courante</em> dans le tableau, et la taille de la fenêtre. Elle renvoie la plus grande <code>Occurrence</code> trouvée <strong>dans la fenêtre</strong>. N'oubliez pas que <em>le caractère courant ne fait pas partie de la fenêtre</em>.</p>
+<p>Le cas où aucune occurrence n'est trouvée correspond à une <code>Occurrence</code> de taille 0 et de retour 0. Dans le cas où plusieurs occurrences de même taille sont présentes dans la fenêtre, cette fonction devra choisir l'occurrence la plus à gauche, c'est-à-dire la plus éloignée de la position courante.</p>
+<p>Naturellement, plus la fenêtre sera grande, plus la fonction aura de travail à effectuer. Dans la suite de ce devoir, nous prendrons une taille de fenêtre égale à 100.</p>
+<p>Cette fonction doit effectuer bon nombre de manipulations sur les tableaux. Il est facile d'y glisser des erreurs par inadvertance. Il sera donc opportun de réfléchir sur papier avant de se lancer dans l'implémentation.</p>
+<ul>
+<li>Quels sont les hypothèses de la fonction ?</li>
+<li>Que doit-il se passer dans les cas limites ? (Au tout début du tableau, à la toute fin du tableau.)</li>
+<li>Quelle est l'organisation générale de la fonction ? Combien de boucles imbriquées ?</li>
+</ul>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testLz1()</code>.</p>
+<h3 id="fonctionnement-de-lalgorithme-lz77-suite">Fonctionnement de l'algorithme LZ77 (suite)</h3>
+<p>Voyons maintenant comment fonctionne précisément l'algorithme LZ77.</p>
+<ol style="list-style-type: decimal">
+<li>On commence au début du <em>tableau d'entrées</em>.</li>
+<li>On trouve la plus grande occurrence <code>o</code>, de taille <code>k</code>.</li>
+<li>On stocke <code>o</code> ainsi que le caractère à venir situé immédiatement après l'occurrence <code>o</code>.</li>
+<li>On avance de <code>k + 1</code> éléments, et on recommence à l'étape 2.</li>
+</ol>
+<p>Si l'on reprend l'exemple précédent :</p>
+<pre><code>          caractère situé
+          après l'occurrence
+                 ↓
+{ 1, 0, 1, 0, 1, 1, 1 } ← tableau d'entrées
+           ↑        ↑
+         position   position
+         courante   courante
+                    à l'étape
+                    suivante</code></pre>
+<p>À ce stade-là, l'algorithme stockera l'occurrence <code>(2, 2)</code> et le caractère <code>1</code>. Le schéma montre la position courante à l'étape suivante (c'est-à-dire une fois l'occurrence et le caractère stockés).</p>
+<p>Il est crucial de stocker le caractère suivant. En effet, il n'est pas toujours possible de trouver une occurrence. Il faut malgré tout stocker le caractère situé à la position courante. Garder le caractère situé après l'occurrence permet d'assurer cette garantie.</p>
+<h3 id="structures-de-données-suite">Structures de données (suite)</h3>
+<p>Créez une classe <code>Element</code>. Elle contiendra deux champs : un pour mémoriser l'occurrence et un autre pour mémoriser caractère suivant. Elle fournira le constructeur <code>Element(Occurrence e, int s)</code>.</p>
+<p>Ainsi, le résultat de l'encodage sera une succession d'éléments que nous stockerons sous forme de tableau <code>Element[]</code>.</p>
+<h3 id="convention-de-terminaison">Convention de terminaison</h3>
+<p>Nous ferons désormais l'hypothèse que nos entreés sont des successions de 0 et de 1, terminés par un caractère spécial, ici un 2, qui marque la fin de la chaîne. N'oubliez pas de terminer vos tableaux de test par l'entier 2.</p>
+<p>On peut voir l'intérêt de cette convention en considérant le tableau <code>{ 1, 1 }</code>. À la position <code>1</code>, on voudra créer l'occurrence <code>(1, 1)</code>. Il faudra alors accéder à l'élément suivant, qui n'existe pas car c'est la fin du tableau. Rajouter un 2 à la fin de toutes les entrées permet de garantir que le 2 ne fera jamais partie d'aucune occurrence et sera toujours un <em>caractère suivant</em> valide.</p>
+<p>Dans la suite des questions, considérez que le 2 fait partie intégrante du tableau : il doit être compté pour la longueur, doit être compressé comme les autres caractères, et doit apparaître à la fin de la chaîne décompressée.</p>
+<h3 id="longueur-de-la-chaîne-compressée">Longueur de la chaîne compressée</h3>
+<p>Écrivez la fonction <code>public static int LZ77Longueur(int[] t, int tailleFenetre)</code> qui calcule le nombre d'éléments nécessaire pour représenter <code>t</code> une fois compressé au format LZ77. Il faudra faire appel à <code>plusLongueOccurrence</code>. Attention à bien avancer du bon nombre de cases à chaque recherche d'occurrence.</p>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testLz2()</code>.</p>
+<h3 id="compression-1">Compression</h3>
+<p>La fonction de compression est très similaire au calcul de la longueur de la chaîne compressée, si ce n'est qu'elle stocke le résultat (compressé) dans un tableau d'<code>Element</code>.</p>
+<p>Écrivez la fonction <code>public static Element[] LZ77(int[] tab, int tailleFenetre)</code> qui se contente de compresser le tableau <code>tab</code> et de renvoyer la version compressée.</p>
+<p>Afin de valider vos résultats, il est nécessaire que vous les affichiez dans un format précis. À cet effet, écrivez une fonction <code>public static void afficheEncode(Element[] tab)</code> qui affiche <code>tab</code> sur la sortie standard, suivi d'un retour chariot <code>\n</code>. Les fonctions de test se chargeront d'appeler <code>afficheEncode</code> comme il faut.</p>
+<p>La fonction d'affichage suit des conventions précises. Chaque <code>Element</code> de retour <code>r</code>, de taille <code>t</code> et de suivant <code>s</code> devra être affiché <code>(r,t)s</code>. Les <code>Element</code>s devront être affichés les uns à la suite des autres, sans séparateur. À titre indicatif, voici le début de la sortie attendue pour le premier test de la fonction <code>testLz3()</code>:</p>
+<pre><code>(0,0)0(1,1)0(0,0)1(4,4)1(2,2)0(10,3)1</code></pre>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testLz3()</code>.</p>
+<h3 id="longueur-de-la-chaîne-décompressée">Longueur de la chaîne décompressée</h3>
+<p>Écrivez la fonction <code>public static int LZ77InverseLongueur(Element[] t)</code>. Elle prend une chaîne compressée, c'est-à-dire un tableau d'<code>Element</code>. Elle renvoie la longueur qu'occupera <code>t</code> une fois décompressé.</p>
+<p>Cette fonction est relativement simple à écrire, car l'information de longueur est contenue dans chaque <code>Occurrence</code>.</p>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testLz4()</code>.</p>
+<h3 id="décompression-1">Décompression</h3>
+<p>Écrivez la fonction <code>public static int[] LZ77Inverse(Element[] t)</code>. Elle prend un tableau <code>t</code> représentant des données compressées et renvoie la version décompressée. Vous aurez besoin d'implémenter l'opération <code>void blit(int[] t1, int[] t2, int start1, int len, int start2)</code>, qui copie les caractères du tableau <code>t1</code> allant de <code>start1</code> à <code>start1 + len - 1</code> vers le tableau <code>t2</code> à partir de la position <code>start2</code>. N'hésitez pas à tester vos fonctions sur des exemples de petite taille.</p>
+<p>Afin de valider vos résultats, il est nécessaire que vous les affichiez dans un format précis. À cet effect, écrivez une fonction <code>public static void afficheDecode(int[] t)</code> qui affiche <code>t</code> sur la sortie standard, suivi d'un retour chariot <code>\n</code>. Les entiers devront être affichés séparés par un espace. À titre indicatif, voici le début de la sortie attendue pour le premier test de la fonction <code>testLz5()</code>:</p>
+<pre><code>1 0 1 0 1 0 0 0 0 1 0 1 1 1 0 0 1 1 1 1</code></pre>
+<p>Décommentez son contenu et soumettez les résultats de la fonction <code>testLz5()</code>.</p><p></p>
+<script type="text/x-mathjax-config;executed=true">
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  
+  styleSheets: [],
+  styles: {},
+
+  jax: ["input/TeX"],
+  
+  extensions: ["tex2jax.js"],
+
+  preJax: null,
+  postJax: null,
+
+  preRemoveClass: "MathJax_Preview",
+
+  showProcessingMessages: true,
+
+  messageStyle: "none",
+  
+  displayAlign: "center",
+  displayIndent: "0em",
+  
+  delayStartupUntil: "none",
+
+  skipStartupTypeset: false,
+  
+  elements: [],
+  
+  tex2jax: {
+	    inlineMath: [
+	                 ['$$','$$'],      // uncomment this for standard TeX math delimiters
+	                 ['\\(','\\)']
+	                 ],
+
+	                 displayMath: [
+	                 ['\\[','\\]']
+	                 ],
+
+    skipTags: ["script","noscript","style","textarea","pre","code"],
+    ignoreClass: "tex2jax_ignore",
+    processClass: "tex2jax_process",
+    processEscapes: false,
+    processEnvironments: true,
+    preview: "TeX"
+    
+  },
+  
+  mml2jax: {
+    preview: "alttext"
+    
+  },
+  
+  jsMath2jax: {
+    preview: "TeX"
+    
+  },
+
+  TeX: {
+    TagSide: "right",
+    TagIndent: ".8em",
+    MultLineWidth: "85%",
+    Macros: {},
+
+    extensions: ["AMSmath.js", "AMSsymbols.js"]
+    
+  },
+
+  //============================================================================
+  //
+  //  These parameters control the MathML inupt jax.
+  //
+  MathML: {
+    //
+    //  This specifies whether to use TeX spacing or MathML spacing when the
+    //  HTML-CSS output jax is used.
+    //
+    useMathMLspacing: false
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the HTML-CSS output jax.
+  //
+  "HTML-CSS": {
+    
+    scale: 100,
+    
+    availableFonts: ["STIX","TeX"],
+    
+    preferredFont: "TeX",
+    
+    webFont: "TeX",
+    
+    imageFont: "TeX",
+    
+    undefinedFamily: "STIXGeneral,'Arial Unicode MS',serif",
+      
+    showMathMenu: true,
+
+    styles: {},
+    
+    tooltip: {
+      delayPost: 600,          // milliseconds delay before tooltip is posted after mouseover
+      delayClear: 600,         // milliseconds delay before tooltip is cleared after mouseout
+      offsetX: 10, offsetY: 5  // pixels to offset tooltip from mouse position
+    }
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the NativeMML output jax.
+  //
+  NativeMML: {
+
+    scale: 100,
+
+    showMathMenu: true,
+    showMathMenuMSIE: true,
+
+    styles: {}
+  },
+  
+  MathMenu: {
+    delay: 400,
+    
+    helpURL: "http://www.mathjax.org/help/user/",
+
+    showRenderer: true,
+    showFontMenu: false,
+    showContext:  false,
+
+    windowSettings: {
+      status: "no", toolbar: "no", locationbar: "no", menubar: "no",
+      directories: "no", personalbar: "no", resizable: "yes", scrollbars: "yes",
+      width: 100, height: 50
+    },
+    
+    styles: {}
+    
+  },
+
+  MMLorHTML: {
+    prefer: {
+      MSIE:    "MML",
+      Firefox: "HTML",
+      Opera:   "HTML",
+      other:   "HTML"
+    }
+  }
+});
+</script>
+</div></div>
