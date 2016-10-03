@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html style="height: 100%;" lang="en"><head>
+
+        <meta content="4851b15326f6b290-09e175a0bcd24dcd-gab2f4fb87b61a9c2-c" name="google-translate-customization">
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        
+
+                        <h1>Problem Set 6: Web Server</h1>
+                    
+                    <span class="author" id="author">
+                        This is CS50. Harvard University.
+                    </span>
+                
+
+                
+
+<div class="sect1">
+<h2 id="getting_started"><a href="#getting_started" class="link">Getting Started</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Start up your appliance and, upon reaching John Harvard’s desktop, open a terminal window (remember how?) and execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">update50</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to ensure that your appliance is up-to-date!</p>
+</div>
+<div class="paragraph">
+<p>Like Problem Set 5, this problem set comes with some distribution code that you’ll need to download before getting started.  Go ahead and execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">cd ~/Dropbox</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in order to navigate to your <code>~/Dropbox</code> directory.  Then execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">wget http://cdn.cs50.net/2014/fall/psets/6/pset6/pset6.zip</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in order to download a ZIP (i.e., compressed version) of this problem set’s distro.  If you then execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">ls</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you should see that you now have a file called <code>pset6.zip</code> in your <code>~/Dropbox</code> directory.  Unzip it by executing the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">unzip pset6.zip</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you again execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">ls</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you should see that you now also have a <code>pset6</code> directory.  You’re now welcome to delete the ZIP file with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">rm -f pset6.zip</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now dive into that <code>pset6</code> directory by executing the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">cd pset6</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">tree</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(which is a hierarchical, recursive variant of <code>ls</code>), and you should see that the directory contains the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">.
+|-- public
+|   |-- cat.html
+|   |-- cat.jpg
+|   |-- hello.html
+|   `-- hello.php
+`-- server.c</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dang it, still C. But some other stuff too!</p>
+</div>
+<div class="paragraph">
+<p>Go ahead and take a look at <code>cat.html</code> with <code>gedit</code>. Pretty simple, right? Looks like it has an <code>img</code> tag, the value of whose <code>src</code> attribute is <code>cat.jpg</code>.</p>
+</div>
+<div class="paragraph">
+<p>Next, take a look at <code>hello.html</code> with <code>gedit</code>. Notice how it has a <code>form</code> that’s configured to submit via GET a <code>text</code> field called <code>name</code> to <code>hello.php</code>. (Make sense? If not, try taking another look at the walkthrough for <code>search-0.html</code> from Week 7!)</p>
+</div>
+<div class="paragraph">
+<p>Now take a look at <code>hello.php</code>. Notice how it’s mostly HTML but inside its <code>body</code> is a bit of PHP code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="php language-php"><span class="inline-delimiter">&lt;?</span>= <span class="predefined">htmlspecialchars</span>(<span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">"</span><span class="content">name</span><span class="delimiter">"</span></span>]) <span class="inline-delimiter">?&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;?=</code> notation just means "echo the following value here". <code>htmlspecialchars</code>, meanwhile, is just an attrociously named function whose purpose in life is to ensure that special (even dangerous!) characters like <code>&lt;</code> are properly "escaped" as HTML "entities." See <a href="http://php.net/manual/en/function.htmlspecialchars.php">http://php.net/manual/en/function.htmlspecialchars.php</a> for more details if curious. Anyhow, <code>$_GET</code> is a "superglobal" variable inside of which are any HTTP parameters that were passed via GET to <code>hello.php</code>. More specifically, it’s an "associative array" (i.e., hash table) with keys and values. Per that HTML form in <code>hello.html</code>, one such key should be <code>name</code>! But more on all that in a bit.</p>
+</div>
+<div class="paragraph">
+<p>Now the fun part. Open up <code>server.c</code> with <code>gedit</code>.</p>
+</div>
+<div class="paragraph">
+<p>Yup. You guessed it. The challenge ahead is to implement your own web server that knows how to serve static content (i.e., files ending in <code>.html</code>, <code>.jpg</code>, et al.) and dynamic content (i.e., files ending in <code>.php</code>).</p>
+</div>
+<div class="paragraph">
+<p>But let’s try out the staff’s solution before we dive into the distribution code.</p>
+</div>
+<div class="paragraph">
+<p>Open up a big terminal window (outside of <code>gedit</code>), as via <strong>Menu &gt; Accessories &gt; Terminal Emulator</strong>. Then execute the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">~cs50/pset6/server</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see these instructions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">Usage: server [-p port] /path/to/root</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Looks a bit complex, but that’s just a conventional way of saying:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>This program’s name is <code>server</code>.</p>
+</li>
+<li>
+<p>To specify a (TCP) port number on which <code>server</code> should listen for HTTP requests, include <code>-p</code> as a command-line argument, followed by (presumably) a number. The brackets imply that specifying a port is optional. (If you don’t specify, a random port will be chosen for you.) As an aside, most any number between 1024 (or, even more properly, 49152) and 65536 should be fine.</p>
+</li>
+<li>
+<p>The last command-line argument to <code>server</code> should be the path to your server’s "root" (the directory from which files will be served).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let’s try it out. Execute the below from within your own <code>~/Dropbox/pset6</code> directory so that the staff’s solution uses your own copy of <code>public</code> as its root.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">~cs50/pset6/server public</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see output like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash"><span class="yellow">Using /home/jharvard/solutions/2014/fall/psets/6/public for server's root</span>
+<span class="yellow">Listening on port #####</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>#####</code> is a random port number. Take note of your appliance’s IP address, which should be a number of the form <code>#.#.#.#</code> in the appliance’s bottom-right corner. Then, open up Chrome (inside of the appliance or on your own computer) and visit <code>http://#.#.#.#:#####/cat.jpg</code>, where, again, <code>#.#.#.#</code> is your appliance’s IP address (not <code>#.#.#.#</code> literally) and <code>#####</code> is the random port number. For instance, if your appliance’s IP address is <code>1.2.3.4</code> and the random port number is 1337, you should visit <code>http://1.2.3.4:1337/cat.jpg</code>.</p>
+</div>
+<div class="paragraph">
+<p>Anyhow, you should see a happy cat?? In your terminal window, meanwhile, you should see</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">GET /cat.jpg HTTP/1.1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which is the "request line" that your browser sent to the server (which is being outputted by <code>server</code> via <code>printf</code> for diagnostics' sake). Below that you should see</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash"><span class="green">HTTP/1.1 200 OK</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which is the server’s response to the browser (which is also being outputted by <code>server</code> via <code>printf</code> for diagnostics' sake).</p>
+</div>
+<div class="paragraph">
+<p>Go ahead and stop the server by hitting control-c. Then, re-run it on, say, port <code>8080</code> which is a popular choice when running a webserver without "superuser" privileges. Remember how? Like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">~cs50/pset6/server -p 8080 public</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, just like I did in that short on HTTP, open up Chrome’s developer tools, per the instructions at <a href="https://developer.chrome.com/devtools">https://developer.chrome.com/devtools</a>. Then, once open, click the tools' <strong>Network</strong> tab, and then, while holding down Shift, reload the page.</p>
+</div>
+<div class="paragraph">
+<p>Not only should you see Happy Cat again. You should also see the below in your terminal window.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">GET /cat.jpg HTTP/1.1
+<span class="green">HTTP/1.1 200 OK</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You might also see the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">GET /favicon.ico HTTP/1.1
+<span class="red">404 Not Found</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What’s going on if so? Well, by convention, a lot of websites have in their root directory a <code>favicon.ico</code> file, which is a tiny icon that’s meant to be displayed a browser’s address bar or tab. If you do see those lines in your terminal window, that just means Chrome is guessing that your server, too, might have <code>favicon.ico</code> file. It doesn’t (unless you put one to <code>public</code>), so not to worry.</p>
+</div>
+
+<div class="paragraph">
+<p>Now try visiting <code>http://#.#.#.#:8080/cat.html</code>. You should see Happy Cat again, possibly with a bit of a margin around him (simply because of Chrome’s default CSS properties). If you look at the developer tools' <strong>Network</strong> tab (possibly after reloading, if they weren’t still open), you should see that Chrome first requested <code>cat.html</code> followed by <code>cat.jpg</code>, since the latter, recall, was specified as the value of that <code>img</code> element’s <code>src</code> attribute that we saw earlier in <code>cat.html</code>. To confirm as much, take a look at the developer tools' <strong>Elements</strong> tab, wherein you’ll see a pretty-printed version of the HTML in <code>cat.html</code>. You can even change it but only Chrome’s in-memory copy thereof. To change the actual file, you’d need to do so with, say, <code>gedit</code> in the usual way. Incidentally, you might find it interesting to tinker with the developer tools' <strong>Styles</strong> tab at right, too. Even though this page doesn’t have any CSS of its own, you can see and change (temporarily) Chrome’s default CSS properties via that tab.</p>
+</div>
+<div class="paragraph">
+<p>Okay, one last test. Try visiting <code>http://#.#.#.#:8080/hello.html</code>. Go ahead and input your name into the form and then submit it, as by clicking the button or hitting Enter. You should find yourself at a URL like <code>http://#.#.#.#:8080/hello.php?name=Alice</code> (albeit with your name, not Alice’s), where a personalized hello awaits! That’s what we mean by "dynamic" content. By submitting that form, you provided input (i.e., your name) to the server, which then generated output just for you. (That input was in the form of an "HTTP parameter" called <code>name</code>, the value of which was your name.) Indeed, if you look at the page’s source code (as via the developer tools' <strong>Elements</strong> tab), you’ll see your name embedded within the HTML! By contrast, files like <code>cat.jpg</code> and <code>cat.html</code> (and even <code>hello.html</code>) are "static" content, since they’re not dynamically generated.</p>
+</div>
+<div class="paragraph">
+<p><strong>Take care not to omit the port number from your URLs.</strong> Else your browser will end up talking to the appliance’s own web server (Apache), and you’ll see 403s and 404s that you’re probably not expecting!</p>
+</div>
+<div class="paragraph">
+<p>Neat, eh?? Though odds are you’ll find it easier to test your own code via a command line than with a browser. So let’s show you one other technique.</p>
+</div>
+<div class="paragraph">
+<p>Open up a second terminal window and position it alongside your first. In the first terminal window, execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">~cs50/pset6/server -p 8080 public</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>from within your own <code>~/Dropbox/pset6</code> directory, if the server isn’t already running on that port. Then, in the second terminal window, execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">telnet #.#.#.# 8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>#.#.#.#</code> is, as before, your appliance’s IP address. <code>telnet</code> is a program via which you can "communicate with another host" via textual commands. (Back in my day, too, it was how we checked email!) Anyhow, note that <code>telnet</code> expects a space (not a colon) between an address and the port.</p>
+</div>
+<div class="paragraph">
+<p>You should find that <code>telnet</code> is now waiting for input. Go ahead and type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">GET /cat.html HTTP/1.1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>followed by Enter twice, which <code>telnet</code> will interpret as CRLF CRLF (i.e., <code>\r\n\r\n</code>).</p>
+</div>
+<div class="paragraph">
+<p>You should see that the server’s responded with a request line, some headers, a blank line, and some HTML?? Nice! Odds are, whilst debugging your server, you’ll find it more convenient (and revealing!) to see all of that via <code>telnet</code> than by poking around Chrome’s developer tools.</p>
+</div>
+<div class="paragraph">
+<p>Incidentally, take care not to request <code>cat.jpg</code> (or any binary file) via <code>telnet</code>, else you’ll see quite a mess! (You’re about to try, aren’t you.)</p>
+</div>
+<div class="paragraph">
+<p>Unfortunately, your own copy of <code>server.c</code> isn’t quite so featureful as the staff’s solution… yet! Let’s dive into that distribution code. </p>
+</div>
+
+<div class="paragraph">
+<p>And now a lower-level tour through the code.</p>
+</div>
+<div class="sect2">
+<h3 id="server_c"><a href="#server_c" class="link">server.c</a></h3>
+<div class="paragraph">
+<p>Open up <code>server.c</code> with <code>gedit</code>, if not open already. Let’s take a tour.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Atop the file are a bunch of "feature test macro requirements" that allow us to use certain functions that are declared (conditionally) in the header files further below.</p>
+</li>
+<li>
+<p>Defined next are a few constants that specify limits on HTTP requests sizes. We’ve (arbitrarily) based their values on defaults used by Apache, a popular web server. See <a href="http://httpd.apache.org/docs/2.2/mod/core.html">http://httpd.apache.org/docs/2.2/mod/core.html</a> if curious.</p>
+</li>
+<li>
+<p>Defined next is <code>OCTETS</code>, a constant the specifies how many "octets" we’ll eventually be reading into buffers at a time. An "octet" is just another word for what we know as a "byte" (i.e., 8 bits); it’s common nomenclature in the world of networking.</p>
+</li>
+<li>
+<p>Next are a bunch of header files, followed by a definition of <code>octet</code>, which we’ve indeed defined as 8 bits (i.e., a <code>char</code>), followed by some prototypes.</p>
+</li>
+<li>
+<p>Finally, just above <code>main</code> are a bunch of global variables. In general, it’s wise to avoid global variables, but sometimes you can’t. Indeed, as you’ll soon see, this web server has a "signal handler" that requires that some of the server’s state be global so that it can thoroughly free memory when a user stops the server by hitting control-c.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="main"><a href="#main" class="link">main</a></h4>
+<div class="paragraph">
+<p>Let’s now walk through <code>main</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Atop <code>main</code> is an initialization of what appears to be a global variable called <code>errno</code>. In fact, <code>errno</code> is defined in <code>errno.h</code> and is used by quite a few functions to indicate (via an <code>int</code>), in cases of error, precisely which error has occurred. See <code>man errno</code> for more details.</p>
+</li>
+<li>
+<p>Shortly thereafter is a call to <code>getopt</code>, which is a function declared in <code>unistd.h</code> that makes it easier to parse command-line arguments. See <code>man 3 getopt</code> if curious. Notice how we use <code>getopt</code> (and some Boolean expressions) to ensure that <code>server</code> is used properly.</p>
+</li>
+<li>
+<p>Next notice the call to <code>start</code> (for which you may have noticed a prototype earlier). More on that later.</p>
+</li>
+<li>
+<p>Below that is</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="c language-c">signal(SIGINT, handler);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which tells the program to listen for <code>SIGINT</code> (i.e., control-c) and call <code>handler</code> (a function defined by us elsewhere in <code>server.c</code>) if heard.</p>
+</div>
+</li>
+<li>
+<p>And then <code>main</code> enters an infinite <code>while</code> loop.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Inside of that loop is a call to <code>reset</code> (another function defined by us) that takes care of freeing some memory and resetting some state in between HTTP requests.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Thereafter is a call to <code>connected</code> within an <code>if</code> statement. Even though <code>connected</code> does return <code>true</code> or <code>false</code>, it does so by "blocking," waiting until a browser actually connects to the server before returning a value.</p>
+</li>
+<li>
+<p>After that is a call to <code>parse</code>, which parses a browser’s HTTP request and returns, as one big string (i.e., <code>char*</code>), its request line and any headers, with each line terminated by CRLF (i.e., <code>\r\n</code>) instead of just LF (i.e., <code>\n</code>). Per the spec, aka "request for comments" (RFC), for HTTP, lines in HTTP messages should indeed be terminated by CRLF (just like text files in Windows). See <a href="https://tools.ietf.org/html/rfc7230">https://tools.ietf.org/html/rfc7230</a> if curious. Note that <code>parse</code> ultimately stores the address of the parsed request in <code>request</code>, one of the global variables declared above <code>main</code>.</p>
+</li>
+<li>
+<p>Next is a bunch of code that parses that request, extracting only its request line.</p>
+</li>
+<li>
+<p>And then there’s a <code>TODO</code> for you! But more on that in a bit.</p>
+</li>
+<li>
+<p>Below the <code>TODO</code> is a bunch of code we wrote that adds support for <code>.php</code> files. It’s a bit cryptic at first glance, but in a nutshell, all we’re doing, upon receiving a request for, say, <code>hello.php</code>, is executing a line like</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="php language-php"><span class="constant">QUERY_STRING</span>=<span class="string"><span class="delimiter">"</span><span class="content">name=Alice</span><span class="delimiter">"</span></span> <span class="constant">REDIRECT_STATUS</span>=<span class="integer">200</span> <span class="constant">SCRIPT_FILENAME</span>=/home/jharvard/<span class="constant">Dropbox</span>/pset6/<span class="keyword">public</span>/hello.php php-cgi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the effect of which is to pass the contents of <code>hello.php</code> to PHP’s interpreter (i.e., <code>php-cgi</code>), with any HTTP parameters supplied via an "environment variable" called <code>QUERY_STRING</code>. Via <code>load</code> (a function we wrote), we then read the interpreter’s output into memory (storing the address thereof in a global variable called <code>body</code>, which was also declared above <code>main</code>). And then we respond to the browser with (dynamically generated) output like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="html language-html">HTTP/1.1 200 OK
+Connection: close
+Content-Length: 127
+X-Powered-By: PHP/5.5.9-1ubuntu4.4
+Content-type: text/html
+
+<span class="doctype">&lt;!DOCTYPE html&gt;</span>
+
+<span class="tag">&lt;html&gt;</span>
+    <span class="tag">&lt;head&gt;</span>
+        <span class="tag">&lt;title&gt;</span>hello<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span>
+        hello, Alice    <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Perhaps new is our use of <code>popen</code>, <code>memmem</code>, <code>dprintf</code>, and <code>write</code>, but see each’s <code>man</code> page for details! And know that <code>popen</code> opens a "pipe" to a process (<code>php-cgi</code> in our case), which provides us with a <code>FILE</code> pointer via which we can read that process’s standard output (as though it were an actual file). Note, too, that functions like <code>dprintf</code> and <code>write</code> (and <code>open</code> and <code>read</code> and others) use a "file descriptor" (i.e., an <code>int</code>) instead of a <code>FILE</code> pointer (i.e., <code>FILE*</code>) to refer to files. That aside, though, they’re not all that different from <code>fprintf</code> and <code>fwrite</code> (and <code>fopen</code> and <code>fread</code> and others). Do just consult <code>man</code> pages for which functions use which.</p>
+</div>
+</li>
+<li>
+<p>Below that code for handling <code>.php</code> files is another <code>TODO</code> for you! But more on that in a bit too.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>And that’s it for <code>main</code>! Notice, though, that throughout <code>main</code> are a few uses of <code>continue</code>, the effect of which is to jump back to the start of that infinite loop, where <code>reset</code> is called. Just before <code>continue</code> in some cases, too, is a call to <code>error</code> (another function we wrote) with an HTTP status code. Together, those lines (along with others you’ll write!) allow the server to handle and respond to errors just before returning its attention to (i.e., blocking for) new requests.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="connected"><a href="#connected" class="link">connected</a></h4>
+<div class="paragraph">
+<p>Take a quick peek at <code>connected</code> below <code>main</code>. Don’t fret if unsure how this function works, but do try to infer from the <code>man</code> pages for <code>memset</code> and <code>accept</code>!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="error"><a href="#error" class="link">error</a></h4>
+<div class="paragraph">
+<p>Spend a bit more time looking through <code>error</code>, which is that function via which we respond to browsers with errors (e.g., 404). This function’s a bit longer but perhaps has some more familiar constructs. Before forging ahead, be sure you’re reasonably comfortable with how this function works.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="load"><a href="#load" class="link">load</a></h4>
+<div class="paragraph">
+<p>Recall that <code>load</code> is the function that reads a file into memory (using a global variable called <code>file</code> that’s declared above <code>main</code>). Read through this one slowly, taking note how it uses one buffer (<code>buffer</code>) to read a fixed number of octets at a time that it then copies into a second buffer (the address of which is stored in <code>body</code>, another global variable that’s declared above <code>main</code>), which it re-sizes as needed via <code>realloc</code>. Long story (nay, long function!) short, this function reads the entirety of a file (or a pipe) into memory.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="handler"><a href="#handler" class="link">handler</a></h4>
+<div class="paragraph">
+<p>Thankfully, a short one! Essentially, this function (called whenever a user hits control-c) simply calls <code>stop</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="lookup"><a href="#lookup" class="link">lookup</a></h4>
+<div class="paragraph">
+<p>Awww, just a <code>TODO</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="parse"><a href="#parse" class="link">parse</a></h4>
+<div class="paragraph">
+<p>Another biggee, albeit pretty similar to <code>load</code>! This one, though, reads an HTTP request from a network connection, ultimately throwing away one CRLF and the request’s "body", if any, preserving only its request line and headers, the address of which is stored in that global variable called <code>request</code> that’s declared above <code>main</code>. Notice, too, that this function calls <code>error</code> in a couple of cases.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="reset"><a href="#reset" class="link">reset</a></h4>
+<div class="paragraph">
+<p>And now that function called <code>reset</code>, which gets called within that infinite loop within <code>main</code>. Notice how this function not only frees memory, it also resets some of those global variables to known values.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="start"><a href="#start" class="link">start</a></h4>
+<div class="paragraph">
+<p>Here’s that function that started it all (pun intended). Don’t worry if (even with <code>man</code>) you don’t understand all of its lines, particularly the networking code. But do keep in mind that <code>start</code> is the function that configures the server to listen for connections on a particular TCP port!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stop"><a href="#stop" class="link">stop</a></h4>
+<div class="paragraph">
+<p>And <code>stop</code> does the opposite, freeing all memory and ultimately compelling the server to exit, without even returning control to <code>main</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what_to_do"><a href="#what_to_do" class="link">What To Do</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alright, let’s tackle those <code>TODO</code>s.</p>
+</div>
+<div class="sect2">
+<h3 id="lookup_2"><a href="#lookup_2" class="link">lookup</a></h3>
+<div class="paragraph">
+<p>Complete the implementation of <code>lookup</code> in such a way that it returns</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>text/css</code> if <code>extension</code> is <code>css</code> (or any capitalization thereof),</p>
+</li>
+<li>
+<p><code>text/html</code> if <code>extension</code> is <code>html</code> (or any capitalization thereof),</p>
+</li>
+<li>
+<p><code>image/gif</code> if <code>extension</code> is <code>gif</code> (or any capitalization thereof),</p>
+</li>
+<li>
+<p><code>image/x-icon</code> if <code>extension</code> is <code>ico</code> (or any capitalization thereof),</p>
+</li>
+<li>
+<p><code>image/jpeg</code> (not <code>image/jpg</code>) if <code>extension</code> is <code>jpg</code> (or any capitalization thereof),</p>
+</li>
+<li>
+<p><code>text/javascript</code> if <code>extension</code> is <code>js</code> (or any capitalization thereof),</p>
+</li>
+<li>
+<p><code>image/png</code> if <code>extension</code> is <code>png</code> (or any capitalization thereof), or</p>
+</li>
+<li>
+<p><code>NULL</code> otherwise.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="main_2"><a href="#main_2" class="link">main</a></h3>
+<div class="sect3">
+<h4 id="validate_request_line"><a href="#validate_request_line" class="link">validate request-line</a></h4>
+<div class="paragraph">
+<p>Per 3.1.1 of <a href="http://tools.ietf.org/html/rfc7230">http://tools.ietf.org/html/rfc7230</a>, a <code>request-line</code> is defined as</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>method SP request-target SP HTTP-version CRLF</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>wherein <code>SP</code> represents a single space (<code> </code>) and <code>CRLF</code> represents <code>\r\n</code>. None of <code>method</code>, <code>request-target</code>, and <code>HTTP-version</code>, meanwhile, may contain <code>SP</code>.</p>
+</div>
+<div class="paragraph">
+<p>Per 5.3 of the same RFC, <code>request-target</code>, meanwhile, can take several forms, the only one of which your server needs to support is</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>absolute-path [ "?" query ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>whereby <code>absolute-path</code> (which will not contain <code>?</code>) must start with <code>/</code> and might optionally be followed by a <code>?</code> followed by a <code>query</code>, which may not contain <code>"</code>.</p>
+</div>
+<div class="paragraph">
+<p>Ensure that <code>request-line</code> (which is already stored for you in a variable called <code>line</code>) is consistent with these rules. If it is not, respond to the browser with <strong>400 Bad Request</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Even if <code>request-line</code> is consistent with these rules,</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>if <code>method</code> is not <code>GET</code>, respond to the browser with <strong>405 Method Not Allowed</strong>;</p>
+</li>
+<li>
+<p>if <code>request-target</code> does not begin with <code>/</code>, respond to the browser with <strong>501 Not Implemented</strong>;</p>
+</li>
+<li>
+<p>if <code>request-target</code> contains a <code>"</code>, respond to the browser with <strong>400 Bad Request</strong>;</p>
+</li>
+<li>
+<p>if <code>HTTP-version</code> is not <code>HTTP/1.1</code>, respond to the browser with <strong>505 HTTP Version Not Supported</strong>; or</p>
+</li>
+<li>
+<p>if <code>absolute-path</code> does not contain a <code>.</code> (and thus a file extension), respond to the browser with <strong>501 Not Implemented</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Odds are you’ll find functions like <code>strchr</code>, <code>strcpy</code>, <code>strncpy</code>, and/or <code>strstr</code> of help!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="extract_query_from_request_target"><a href="#extract_query_from_request_target" class="link">extract query from request-target</a></h4>
+<div class="paragraph">
+<p>Re-define a string called <code>query</code> that contains the <code>query</code> substring from <code>request-target</code>. If the latter is absent (even if a <code>?</code> is present), then the string should be <code>""</code>, thereby consuming one byte, whereby <code>query[0]</code> is <code>'\0'</code>.</p>
+</div>
+<div class="paragraph">
+<p>For instance, if <code>request-target</code> is <code>/hello.php</code> or <code>/hello.php?</code>, then <code>query</code> should have a value of <code>""</code>. And if <code>request-target</code> is <code>/hello.php?q=Alice</code>, then <code>query</code> should have a value of <code>q=Alice</code>.</p>
+</div>
+<div class="paragraph">
+<p>It’s probably best to ensure that <code>query</code> references memory on the stack, not the heap, so that you don’t need to worry about freeing it in <code>stop</code> if the user hits control-c.</p>
+</div>
+<div class="paragraph">
+<p>Odds are you’ll find functions like <code>strchr</code>, <code>strcpy</code>, <code>strncpy</code>, and/or <code>strstr</code> of help!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="concatenate_root_and_absolute_path"><a href="#concatenate_root_and_absolute_path" class="link">concatenate root and absolute-path</a></h4>
+<div class="paragraph">
+<p>Re-define a string called <code>path</code> that contains the concatenation of <code>root</code> (a global variable) and <code>absolute-path</code>.</p>
+</div>
+<div class="paragraph">
+<p>It’s probably best to ensure that <code>path</code> references memory on the stack, not the heap, so that you don’t need to worry about freeing it in <code>stop</code> if the user hits control-c.</p>
+</div>
+<div class="paragraph">
+<p>Odds are you’ll find functions like <code>strcat</code>, <code>strcpy</code>, and/or <code>strncpy</code> of help!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ensure_path_exists"><a href="#ensure_path_exists" class="link">ensure path exists</a></h4>
+<div class="paragraph">
+<p>Ensure that <code>path</code> actually exists. Respond to the browser with <strong>404 Not Found</strong> if not!</p>
+</div>
+<div class="paragraph">
+<p>Odds are you’ll find functions like <code>access</code> and/or <code>stat</code> of help! For the latter, be sure to consult <code>man 2 stat</code> (i.e., chapter 2) rather than <code>man stat</code> (i.e., chapter 1).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ensure_path_is_readable"><a href="#ensure_path_is_readable" class="link">ensure path is readable</a></h4>
+<div class="paragraph">
+<p>Ensure that <code>path</code> is readable. Respond to the browser with <strong>403 Forbidden</strong> if not!</p>
+</div>
+<div class="paragraph">
+<p>Odds are you’ll find functions like <code>access</code> and/or <code>stat</code> of help!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="extract_path_s_extension"><a href="#extract_path_s_extension" class="link">extract path’s extension</a></h4>
+<div class="paragraph">
+<p>Re-define a string called <code>extension</code> that contains the file extension of the file specified by <code>path</code> (i.e., the substring after the last <code>.</code> in path).</p>
+</div>
+<div class="paragraph">
+<p>It’s probably best to ensure that <code>extension</code> references memory on the stack, not the heap, so that you don’t need to worry about freeing it in <code>stop</code> if the user hits control-c.</p>
+</div>
+<div class="paragraph">
+<p>Odds are you’ll find functions like <code>strchr</code>, <code>strrchr</code>, <code>strcpy</code>, <code>strncpy</code>, and/or <code>strstr</code> of help!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="respond_to_client"><a href="#respond_to_client" class="link">respond to client</a></h4>
+<div class="paragraph">
+<p>Complete the implementation of support for static content in such a way that, after loading a file into memory via <code>load</code>, <code>main</code> responds to a browser with these lines</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">HTTP/1.1 200 OK
+Connection: close
+Content-Length: %i
+Content-Type: %s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>each of which is terminated with CRLF (i.e., <code>\r\n</code>), which are followed after a single blank line (i.e., an additional CRLF) by the bytes of the file itself, whereby <code>%i</code> represents the file’s size in bytes and <code>%s</code> represents the file’s MIME type.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+        </div>
+        
+        
+
+        <div id="footer">
+            Copyright &copy; David J. Malan
+        </div>
+
+      
+
+    
+<iframe frameborder="0" class="goog-te-menu-frame skiptranslate" style="visibility: visible; box-sizing: content-box; width: 739px; height: 274px; display: none;"></iframe><iframe frameborder="0" class="goog-te-menu-frame skiptranslate" style="visibility: visible; box-sizing: content-box; width: 228px; height: 71px; display: none;"></iframe></body>

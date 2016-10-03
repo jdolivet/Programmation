@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html style="height: 100%;" lang="en"><head>
+
+        <meta content="4851b15326f6b290-09e175a0bcd24dcd-gab2f4fb87b61a9c2-c" name="google-translate-customization">
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        
+
+                        <h1>Problem Set 5: Mispellings</h1>
+                    
+                    <span class="author" id="author">
+                        This is CS50. Harvard University.
+                    </span>
+                
+
+                
+                  
+
+<div class="sect1">
+<h2 id="getting_started"><a href="#getting_started" class="link">Getting Started</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Start up your appliance and, upon reaching John Harvard’s desktop, open a terminal window (remember how?) and execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">update50</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>to ensure that your appliance is up-to-date!</p>
+</div>
+<div class="paragraph">
+<p>Like Problem Set 4, this problem set comes with some distribution code that you’ll need to download before getting started.  Go ahead and execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">cd ~/Dropbox</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in order to navigate to your <code>~/Dropbox</code> directory.  Then execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">wget http://cdn.cs50.net/2014/fall/psets/5/pset5/pset5.zip</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in order to download a ZIP (i.e., compressed version) of this problem set’s distro.  If you then execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">ls</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you should see that you now have a file called <code>pset5.zip</code> in your <code>~/Dropbox</code> directory.  Unzip it by executing the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">unzip pset5.zip</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you again execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">ls</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>you should see that you now also have a <code>pset5</code> directory.  You’re now welcome to delete the ZIP file with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">rm -f pset5.zip</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now dive into that <code>pset5</code> directory by executing the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">cd pset5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">ls</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and you should see that the directory contains the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">dictionary.c  dictionary.h  Makefile  questions.txt  speller.c</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Interesting!</p>
+</div>
+<div class="paragraph">
+<p>Anyhow, theoretically, on input of size <em>n</em>, an algorithm with a running time of <em>n</em> is asymptotically equivalent, in terms of <em>O</em>, to an algorithm with a running time of 2<em>n</em>.  In the real world, though, the fact of the matter is that the latter feels twice as slow as the former.</p>
+</div>
+<div class="paragraph">
+<p>The challenge ahead of you is to implement the fastest spell-checker you can!  By "fastest," though, we’re talking actual, real-world, noticeable time&mdash;none of that asymptotic stuff this time.</p>
+</div>
+<div class="paragraph">
+<p>In <code>speller.c</code>, we’ve put together a program that’s designed to spell-check a file after loading a dictionary of words from disk into memory.  Unfortunately, we didn’t quite get around to implementing the loading part.  Or the checking part.  Both (and a bit more) we leave to you!</p>
+</div>
+<div class="paragraph">
+<p>Before we walk you through <code>speller.c</code>, go ahead and open up <code>dictionary.h</code> with <code>gedit</code>.  Declared in that file are four functions; take note of what each should do.  Now open up <code>dictionary.c</code>.  Notice that we’ve implemented those four functions, but only barely, just enough for this code to compile.  Your job for this problem set is to re-implement those functions as cleverly as possible so that this spell-checker works as advertised.  And fast!</p>
+</div>
+<div class="paragraph">
+<p>Let’s get you started.</p>
+</div>
+<div class="sect2">
+<h3 id="makefile"><a href="#makefile" class="link">Makefile</a></h3>
+<div class="paragraph">
+<p>Recall that <code>make</code> automates compilation of your code so that you don’t have to execute <code>clang</code> manually along with a whole bunch of switches.  However, as your programs grow in size, make won’t be able to infer from context anymore how to compile your code; you’ll need to start telling make how to compile your program, particularly when they involve multiple source (i.e., <code>.c</code>) files, as in the case of this problem set.  And so we’ll utilize a <code>Makefile</code>, a configuration file that tells make exactly what to do.  Open up <code>Makefile</code> with <code>gedit</code>, and let’s take a tour of its lines.</p>
+</div>
+<div class="paragraph">
+<p>The line below defines a variable called <code>CC</code> that specifies that make should use <code>clang</code> for compiling.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">CC = clang</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line below defines a variable called <code>CFLAGS</code> that specifies, in turn, that <code>clang</code> should use some flags, most of which should look familiar.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">CFLAGS = -ggdb3 -O0 -Qunused-arguments -std=c99 -Wall -Werror</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line below defines a variable called <code>EXE</code>, the value of which will be our program’s name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">EXE = speller</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line below defines a variable called <code>HDRS</code>, the value of which is a space-separated list of header files used by <code>speller</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">HDRS = dictionary.h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line below defines a variable called <code>LIBS</code>, the value of which is should be a space-separated list of libraries, each of which should be prefixed with <code>-l</code>.  (Recall our use of <code>-lcs50</code> earlier this term.)  Odds are you won’t need to enumerate any libraries for this problem set, but we’ve included the variable just in case.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">LIBS =</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line below defines a variable called <code>SRCS</code>, the value of which is a space-separated list of C files that will collectively implement speller.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">SRCS = speller.c dictionary.c</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line below defines a variable called <code>OBJS</code>, the value of which is identical to that of <code>SRCS</code>, except that each file’s extension is not <code>.c</code> but <code>.o</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">OBJS = $(SRCS:.c=.o)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The lines below define a "target" using these variables that tells make how to compile speller.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">$(EXE): $(OBJS) Makefile
+    $(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The line below specifies that our <code>.o</code> files all "depend on" <code>dictionary.h</code> and <code>Makefile</code> so that changes to either induce recompilation of the former when you run <code>make</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">$(OBJS): $(HDRS) Makefile</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, the lines below define another target for cleaning up this problem set’s directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">clean:
+    rm -f core $(EXE) *.o</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Know that you’re welcome to modify this <code>Makefile</code> as you see fit.  In fact, you should if you create any <code>.c</code> or <code>.h</code> files of your own.  But be sure not to change any tabs (i.e., <code>\t</code>) to spaces, since make expects the former to be present below each target.  To be safe, uncheck <strong>Use Spaces</strong> under <strong>Tab Width</strong> at the bottom of <code>gedit</code>'s window before modifying <code>Makefile</code>.</p>
+</div>
+<div class="paragraph">
+<p>The net effect of all these lines is that you can compile <code>speller</code> with a single command, even though it comprises quite a few files:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">make speller</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Even better, you can also just execute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">make</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And if you ever want to delete speller plus any <code>core</code> or <code>.o</code> files, you can do so with a single command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">make clean</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In general, though, anytime you want to compile your code for this problem set, it should suffice to run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">make</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="speller_c"><a href="#speller_c" class="link">speller.c</a></h3>
+<div class="paragraph">
+<p>Okay, next open up <code>speller.c</code> with <code>gedit</code> and spend some time looking over the code and comments therein.  You won’t need to change anything in this file, but you should understand it nonetheless.  Notice how, by way of <code>getrusage</code>, we’ll be "benchmarking" (i.e., timing the execution of) your implementations of <code>check</code>, <code>load</code>, <code>size</code>, and <code>unload</code>.  Also notice how we go about passing <code>check</code>, word by word, the contents of some file to be spell-checked.  Ultimately, we report each misspelling in that file along with a bunch of statistics.</p>
+</div>
+<div class="paragraph">
+<p>Notice, incidentally, that we have defined the usage of <code>speller</code> to be</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">Usage: speller [dictionary] text</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>dictionary</code> is assumed to be a file containing a list of lowercase words, one per line, and <code>text</code> is a file to be spell-checked.  As the brackets suggest, provision of <code>dictionary</code> is optional; if this argument is omitted, <code>speller</code> will use <code>/home/cs50/pset5/dictionaries/large</code> by default.  In other words, running</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">./speller text</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will be equivalent to running</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">./speller ~cs50/pset5/dictionaries/large text</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>text</code> is the file you wish to spell-check.  Suffice it to say, the former is easier to type!  (Of course, <code>speller</code> will not be able to load any dictionaries until you implement <code>load</code> in <code>dictionary.c</code>!  Until then, you’ll see <strong>Could not load</strong>.)</p>
+</div>
+<div class="paragraph">
+<p>Within the default dictionary, mind you, are 143,091 words, all of which must be loaded into memory!  In fact, take a peek at that file to get a sense of its structure and size, as with <code>gedit</code>.  Notice that every word in that file appears in lowercase (even, for simplicity, proper nouns and acronyms).  From top to bottom, the file is sorted lexicographically, with only one word per line (each of which ends with <code>\n</code>).  No word is longer than 45 characters, and no word appears more than once.  During development, you may find it helpful to provide <code>speller</code> with a <code>dictionary</code> of your own that contains far fewer words, lest you struggle to debug an otherwise enormous structure in memory.  In <code>/home/cs50/pset5/dictionaries/small</code> is one such dictionary.  To use it, execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">./speller ~cs50/pset5/dictionaries/small text</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>text</code> is the file you wish to spell-check.   Don’t move on until you’re sure you understand how <code>speller</code> itself works!</p>
+</div>
+<div class="paragraph">
+<p>Odds are, you didn’t spend enough time looking over <code>speller.c</code>.  Go back one square and walk yourself through it again!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="questions_txt"><a href="#questions_txt" class="link">questions.txt</a></h3>
+<div class="paragraph">
+<p>Okay, technically that last problem induced an infinite loop.  But we’ll assume you broke out of it.  Open up <code>questions.txt</code> with <code>gedit</code> and answer each of the following questions in one or more sentences.</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="olist arabic">
+<ol start="0" class="arabic">
+<li>
+<p>What is pneumonoultramicroscopicsilicovolcanoconiosis?</p>
+</li>
+<li>
+<p>According to its <code>man</code> page, what does <code>getrusage</code> do?</p>
+</li>
+<li>
+<p>Per that same man page, how many members are in a variable of type <code>struct rusage</code>?</p>
+</li>
+<li>
+<p>Why do you think we pass <code>before</code> and <code>after</code> by reference (instead of by value) to <code>calculate</code>, even though we’re not changing their contents?</p>
+</li>
+<li>
+<p>Explain as precisely as possible, in a paragraph or more, how <code>main</code> goes about reading words from a file.  In other words, convince us that you indeed understand how that function’s <code>for</code> loop works.</p>
+</li>
+<li>
+<p>Why do you think we used <code>fgetc</code> to read each word’s characters one at a time rather than use <code>fscanf</code> with a format string like <code>"%s"</code> to read whole words at a time?  Put another way, what problems might arise by relying on <code>fscanf</code> alone?</p>
+</li>
+<li>
+<p>Why do you think we declared the parameters for <code>check</code> and <code>load</code> as <code>const</code>?</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="texts"><a href="#texts" class="link">texts</a></h3>
+<div class="paragraph">
+<p>So that you can test your implementation of <code>speller</code>, we’ve also provided you with a whole bunch of texts, among them the script from <em>Austin Powers: International Man of Mystery</em>, a sound bite from Ralph Wiggum, three million bytes from Tolstoy, some excerpts from Machiavelli and Shakespeare, the entirety of the King James V Bible, and more.  So that you know what to expect, open and skim each of those files, as with <code>gedit</code>.  For instance, to open <code>austinpowers.txt</code>, open a terminal window and execute the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">gedit ~cs50/pset5/texts/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, launch <code>gedit</code>, select <strong>File &gt; Open…</strong>, click <strong>Computer</strong> at left (under <strong>Devices</strong>), double-click <strong>home</strong> at right, click <strong>cs50</strong> at right, double-click <strong>pset5</strong> at right, double-click <strong>texts</strong> at right, then double-click <strong>austinpowers.txt</strong> at right.  (If you get lost, simply start these steps over!)</p>
+</div>
+<div class="paragraph">
+<p>Now, as you should know from having read over <code>speller.c</code> carefully, the output of <code>speller</code>, if executed with, say,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">./speller ~cs50/pset5/texts/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will eventually resemble the below.   For now, try executing the staff’s solution (using the default dictionary) with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">~cs50/pset5/speller ~cs50/pset5/texts/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Below’s some of the output you’ll see.  For amusement’s sake, we’ve excerpted some of our favorite "misspellings."  And lest we spoil the fun, we’ve omitted our own statistics for now.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">MISSPELLED WORDS
+
+[...]
+Bigglesworth
+[...]
+Fembots
+[...]
+Virtucon
+[...]
+friggin'
+[...]
+shagged
+[...]
+trippy
+[...]
+
+WORDS MISSPELLED:
+WORDS IN DICTIONARY:
+WORDS IN TEXT:
+TIME IN load:
+TIME IN check:
+TIME IN size:
+TIME IN unload:
+TIME IN TOTAL:</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>TIME IN load</code> represents the number of seconds that <code>speller</code> spends executing your implementation of <code>load</code>.  <code>TIME IN check</code> represents the number of seconds that <code>speller</code> spends, in total, executing your implementation of <code>check</code>.  <code>TIME IN size</code> represents the number of seconds that <code>speller</code> spends executing your implementation of <code>size</code>.  <code>TIME IN unload</code> represents the number of seconds that <code>speller</code> spends executing your implementation of <code>unload</code>.  <code>TIME IN TOTAL</code> is the sum of those four measurements.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note that these times may vary somewhat across executions of <code>speller</code>, depending on what else your appliance is doing, even if you don’t change your code.</strong></p>
+</div>
+<div class="paragraph">
+<p>Incidentally, to be clear, by "misspelled" we simply mean that some word is not in the <code>dictionary</code> provided.</p>
+</div>
+<div class="paragraph">
+<p>And now this:</p>
+</div>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="spell_checking"><a href="#spell_checking" class="link">Spell Checking</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alright, the challenge now before you is to implement <code>load</code>, <code>check</code>, <code>size</code>, and <code>unload</code> as efficiently as possible, in such a way that <code>TIME IN load</code>, <code>TIME IN check</code>, <code>TIME IN size</code>, and <code>TIME IN unload</code> are all minimized.  To be sure, it’s not obvious what it even means to be minimized, inasmuch as these benchmarks will certainly vary as you feed <code>speller</code> different values for <code>dictionary</code> and for <code>text</code>.  But therein lies the challenge, if not the fun, of this problem set.  This problem set is your chance to design.  Although we invite you to minimize space, your ultimate enemy is time.  But before you dive in, some specifications from us.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You may not alter <code>speller.c</code>.</p>
+</li>
+<li>
+<p>You may alter <code>dictionary.c</code> (and, in fact, must in order to complete the implementations of <code>load</code>, <code>check</code>, <code>size</code>, and <code>unload</code>), but you may not alter the declarations of <code>load</code>, <code>check</code>, <code>size</code>, or <code>unload</code>.</p>
+</li>
+<li>
+<p>You may alter <code>dictionary.h</code>, but you may not alter the declarations of <code>load</code>, <code>check</code>, <code>size</code>, or <code>unload</code>.</p>
+</li>
+<li>
+<p>You may alter <code>Makefile</code>.</p>
+</li>
+<li>
+<p>You may add functions to <code>dictionary.c</code> or to files of your own creation so long as all of your code compiles via <code>make</code>.</p>
+</li>
+<li>
+<p>Your implementation of <code>check</code> must be case-insensitive.  In other words, if <code>foo</code> is in dictionary, then <code>check</code> should return true given any capitalization thereof; none of <code>foo</code>, <code>foO</code>, <code>fOo</code>, <code>fOO</code>, <code>fOO</code>,  <code>Foo</code>, <code>FoO</code>, <code>FOo</code>, and <code>FOO</code> should be considered misspelled.</p>
+</li>
+<li>
+<p>Capitalization aside, your implementation of <code>check</code> should only return <code>true</code> for words actually in <code>dictionary</code>.  Beware hard-coding common words (e.g., <code>the</code>), lest we pass your implementation a <code>dictionary</code> without those same words.  Moreover, the only possessives allowed are those actually in <code>dictionary</code>.  In other words, even if <code>foo</code> is in <code>dictionary</code>, <code>check</code> should return <code>false</code> given <code>foo’s</code> if <code>foo’s</code> is not also in <code>dictionary</code>.</p>
+</li>
+<li>
+<p>You may assume that <code>check</code> will only be passed strings with alphabetical characters and/or apostrophes.</p>
+</li>
+<li>
+<p>You may assume that any <code>dictionary</code> passed to your program will be structured exactly like ours, lexicographically sorted from top to bottom with one word per line, each of which ends with <code>\n</code>.  You may also assume that <code>dictionary</code> will contain at least one word, that no word will be longer than <code>LENGTH</code> (a constant defined in <code>dictionary.h</code>) characters, that no word will appear more than once, and that each word will contain only lowercase alphabetical characters and possibly apostrophes.</p>
+</li>
+<li>
+<p>Your spell-checker may only take <code>text</code> and, optionally, <code>dictionary</code> as input.  Although you might be inclined (particularly if among those more comfortable) to "pre-process" our default dictionary in order to derive an "ideal hash function" for it, you may not save the output of any such pre-processing to disk in order to load it back into memory on subsequent runs of your spell-checker in order to gain an advantage.</p>
+</li>
+<li>
+<p>You may research hash functions in books or on the Web, so long as you cite the origin of any hash function you integrate into your own code.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Alright, ready to go?</p>
+</div>
+<div class="sect2">
+<h3 id="load"><a href="#load" class="link">load</a></h3>
+<div class="paragraph">
+<p>Implement <code>load</code>!</p>
+</div>
+<div class="paragraph">
+<p>Allow us to suggest that you whip up some dictionaries smaller than the 143,091-word default with which to test your code during development.  </p>
+</div>
+
+</div>
+<div class="sect2">
+<h3 id="check"><a href="#check" class="link">check</a></h3>
+<div class="paragraph">
+<p>Implement <code>check</code>!</p>
+</div>
+<div class="paragraph">
+<p>Allow us to suggest that you whip up some small files to spell-check before trying out, oh, War and Peace. </p>
+</div>
+
+</div>
+<div class="sect2">
+<h3 id="size"><a href="#size" class="link">size</a></h3>
+<div class="paragraph">
+<p>Implement <code>size</code>!</p>
+</div>
+<div class="paragraph">
+<p>If you planned ahead, this one is easy!  </p>
+</div>
+
+</div>
+<div class="sect2">
+<h3 id="unload"><a href="#unload" class="link">unload</a></h3>
+<div class="paragraph">
+<p>Implement <code>unload</code>!</p>
+</div>
+<div class="paragraph">
+<p>Be sure to free any memory that you allocated in <code>load</code>!  </p>
+</div>
+
+<div class="paragraph">
+<p>In fact, be sure that your spell-checker doesn’t leak any memory at all.  Recall that <code>valgrind</code> is your newest best friend.  Know that <code>valgrind</code> watches for leaks while your program is actually running, so be sure to provide command-line arguments if you want <code>valgrind</code> to analyze <code>speller</code> while you use a particular <code>dictionary</code> and/or text, as in the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">valgrind --leak-check=full ./speller ~cs50/pset5/texts/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you run <code>valgrind</code> without specifying a <code>text</code> for <code>speller</code>, your implementations of <code>load</code> and <code>unload</code> won’t actually get called (and thus analyzed).</p>
+</div>
+<div class="paragraph">
+<p>And don’t forget about your other good buddy, <code>gdb</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="checking_spell_checking"><a href="#checking_spell_checking" class="link">Checking Spell Checking</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>How to check whether your program is outting the right misspelled words?  Well, you’re welcome to consult the "answer keys" in <code>~cs50/pset5/keys</code>, as with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">gedit ~cs50/pset5/keys/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you could run your program on some text in one window, as with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">./speller ~cs50/pset5/texts/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you can then run the staff’s solution on the same text in another window, as with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">~cs50/pset5/speller ~cs50/pset5/texts/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And you could then compare the windows visually side by side.  That could get tedious quickly, though.  So you might instead want to "redirect" your program’s output to a file (just like you may have done with <code>generate</code> in Problem Set 3), as with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">./speller ~cs50/pset5/texts/austinpowers.txt &gt; student.txt
+~cs50/pset5/speller ~cs50/pset5/texts/austinpowers.txt &gt; staff.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can then compare both files side by side in the same window with a program like <code>diff</code>, as with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">diff -y student.txt staff.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, to save time, you could just compare your program’s output (assuming you redirected it to, e.g., <code>student.txt</code>) against one of the answer keys without running the staff’s solution, as with the below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">diff -y student.txt ~cs50/pset5/keys/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If your program’s output matches the staff’s, <code>diff</code> will output two columns that should be identical except for, perhaps, the running times at the bottom.  If the columns differ, though, you’ll see a <code>&gt;</code> or <code>|</code> where they differ.  For instance, if you see</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">MISSPELLED WORDS                                                MISSPELLED WORDS
+
+FOTTAGE                                                         FOTTAGE
+INT                                                             INT
+                                                              &gt; EVIL'S
+s                                                               s
+                                                              &gt; EVIL'S
+Farbissina                                                      Farbissina</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>that means your program (whose output is on the left) does not think that <code>EVIL’s</code> is misspelled, even though the staff’s output (on the right) does, as is implied by the absence of <code>EVIL’s</code> in the lefthand column and the presence of <code>EVIL’s</code> in the righthand column.</p>
+</div>
+<div class="paragraph">
+<p>To test your code less manually (though still not exhaustively), you may also execute the below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">check50 2014.fall.pset5.speller dictionary.c dictionary.h Makefile</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that <code>check50</code> does not check for memory leaks, so be sure to run <code>valgrind</code> as prescribed as well.</p>
+</div>
+<div class="paragraph">
+<p>How to assess just how fast (and correct) your code is?  Well, as always, feel free to play with the staff’s solution, as with the below, and compare its numbers against yours.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">~cs50/pset5/speller ~cs50/pset5/texts/austinpowers.txt</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="big_board"><a href="#big_board" class="link">Big Board</a></h3>
+<div class="paragraph">
+<p><em>Afraid the Big Board is only available on campus!</em></p>
+</div>
+</div>
+
+
+        </div>
+        
+        
+
+        <div id="footer">
+            Copyright &copy; David J. Malan
+        </div>
+
+        
+
+    
+<iframe frameborder="0" class="goog-te-menu-frame skiptranslate" style="visibility: visible; box-sizing: content-box; width: 739px; height: 274px; display: none;"></iframe><iframe frameborder="0" class="goog-te-menu-frame skiptranslate" style="visibility: visible; box-sizing: content-box; width: 228px; height: 71px; display: none;"></iframe></body>
