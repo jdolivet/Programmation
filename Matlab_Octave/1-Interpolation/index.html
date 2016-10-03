@@ -1,0 +1,309 @@
+<head><meta content="IE=Edge,chrome=IE7" http-equiv="X-UA-Compatible"><meta content="!" name="fragment"><meta content="NOODP" name="robots"><meta charset="utf-8"><meta content="Coursera" property="og:title"><meta content="website" property="og:type"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" property="og:image"><meta content="https://www.coursera.org/assignment/view?assignment_id=15" property="og:url"><meta content="Coursera" property="og:site_name"><meta content="en_US" property="og:locale"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." property="og:description"><meta content="727836538,4807654" property="fb:admins"><meta content="274998519252278" property="fb:app_id"><meta content="Coursera" name="twitter:site"><meta content="Coursera" name="twitter:app:name:iphone"><meta content="Coursera" name="twitter:app:name:ipad"><meta content="Coursera" name="twitter:app:name:googleplay"><meta content="id736535961" name="twitter:app:id:iphone"><meta content="id736535961" name="twitter:app:id:ipad"><meta content="org.coursera.android" name="twitter:app:id:googleplay"><meta content="Take free online classes from 80+ top universities and organizations. Coursera is a social entrepreneurship company partnering with Stanford University, Yale University, Princeton University and others around the world to offer courses online for anyone to take, for free. We believe in connecting people to a great education so that anyone around the world can learn without limits." name="description"><meta content="http://s3.amazonaws.com/coursera/media/Coursera_Computer_Narrow.png" name="image"><meta content="app-id=736535961" name="apple-itunes-app"><title>Assignment Details | Coursera</title>    <link type="text/css" rel="stylesheet" href="https://dw0ugk4msqulk.cloudfront.net/d59975fa04707abd602d7f87d0eae218075d7b26/css/spark.main.css">
+      <link type="text/css" rel="stylesheet" href="https://www.coursera.org/maestro/api/course/973093/course.css">
+    <link rel="icon" href="https://spark-public.s3.amazonaws.com/algoprog/static/images/favicon.ico">
+</head>
+
+
+
+<h2 class="course-page-header">
+  <span>
+Expériences numériques avec l'interpolation de Lagrange  </span>
+  
+
+</h2>
+
+
+<a style="display:none;" title="Quiz documentation" href="https://class.coursera.org/mooc/help/quiz" rel="help" data-coursera-admin-helpwidget-link="">Learn more</a>
+
+
+
+
+
+
+
+
+
+
+            <form accept-charset="UTF-8" id="quiz_form" method="post">
+    
+        <div class="course-quiz-preamble">
+        Le but de cet exercice est de compléter un programme 
+permettant d'interpoler une fonction continue par un polynôme
+(sect. 1.4 du livre).
+Soit <span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-1-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-1"><span style="display: inline-block; position: relative; width: 117px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(2.064em, 1000em, 3.389em, -0.432em); top: -2.976em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math; font-style: italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.06em;"></span></span><span class="mo" id="MathJax-Span-4" style="font-family: MathJax_Main; padding-left: 0.278em;">:</span><span class="mo" id="MathJax-Span-5" style="font-family: MathJax_Main; padding-left: 0.278em;">[</span><span class="mo" id="MathJax-Span-6" style="font-family: MathJax_Main;">−</span><span class="mn" id="MathJax-Span-7" style="font-family: MathJax_Main;">1</span><span class="mo" id="MathJax-Span-8" style="font-family: MathJax_Main;">,</span><span class="mn" id="MathJax-Span-9" style="font-family: MathJax_Main; padding-left: 0.167em;">1</span><span class="mo" id="MathJax-Span-10" style="font-family: MathJax_Main;">]</span><span class="mo" id="MathJax-Span-11" style="font-family: MathJax_Main; padding-left: 0.278em;">→</span><span class="texatom" id="MathJax-Span-12" style="padding-left: 0.278em;"><span class="mrow" id="MathJax-Span-13"><span class="mi" id="MathJax-Span-14" style="font-family: MathJax_AMS;">R</span></span></span></span><span style="display: inline-block; width: 0px; height: 2.976em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.463em; vertical-align: -0.401em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-1">f:[-1,1]\to \mathbb R</script> une fonction continue donnée et soit 
+<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-2-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-15"><span style="display: inline-block; position: relative; width: 182px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.863em, 1000em, 2.979em, -0.468em); top: -2.652em; left: 0em;"><span class="mrow" id="MathJax-Span-16"><span class="msubsup" id="MathJax-Span-17"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-18" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.393em; left: 0.379em;"><span class="mn" id="MathJax-Span-19" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span><span class="mo" id="MathJax-Span-20" style="font-family: MathJax_Main; padding-left: 0.278em;">&lt;</span><span class="msubsup" id="MathJax-Span-21" style="padding-left: 0.278em;"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-22" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.393em; left: 0.379em;"><span class="mn" id="MathJax-Span-23" style="font-size: 70.7%; font-family: MathJax_Main;">1</span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span><span class="mo" id="MathJax-Span-24" style="font-family: MathJax_Main; padding-left: 0.278em;">&lt;</span><span class="msubsup" id="MathJax-Span-25" style="padding-left: 0.278em;"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-26" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.393em; left: 0.379em;"><span class="mn" id="MathJax-Span-27" style="font-size: 70.7%; font-family: MathJax_Main;">2</span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span></span></span><span class="mo" id="MathJax-Span-28" style="font-family: MathJax_Main; padding-left: 0.278em;">&lt;</span><span class="mo" id="MathJax-Span-29" style="font-family: MathJax_Main; padding-left: 0.278em;">…</span><span class="mo" id="MathJax-Span-30" style="font-family: MathJax_Main; padding-left: 0.278em;">&lt;</span><span class="msubsup" id="MathJax-Span-31" style="padding-left: 0.278em;"><span style="display: inline-block; position: relative; width: 0.887em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-32" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.339em; left: 0.379em;"><span class="mi" id="MathJax-Span-33" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.188em; vertical-align: -0.29em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-2">t_0\lt t_1\lt t_2\lt \ldots\lt t_n</script>, <span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-3-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-34"><span style="display: inline-block; position: relative; width: 56px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.739em, 1000em, 3.064em, -0.393em); top: -2.652em; left: 0em;"><span class="mrow" id="MathJax-Span-35"><span class="mo" id="MathJax-Span-36" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-37" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-38" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="mn" id="MathJax-Span-39" style="font-family: MathJax_Main; padding-left: 0.222em;">1</span><span class="mo" id="MathJax-Span-40" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.463em; vertical-align: -0.401em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-3">(n+1)</script> points de <span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-4-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-41"><span style="display: inline-block; position: relative; width: 50px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.739em, 1000em, 3.064em, -0.369em); top: -2.652em; left: 0em;"><span class="mrow" id="MathJax-Span-42"><span class="mo" id="MathJax-Span-43" style="font-family: MathJax_Main;">[</span><span class="mo" id="MathJax-Span-44" style="font-family: MathJax_Main;">−</span><span class="mn" id="MathJax-Span-45" style="font-family: MathJax_Main;">1</span><span class="mo" id="MathJax-Span-46" style="font-family: MathJax_Main;">,</span><span class="mn" id="MathJax-Span-47" style="font-family: MathJax_Main; padding-left: 0.167em;">1</span><span class="mo" id="MathJax-Span-48" style="font-family: MathJax_Main;">]</span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.463em; vertical-align: -0.401em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-4">[-1,1]</script>. On cherche
+un polynôme <span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-5-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-49"><span style="display: inline-block; position: relative; width: 18px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.885em, 1000em, 2.889em, -0.526em); top: -2.489em; left: 0em;"><span class="mrow" id="MathJax-Span-50"><span class="msubsup" id="MathJax-Span-51"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(1.993em, 1000em, 2.954em, -0.526em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-52" style="font-family: MathJax_Math; font-style: italic;">p</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.26em; left: 0.487em;"><span class="mi" id="MathJax-Span-53" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.039em; vertical-align: -0.384em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-5">p_n</script> de degré inférieur ou égal à <span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-6-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-54"><span style="display: inline-block; position: relative; width: 11px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.993em, 1000em, 2.771em, -0.466em); top: -2.597em; left: 0em;"><span class="mrow" id="MathJax-Span-55"><span class="mi" id="MathJax-Span-56" style="font-family: MathJax_Math; font-style: italic;">n</span></span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 0.741em; vertical-align: -0.086em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-6">n</script> tel que <span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-7-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-57"><span style="display: inline-block; position: relative; width: 108px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.739em, 1000em, 3.108em, -0.526em); top: -2.652em; left: 0em;"><span class="mrow" id="MathJax-Span-58"><span class="msubsup" id="MathJax-Span-59"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(1.993em, 1000em, 2.954em, -0.526em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-60" style="font-family: MathJax_Math; font-style: italic;">p</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.26em; left: 0.487em;"><span class="mi" id="MathJax-Span-61" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-62" style="font-family: MathJax_Main;">(</span><span class="msubsup" id="MathJax-Span-63"><span style="display: inline-block; position: relative; width: 0.724em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-64" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.339em; left: 0.379em;"><span class="mi" id="MathJax-Span-65" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">j</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-66" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-67" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mi" id="MathJax-Span-68" style="font-family: MathJax_Math; font-style: italic; padding-left: 0.278em;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.06em;"></span></span><span class="mo" id="MathJax-Span-69" style="font-family: MathJax_Main;">(</span><span class="msubsup" id="MathJax-Span-70"><span style="display: inline-block; position: relative; width: 0.724em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-71" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.339em; left: 0.379em;"><span class="mi" id="MathJax-Span-72" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">j</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-73" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.521em; vertical-align: -0.46em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-7">p_n(t_j)=f(t_j)</script>, <span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-8-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-74"><span style="display: inline-block; position: relative; width: 77px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(1.823em, 1000em, 3.018em, -0.448em); top: -2.652em; left: 0em;"><span class="mrow" id="MathJax-Span-75"><span class="mn" id="MathJax-Span-76" style="font-family: MathJax_Main;">0</span><span class="mo" id="MathJax-Span-77" style="font-family: MathJax_Main; padding-left: 0.278em;">≤</span><span class="mi" id="MathJax-Span-78" style="font-family: MathJax_Math; font-style: italic; padding-left: 0.278em;">j</span><span class="mo" id="MathJax-Span-79" style="font-family: MathJax_Main; padding-left: 0.278em;">≤</span><span class="mi" id="MathJax-Span-80" style="font-family: MathJax_Math; font-style: italic; padding-left: 0.278em;">n</span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.291em; vertical-align: -0.341em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-8">0\le j\le n</script>.
+<br>
+D'après le cours, on a :
+<br>
+<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-9-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-81"><span style="display: inline-block; position: relative; width: 168px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(0.927em, 1000em, 4.146em, -0.526em); top: -2.652em; left: 0em;"><span class="mrow" id="MathJax-Span-82"><span class="msubsup" id="MathJax-Span-83"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(1.993em, 1000em, 2.954em, -0.526em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-84" style="font-family: MathJax_Math; font-style: italic;">p</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.26em; left: 0.487em;"><span class="mi" id="MathJax-Span-85" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-86" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-87" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mo" id="MathJax-Span-88" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-89" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mstyle" id="MathJax-Span-90" style="padding-left: 0.278em;"><span class="mrow" id="MathJax-Span-91"><span class="texatom" id="MathJax-Span-92"><span class="mrow" id="MathJax-Span-93"><span class="munderover" id="MathJax-Span-94"><span style="display: inline-block; position: relative; width: 1.461em; height: 0px;"><span style="position: absolute; clip: rect(2.621em, 1000em, 4.346em, -0.432em); top: -3.734em; left: 0em;"><span class="mo" id="MathJax-Span-95" style="font-family: MathJax_Size2; vertical-align: 0em;">∑</span><span style="display: inline-block; width: 0px; height: 3.734em;"></span></span><span style="position: absolute; clip: rect(1.91em, 1000em, 2.95em, -0.495em); top: -1.456em; left: 0.135em;"><span class="texatom" id="MathJax-Span-96"><span class="mrow" id="MathJax-Span-97"><span class="mi" id="MathJax-Span-98" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">j</span><span class="mo" id="MathJax-Span-99" style="font-size: 70.7%; font-family: MathJax_Main;">=</span><span class="mn" id="MathJax-Span-100" style="font-size: 70.7%; font-family: MathJax_Main;">0</span></span></span><span style="display: inline-block; width: 0px; height: 2.543em;"></span></span><span style="position: absolute; clip: rect(1.914em, 1000em, 2.659em, -0.472em); top: -3.639em; left: 0.514em;"><span class="mi" id="MathJax-Span-101" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span></span></span><span class="mi" id="MathJax-Span-102" style="font-family: MathJax_Math; font-style: italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.06em;"></span></span><span class="mo" id="MathJax-Span-103" style="font-family: MathJax_Main;">(</span><span class="msubsup" id="MathJax-Span-104"><span style="display: inline-block; position: relative; width: 0.724em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-105" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.339em; left: 0.379em;"><span class="mi" id="MathJax-Span-106" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">j</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-107" style="font-family: MathJax_Main;">)</span><span class="msubsup" id="MathJax-Span-108"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(1.993em, 1000em, 2.978em, -0.437em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-109" style="font-family: MathJax_Math; font-style: italic;">φ</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.236em; left: 0.649em;"><span class="mi" id="MathJax-Span-110" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">j</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-111" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-112" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mo" id="MathJax-Span-113" style="font-family: MathJax_Main;">)</span></span></span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 3.963em; vertical-align: -1.829em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-9">
+p_n(t) =\displaystyle{ \sum_{j=0}^n }f(t_j)\varphi_j(t)
+</script>
+où
+<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-10-Frame" role="textbox" aria-readonly="true" style=""><nobr><span class="math" id="MathJax-Span-114"><span style="display: inline-block; position: relative; width: 157px; height: 0px; font-size: 132%;"><span style="position: absolute; clip: rect(0.927em, 1000em, 4.543em, -0.437em); top: -2.652em; left: 0em;"><span class="mrow" id="MathJax-Span-115"><span class="msubsup" id="MathJax-Span-116"><span style="display: inline-block; position: relative; width: 0.995em; height: 0px;"><span style="position: absolute; clip: rect(1.993em, 1000em, 2.978em, -0.437em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-117" style="font-family: MathJax_Math; font-style: italic;">φ</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.236em; left: 0.649em;"><span class="mi" id="MathJax-Span-118" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">j</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-119" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-120" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mo" id="MathJax-Span-121" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-122" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mstyle" id="MathJax-Span-123" style="padding-left: 0.278em;"><span class="mrow" id="MathJax-Span-124"><span class="texatom" id="MathJax-Span-125"><span class="mrow" id="MathJax-Span-126"><span class="munderover" id="MathJax-Span-127"><span style="display: inline-block; position: relative; width: 1.299em; height: 0px;"><span style="position: absolute; clip: rect(2.621em, 1000em, 4.346em, -0.431em); top: -3.734em; left: 0em;"><span class="mo" id="MathJax-Span-128" style="font-family: MathJax_Size2; vertical-align: 0em;">∏</span><span style="display: inline-block; width: 0px; height: 3.734em;"></span></span><span style="position: absolute; clip: rect(3.181em, 1000em, 4.618em, -0.343em); top: -2.727em; left: 0.069em;"><span class="texatom" id="MathJax-Span-129"><span class="mrow" id="MathJax-Span-130"><span class="mfrac" id="MathJax-Span-131" style="padding-left: 0.12em; padding-right: 0.12em;"><span style="display: inline-block; position: relative; width: 0.92em; height: 0px;"><span style="position: absolute; clip: rect(1.98em, 1000em, 2.663em, -0.463em); top: -2.803em; left: 50%; margin-left: -0.46em;"><span class="texatom" id="MathJax-Span-132"><span class="mrow" id="MathJax-Span-133"><span class="mi" id="MathJax-Span-134" style="font-size: 50%; font-family: MathJax_Math; font-style: italic;">k</span><span class="mo" id="MathJax-Span-135" style="font-size: 50%; font-family: MathJax_Main;">=</span><span class="mn" id="MathJax-Span-136" style="font-size: 50%; font-family: MathJax_Main;">0</span></span></span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span><span style="position: absolute; clip: rect(1.969em, 1000em, 2.759em, -0.463em); top: -2.245em; left: 50%; margin-left: -0.433em;"><span class="texatom" id="MathJax-Span-137"><span class="mrow" id="MathJax-Span-138"><span class="mi" id="MathJax-Span-139" style="font-size: 50%; font-family: MathJax_Math; font-style: italic;">k</span><span class="mo" id="MathJax-Span-140" style="font-size: 50%; font-family: MathJax_Main;">≠</span><span class="mi" id="MathJax-Span-141" style="font-size: 50%; font-family: MathJax_Math; font-style: italic;">j</span></span></span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 4.004em;"></span></span><span style="position: absolute; clip: rect(1.914em, 1000em, 2.659em, -0.472em); top: -3.639em; left: 0.433em;"><span class="texatom" id="MathJax-Span-142"><span class="mrow" id="MathJax-Span-143"><span class="mi" id="MathJax-Span-144" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span></span></span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span></span></span><span class="mstyle" id="MathJax-Span-145" style="padding-left: 0.167em;"><span class="mrow" id="MathJax-Span-146"><span class="mfrac" id="MathJax-Span-147" style="padding-left: 0.12em; padding-right: 0.12em;"><span style="display: inline-block; position: relative; width: 2.88em; height: 0px;"><span style="position: absolute; clip: rect(1.863em, 1000em, 2.972em, -0.468em); top: -3.328em; left: 50%; margin-left: -1.218em;"><span class="mrow" id="MathJax-Span-148"><span class="mi" id="MathJax-Span-149" style="font-family: MathJax_Math; font-style: italic;">t</span><span class="mo" id="MathJax-Span-150" style="font-family: MathJax_Main; padding-left: 0.222em;">−</span><span class="msubsup" id="MathJax-Span-151" style="padding-left: 0.222em;"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-152" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.339em; left: 0.379em;"><span class="mi" id="MathJax-Span-153" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">k</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span><span style="position: absolute; clip: rect(1.863em, 1000em, 3.108em, -0.468em); top: -1.966em; left: 50%; margin-left: -1.38em;"><span class="mrow" id="MathJax-Span-154"><span class="msubsup" id="MathJax-Span-155"><span style="display: inline-block; position: relative; width: 0.724em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-156" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.339em; left: 0.379em;"><span class="mi" id="MathJax-Span-157" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">j</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span><span class="mo" id="MathJax-Span-158" style="font-family: MathJax_Main; padding-left: 0.222em;">−</span><span class="msubsup" id="MathJax-Span-159" style="padding-left: 0.222em;"><span style="display: inline-block; position: relative; width: 0.833em; height: 0px;"><span style="position: absolute; clip: rect(1.809em, 1000em, 2.771em, -0.468em); top: -2.597em; left: 0em;"><span class="mi" id="MathJax-Span-160" style="font-family: MathJax_Math; font-style: italic;">t</span><span style="display: inline-block; width: 0px; height: 2.597em;"></span></span><span style="position: absolute; top: -2.339em; left: 0.379em;"><span class="mi" id="MathJax-Span-161" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">k</span><span style="display: inline-block; width: 0px; height: 2.489em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span><span style="position: absolute; clip: rect(0.852em, 1000em, 1.245em, -0.487em); top: -1.302em; left: 0em;"><span style="border-left: 2.88em solid; display: inline-block; overflow: hidden; width: 0px; height: 1.25px; vertical-align: 0em;"></span><span style="display: inline-block; width: 0px; height: 1.082em;"></span></span></span></span></span></span><span class="mo" id="MathJax-Span-162" style="font-family: MathJax_Main; padding-left: 0.167em;">.</span></span></span></span><span style="display: inline-block; width: 0px; height: 2.652em;"></span></span></span><span style="border-left: 0em solid; display: inline-block; overflow: hidden; width: 0px; height: 4.487em; vertical-align: -2.353em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-10">
+\varphi_j(t)=\displaystyle{ \prod_{{k=0}\atop{k \neq j}}^{n} }\dfrac{t-t_k}{t_j-t_k}.
+</script>
+<br>
+On propose l'algorithme (octave, matlab) suivant, que l'on complètera. Vous pouvez sauver le fichier <a href="https://d396qusza40orc.cloudfront.net/analysenumerique%2Fexercices%2Fintlag.m">intlag.m</a>, le compléter et le tester avec octave, puis répondre au questions ci-dessous. Pour lancer le calcul taper 
+<br>
+[err,t,f,x,p]=intlag(5);
+<br>
+dans la fenêtre matlab (ou octave). Les résultats pourront ensuite être visualisés en tapant 
+<br>
+plot(t,f,"o",x,p);
+<br>
+<br>
+function [err,t,f,x,p]=intlag(n)
+<br>
+%
+<br>
+%Etant donne un entier n et une fonction continue f,
+<br>
+%le programme interpole la fonction f par un polynome p
+<br>
+%de degre n aux points d interpolation t(1),t(2),...,t(n),t(n+1).
+<br>
+%parametres: entree : n
+<br>
+%	     sortie : err : erreur max entre la fonction f et l interpolant p
+<br>
+%                     t   : (n+1) vecteur contenant les points d interpolation 
+<br>
+%	              f   : (n+1) vecteur contenant les valeurs de la fonction f
+<br>
+%			    aux points d interpolation
+<br>
+%		      x   : vecteur contenant 1001 points uniformement distribues
+<br>
+%			    sur [-1,1]
+<br>
+%		      p   : vecteur contenant les valeurs du polynome p au point x(i)
+<br>
+%
+<br>
+%initialisation des vecteurs t et f
+<br>
+for i=1:n+1
+<br>
+ &emsp;  t(i)=-1+(2.*(i-1))/n;
+<br>
+ &emsp;  f(i)=funct(t(i));
+<br>
+end
+<br>
+%
+<br>
+%calcul de la valeur du polynome d interpolation au point x(i)
+<br>
+%
+<br>
+m=1000;
+<br>
+err=0;
+<br>
+for i=1:m+1
+<br>
+  &emsp; x(i)=-1+(2.*(i-1))/m;
+<br>
+ &emsp;  p(i)=0;
+<br>
+ &emsp;  for j=1:n+1
+<br>
+ &emsp; &emsp;    p(i) = p(i) + f(j) * ?????;
+<br>
+ &emsp;  end
+<br>
+ &emsp;  err = max(err,abs(p(i)-funct(x(i))));
+<br>
+end
+<br>
+end
+<br>
+%calcul de phi_j (la j_ieme fonction de la base de Lagrange)
+<br>
+function basis = phi(j,n,xx,t)   
+<br>
+basis=1;
+<br>
+for k=1:n+1
+<br>
+ &emsp;  if k ~= j
+<br>
+ &emsp; &emsp;    basis = basis * ?????;
+<br>
+ &emsp;  end
+<br>
+end
+<br>
+end
+<br>
+%fonction a interpoler
+<br>
+function f = funct(xx)
+<br>
+f = ?????;
+<br>
+end
+<br>    </div>
+    
+    
+   
+    
+        
+
+
+    </form>
+
+<script type="text/x-mathjax-config;executed=true">
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  
+  styleSheets: [],
+  styles: {},
+
+  jax: ["input/TeX"],
+  
+  extensions: ["tex2jax.js"],
+
+  preJax: null,
+  postJax: null,
+
+  preRemoveClass: "MathJax_Preview",
+
+  showProcessingMessages: true,
+
+  messageStyle: "none",
+  
+  displayAlign: "center",
+  displayIndent: "0em",
+  
+  delayStartupUntil: "none",
+
+  skipStartupTypeset: false,
+  
+  elements: [],
+  
+  tex2jax: {
+	    inlineMath: [
+	                 ['$$','$$'],      // uncomment this for standard TeX math delimiters
+	                 ['\\(','\\)']
+	                 ],
+
+	                 displayMath: [
+	                 ['\\[','\\]']
+	                 ],
+
+    skipTags: ["script","noscript","style","textarea","pre","code"],
+    ignoreClass: "tex2jax_ignore",
+    processClass: "tex2jax_process",
+    processEscapes: false,
+    processEnvironments: true,
+    preview: "TeX"
+    
+  },
+  
+  mml2jax: {
+    preview: "alttext"
+    
+  },
+  
+  jsMath2jax: {
+    preview: "TeX"
+    
+  },
+
+  TeX: {
+    TagSide: "right",
+    TagIndent: ".8em",
+    MultLineWidth: "85%",
+    Macros: {},
+
+    extensions: ["AMSmath.js", "AMSsymbols.js"]
+    
+  },
+
+  //============================================================================
+  //
+  //  These parameters control the MathML inupt jax.
+  //
+  MathML: {
+    //
+    //  This specifies whether to use TeX spacing or MathML spacing when the
+    //  HTML-CSS output jax is used.
+    //
+    useMathMLspacing: false
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the HTML-CSS output jax.
+  //
+  "HTML-CSS": {
+    
+    scale: 100,
+    
+    availableFonts: ["STIX","TeX"],
+    
+    preferredFont: "TeX",
+    
+    webFont: "TeX",
+    
+    imageFont: "TeX",
+    
+    undefinedFamily: "STIXGeneral,'Arial Unicode MS',serif",
+      
+    showMathMenu: true,
+
+    styles: {},
+    
+    tooltip: {
+      delayPost: 600,          // milliseconds delay before tooltip is posted after mouseover
+      delayClear: 600,         // milliseconds delay before tooltip is cleared after mouseout
+      offsetX: 10, offsetY: 5  // pixels to offset tooltip from mouse position
+    }
+  },
+  
+  //============================================================================
+  //
+  //  These parameters control the NativeMML output jax.
+  //
+  NativeMML: {
+
+    scale: 100,
+
+    showMathMenu: true,
+    showMathMenuMSIE: true,
+
+    styles: {}
+  },
+  
+  MathMenu: {
+    delay: 400,
+    
+    helpURL: "http://www.mathjax.org/help/user/",
+
+    showRenderer: true,
+    showFontMenu: false,
+    showContext:  false,
+
+    windowSettings: {
+      status: "no", toolbar: "no", locationbar: "no", menubar: "no",
+      directories: "no", personalbar: "no", resizable: "yes", scrollbars: "yes",
+      width: 100, height: 50
+    },
+    
+    styles: {}
+    
+  },
+
+  MMLorHTML: {
+    prefer: {
+      MSIE:    "MML",
+      Firefox: "HTML",
+      Opera:   "HTML",
+      other:   "HTML"
+    }
+  }
+});
+</script>
+</div></div>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Devoir script R - semaine 4 correction</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+var gs_d=new Date,DoW=gs_d.getDay();gs_d.setDate(gs_d.getDate()-(DoW+6)%7+3);
+var ms=gs_d.valueOf();gs_d.setMonth(0);gs_d.setDate(4);
+var gs_r=(Math.round((ms-gs_d.valueOf())/6048E5)+1)*gs_d.getFullYear();
+var gs_p = (("https:" == document.location.protocol) ? "https://" : "http://");
+document.write(unescape("%3Cscript src='" + gs_p + "s.gstat.orange.fr/lib/gs.js?"+gs_r+"' type='text/javascript'%3E%3C/script%3E"));
+//]]>
+</script>
+</head>
+
+<body>
+<h1>Devoir script R - semaine 4 correction</h1>
+
+<p><strong>Objectif :</strong> Identifier les facteurs liés aux scores de relation et au fait de recommander ou non un service.</p>
+
+<h4>Chargement des données</h4>
+
+<pre><code class="r"># getwd()
+satisf &lt;- read.csv2(&quot;satisfaction_hopital.csv&quot;)
+# View(satisf)
+</code></pre>
+
+<h3>1a. A l’aide d’un modèle de régression, étudiez l’association entre le score de la relation et les variables « age » ?</h3>
+
+<h4>Ecriture du modèle de régression linéaire</h4>
+
+<pre><code class="r">attach(satisf)
+mod1 &lt;- lm(score.relation ~ age, data = satisf)
+summary(mod1)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = score.relation ~ age, data = satisf)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -22.05  -2.45   1.34   3.62   5.67 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  33.7663     0.8450    40.0   &lt;2e-16 ***
+## age           0.0267     0.0149     1.8    0.073 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.61 on 347 degrees of freedom
+##   (185 observations deleted due to missingness)
+## Multiple R-squared:  0.00921,    Adjusted R-squared:  0.00635 
+## F-statistic: 3.23 on 1 and 347 DF,  p-value: 0.0734
+</code></pre>
+
+<pre><code class="r">drop1(mod1, . ~ ., test = &quot;F&quot;)
+</code></pre>
+
+<pre><code>## Single term deletions
+## 
+## Model:
+## score.relation ~ age
+##        Df Sum of Sq  RSS  AIC F value Pr(&gt;F)  
+## &lt;none&gt;              7371 1069                 
+## age     1      68.5 7439 1070    3.23  0.073 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p><strong>Remarque :</strong>  Nous retrouvons la même p-value qu&#39;à la semaine 2 car un test de corrélation revient à faire un modèle linéaire simple.</p>
+
+<p><strong>Interprétation :</strong> Pour une augmentation d&#39;une unité d&#39;âge (soit 1 an), le score de relation augmente de 0,03 points. Néanmoins, il n&#39;y a pas d&#39;association significative entre l&#39;âge et le score de la relation (p = 0,073).</p>
+
+<h4>Condition de validité des résultats</h4>
+
+<p>Pour que le modèle soit valide, les termes de bruit (résidus du modèle) doivent suivre une loi normale.</p>
+
+<pre><code class="r">hist(resid(mod1), main = &quot;Histogramme des résidus&quot;, xlab = &quot;&quot;, ylab = &quot;Résidus&quot;, 
+    col = rgb(223, 241, 203, maxColorValue = 255))
+</code></pre>
+
+<p><img src="data:image/png;base64,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h25faQCw8yxKwD+vumd1anXT6pDqRtWjqxNn6wGATVqUKfoHVberPrdq2YXVWdX7q/Orx25DXQCwIy3KCP786j57WHfv6oItrAUAdrxFGcGfWp1ePbnpbMhLqsOqE6qjqgdsX2kAsPMsSsCfXR1f3b06rjq6uqh6QXVm02cdN+O6s+2s5xpNJ/F9eX8KBYCdYFECvqYQf/Oqx9dt+sjcZsO96g7Vffew7tbVB5rOygeAoS1KwN+2em7T6Prx1YurH22q7x+qR3bVE/D25G2z23oe2jQzAADDW5ST7J5ffbjpZLuPze5ft+mCNx/Kx+QAYK8sygj+pKYR9terX6l+o/rmbN1vVp/YnrIAYGdalBH8v1Xf33TW/K7qjqvW3an67HYUBQA71aKM4H+v+r/VN6onVC+vXlcdVD246Yp2AMAmLUrA/3H1xupr1eerM6r7NwX8DzUdkwcANmlRAr7q46vuf3R2AwD2waIcgwcADiABDwADEvAAMCABDwADEvAAMCABDwADEvAAMCABDwADEvAAMCABDwADEvAAMCABDwADEvAAMCABDwADEvAAMCABDwADOni7CwCAfbF79+6qI6qj5tzU16tvzrmNA07AA7AjveddH+hOJ93+rGtf51pzbeftb33Xm6ofnWsjcyDgAdiRvnP5d3rW857erU84fq7t3OK6J+3IrHQMHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYEACHgAGJOABYECLGPC7qiNazNoAYEdYlBC9dvXU6tzqsuri6lvVedXTq0O3rzQA2HkWJeCfV92zOrW6aXVIdaPq0dWJs/UAwCYdvN0FzDyoul31uVXLLqzOqt5fnV89dhvqAoAdaVFG8OdX99nDuntXF2xhLQCw4y3KCP7U6vTqydUHq0uqw6oTqqOqB2xfaQCw8yxKwJ9dHV/dvTquOrq6qHpB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" alt="plot of chunk unnamed-chunk-3"/> </p>
+
+<p>L&#39;histogramme montre que les termes de bruit ne suivent pas une loi normale. On considère donc que le modèle n&#39;est pas valide.</p>
+
+<h3>1b. Etudiez cette association en prenant en compte le « sexe », « score.information », « amelioration.sante », « profession », « service ». (Le script doit inclure la vérification éventuelle des conditions de validité de la méthode utilisée). Commentez le résultat.</h3>
+
+<h4>Recodage des variables catégorielles effectué en semaine 1</h4>
+
+<pre><code class="r">satisf$profession.c &lt;- factor(satisf$profession, labels = c(&quot;agriculteur&quot;, &quot;artisan&quot;, 
+    &quot;cadre&quot;, &quot;intermédiaire&quot;, &quot;employé&quot;, &quot;ouvrier&quot;, &quot;sans emploi&quot;, &quot;autre&quot;))
+satisf$service.c &lt;- factor(satisf$service)
+satisf$sexe.c &lt;- factor(satisf$sexe, labels = c(&quot;homme&quot;, &quot;femme&quot;))
+</code></pre>
+
+<h4>Ecriture du modèle de régression linéaire</h4>
+
+<pre><code class="r">mod2 &lt;- lm(score.relation ~ age + sexe.c + score.information + amelioration.sante + 
+    amelioration.moral + profession.c + service.c, data = satisf)
+summary(mod2)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = score.relation ~ age + sexe.c + score.information + 
+##     amelioration.sante + amelioration.moral + profession.c + 
+##     service.c, data = satisf)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -15.913  -1.927   0.496   2.568   9.579 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                21.4727     4.3793    4.90  1.6e-06 ***
+## age                         0.0413     0.0163    2.54   0.0118 *  
+## sexe.cfemme                -0.5057     0.5409   -0.93   0.3507    
+## score.information           0.2799     0.0382    7.32  2.9e-12 ***
+## amelioration.sante          0.6609     0.3471    1.90   0.0579 .  
+## amelioration.moral          0.8137     0.2862    2.84   0.0048 ** 
+## profession.cartisan         0.4543     4.2138    0.11   0.9142    
+## profession.ccadre          -0.6613     4.1542   -0.16   0.8736    
+## profession.cintermédiaire  -0.6200     4.1504   -0.15   0.8814    
+## profession.cemployé         0.9756     4.1553    0.23   0.8146    
+## profession.couvrier        -0.3070     4.1847   -0.07   0.9416    
+## profession.csans emploi    -1.0777     4.2746   -0.25   0.8011    
+## profession.cautre           0.5087     4.2175    0.12   0.9041    
+## service.c2                 -1.7032     1.1286   -1.51   0.1324    
+## service.c3                  0.2425     0.9235    0.26   0.7931    
+## service.c4                  0.3263     0.9790    0.33   0.7391    
+## service.c5                  0.2220     0.9013    0.25   0.8056    
+## service.c6                 -1.3928     0.9263   -1.50   0.1339    
+## service.c7                  0.3376     1.0230    0.33   0.7416    
+## service.c8                  1.4861     0.9541    1.56   0.1205    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.06 on 269 degrees of freedom
+##   (245 observations deleted due to missingness)
+## Multiple R-squared:  0.319,  Adjusted R-squared:  0.271 
+## F-statistic: 6.65 on 19 and 269 DF,  p-value: 3.26e-14
+</code></pre>
+
+<pre><code class="r">drop1(mod2, . ~ ., test = &quot;F&quot;)
+</code></pre>
+
+<pre><code>## Single term deletions
+## 
+## Model:
+## score.relation ~ age + sexe.c + score.information + amelioration.sante + 
+##     amelioration.moral + profession.c + service.c
+##                    Df Sum of Sq  RSS AIC F value  Pr(&gt;F)    
+## &lt;none&gt;                          4431 829                    
+## age                 1       106 4536 834    6.43  0.0118 *  
+## sexe.c              1        14 4445 828    0.87  0.3507    
+## score.information   1       882 5312 879   53.55 2.9e-12 ***
+## amelioration.sante  1        60 4490 831    3.63  0.0579 .  
+## amelioration.moral  1       133 4564 835    8.08  0.0048 ** 
+## profession.c        7       118 4549 823    1.02  0.4148    
+## service.c           7       213 4643 828    1.85  0.0787 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p><strong>Interprétation :</strong> En ajustant sur l&#39;ensemble des autres variables, le score de relation est associé à l&#39;âge (p = 0,012).</p>
+
+<h4>Condition de validité des résultats</h4>
+
+<p>Pour que le modèle soit valide, les termes de bruit doivent suivre une loi normale</p>
+
+<pre><code class="r">hist(resid(mod2), main = &quot;Histogramme des résidus&quot;, xlab = &quot;&quot;, ylab = &quot;Résidus&quot;, 
+    col = rgb(223, 241, 203, maxColorValue = 255))
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-6"/> </p>
+
+<p>L&#39;histogramme montre que les termes de bruit suivent une loi normale. On considère donc que le modèle est valide.</p>
+
+<h3>2a. A l’aide d’un modèle de régression logistique, étudiez l’association entre le fait de recommander ou non un service (« recommander.b ») et le sexe. (Le script doit inclure la vérification éventuelle des conditions de validité de la méthode utilisée). Commentez le résultat.</h3>
+
+<h4>Recodage des variables catégorielles effectué en semaine 1 et 2</h4>
+
+<pre><code class="r">satisf$recommander.b &lt;- ifelse(satisf$recommander &gt; 1, 1, 0)
+</code></pre>
+
+<h4>Ecriture du modèle de régression logistique</h4>
+
+<pre><code class="r">mod3 &lt;- glm(recommander.b ~ sexe, data = satisf, family = &quot;binomial&quot;)
+summary(mod3)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## glm(formula = recommander.b ~ sexe, family = &quot;binomial&quot;, data = satisf)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -1.496  -1.460   0.889   0.919   0.919  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.6440     0.1445    4.46  8.4e-06 ***
+## sexe          0.0804     0.2109    0.38      0.7    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 516.95  on 404  degrees of freedom
+## Residual deviance: 516.81  on 403  degrees of freedom
+##   (129 observations deleted due to missingness)
+## AIC: 520.8
+## 
+## Number of Fisher Scoring iterations: 4
+</code></pre>
+
+<pre><code class="r">OR &lt;- exp(mod3$coef)
+OR
+</code></pre>
+
+<pre><code>## (Intercept)        sexe 
+##       1.904       1.084
+</code></pre>
+
+<pre><code class="r">IC &lt;- exp(confint(mod3))
+IC
+</code></pre>
+
+<pre><code>##              2.5 % 97.5 %
+## (Intercept) 1.4397   2.54
+## sexe        0.7171   1.64
+</code></pre>
+
+<pre><code class="r">drop1(mod3, . ~ ., test = &quot;Chisq&quot;)
+</code></pre>
+
+<pre><code>## Single term deletions
+## 
+## Model:
+## recommander.b ~ sexe
+##        Df Deviance AIC   LRT Pr(&gt;Chi)
+## &lt;none&gt;         517 521               
+## sexe    1      517 519 0.145      0.7
+</code></pre>
+
+<p><strong>Remarques :</strong> Nous retrouvons le même OR qu&#39;à la semaine 2 car la procédure <code>twoby2</code> revient à faire une régression logistique simple.</p>
+
+<p><strong>Interprétation :</strong>  La cote de la recommandation est 1,08 fois plus élevée chez les hommes par rapport aux femmes (p = 0,70). L&#39;intervalle de confiance à 95 % du rapport de cote comprend 1 ([0,72 ; 1,64]). Cela nous permet de dire qu&#39;il n&#39;y a pas d&#39;association significative entre le sexe et le fait de recommander ou non un service. </p>
+
+<h4>Condition de validité des résultats</h4>
+
+<p>Le jeu de données doit contenir au moins 5 à 10 événements par variable explicative.
+Il y a 1 variable explicative : 1*10 = 10 &lt; 269. On considère donc que le modèle est valide.</p>
+
+<h3>2b. Etudiez cette association, en prenant en compte les variables « age », «score.information », « amelioration.sante », « amelioration.moral », « profession », « service ». (Le script doit inclure la vérification éventuelle des conditions de validité de la méthode utilisée). Commentez le résultat.</h3>
+
+<h4>Ecriture du modèle de régression logistique</h4>
+
+<pre><code class="r">mod4 &lt;- glm(recommander.b ~ age + sexe + score.information + amelioration.sante + 
+    amelioration.moral + profession.c + service.c, data = satisf, family = &quot;binomial&quot;)
+summary(mod4)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## glm(formula = recommander.b ~ age + sexe + score.information + 
+##     amelioration.sante + amelioration.moral + profession.c + 
+##     service.c, family = &quot;binomial&quot;, data = satisf)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -2.292  -0.937   0.517   0.815   1.693  
+## 
+## Coefficients:
+##                            Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)               -19.27155  882.74393   -0.02    0.983    
+## age                         0.00851    0.00890    0.96    0.339    
+## sexe                        0.51305    0.31568    1.63    0.104    
+## score.information           0.10726    0.02206    4.86  1.2e-06 ***
+## amelioration.sante          0.45079    0.19462    2.32    0.021 *  
+## amelioration.moral          0.24882    0.16450    1.51    0.130    
+## profession.cartisan        15.64697  882.74362    0.02    0.986    
+## profession.ccadre          14.86891  882.74351    0.02    0.987    
+## profession.cintermédiaire  14.56991  882.74351    0.02    0.987    
+## profession.cemployé        15.33721  882.74353    0.02    0.986    
+## profession.couvrier        15.22110  882.74356    0.02    0.986    
+## profession.csans emploi    14.49923  882.74368    0.02    0.987    
+## profession.cautre          14.50311  882.74360    0.02    0.987    
+## service.c2                 -0.54869    0.59108   -0.93    0.353    
+## service.c3                 -0.58114    0.51913   -1.12    0.263    
+## service.c4                  0.44619    0.60664    0.74    0.462    
+## service.c5                 -0.64642    0.50147   -1.29    0.197    
+## service.c6                 -0.22156    0.54069   -0.41    0.682    
+## service.c7                 -0.64436    0.56168   -1.15    0.251    
+## service.c8                  0.00245    0.54581    0.00    0.996    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 391.41  on 313  degrees of freedom
+## Residual deviance: 326.08  on 294  degrees of freedom
+##   (220 observations deleted due to missingness)
+## AIC: 366.1
+## 
+## Number of Fisher Scoring iterations: 13
+</code></pre>
+
+<pre><code class="r">OR &lt;- exp(mod4$coef)
+print(OR)
+</code></pre>
+
+<pre><code>##               (Intercept)                       age 
+##                 4.270e-09                 1.009e+00 
+##                      sexe         score.information 
+##                 1.670e+00                 1.113e+00 
+##        amelioration.sante        amelioration.moral 
+##                 1.570e+00                 1.283e+00 
+##       profession.cartisan         profession.ccadre 
+##                 6.243e+06                 2.867e+06 
+## profession.cintermédiaire       profession.cemployé 
+##                 2.126e+06                 4.580e+06 
+##       profession.couvrier   profession.csans emploi 
+##                 4.078e+06                 1.981e+06 
+##         profession.cautre                service.c2 
+##                 1.989e+06                 5.777e-01 
+##                service.c3                service.c4 
+##                 5.593e-01                 1.562e+00 
+##                service.c5                service.c6 
+##                 5.239e-01                 8.013e-01 
+##                service.c7                service.c8 
+##                 5.250e-01                 1.002e+00
+</code></pre>
+
+<pre><code class="r">IC &lt;- exp(confint(mod4))
+print(IC)
+</code></pre>
+
+<pre><code>##                               2.5 %    97.5 %
+## (Intercept)                      NA 3.097e+69
+## age                       9.912e-01 1.026e+00
+## sexe                      9.029e-01 3.124e+00
+## score.information         1.067e+00 1.164e+00
+## amelioration.sante        1.074e+00 2.309e+00
+## amelioration.moral        9.307e-01 1.778e+00
+## profession.cartisan       6.043e-72        NA
+## profession.ccadre         2.473e-72        NA
+## profession.cintermédiaire 1.826e-72        NA
+## profession.cemployé       4.042e-72        NA
+## profession.couvrier       3.742e-72        NA
+## profession.csans emploi   2.107e-72        NA
+## profession.cautre         1.924e-72        NA
+## service.c2                1.797e-01 1.851e+00
+## service.c3                1.996e-01 1.543e+00
+## service.c4                4.827e-01 5.314e+00
+## service.c5                1.930e-01 1.391e+00
+## service.c6                2.768e-01 2.336e+00
+## service.c7                1.721e-01 1.574e+00
+## service.c8                3.443e-01 2.963e+00
+</code></pre>
+
+<pre><code class="r">drop1(mod4, . ~ ., test = &quot;Chisq&quot;)
+</code></pre>
+
+<pre><code>## Single term deletions
+## 
+## Model:
+## recommander.b ~ age + sexe + score.information + amelioration.sante + 
+##     amelioration.moral + profession.c + service.c
+##                    Df Deviance AIC   LRT Pr(&gt;Chi)    
+## &lt;none&gt;                     326 366                   
+## age                 1      327 365  0.92     0.34    
+## sexe                1      329 367  2.67     0.10    
+## score.information   1      352 390 25.75  3.9e-07 ***
+## amelioration.sante  1      332 370  5.43     0.02 *  
+## amelioration.moral  1      328 366  2.31     0.13    
+## profession.c        7      334 360  8.41     0.30    
+## service.c           7      333 359  7.19     0.41    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+
+<p><strong>Interprétation :</strong> En ajustant sur l&#39;ensemble des autres variables, le score de relation est n&#39;est pas associé au sexe (p = 0,10).</p>
+
+<h4>Condition de validité des résultats</h4>
+
+<p>Le jeu de données doit contenir au moins 5 à 10 événements par variable explicative.
+Il y a 19 variables explicatives: 19*10 = 190 &lt; 269. On considère donc que le modèle est valide.</p>
+
+<script type="text/javascript">
+//<![CDATA[
+if (typeof _gstat != "undefined") _gstat.audience('','pagesperso-orange.fr');
+//]]>
+</script>
+</body>
+
+</html>
+
