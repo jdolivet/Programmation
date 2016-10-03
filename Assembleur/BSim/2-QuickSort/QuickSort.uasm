@@ -1,0 +1,215 @@
+////////////////////////////////////////////////////////////////////////////////
+// Lab 6
+////////////////////////////////////////////////////////////////////////////////
+
+// Include the checkoff program:
+.include "checkoff.uasm"
+
+// Leave the following as zero to run ALL the test cases, and get your solution
+//   validated if all pass.  If you have trouble with test case N, set it to N
+//   to run JUST that test case (for easier debugging):
+TestCase:       LONG(0)
+
+// Quicksort-in-place code.  We include the C/Python version here as a comment;
+// you can use this as a model for your Beta assembly version:
+
+//def partition(array,left,right):
+//    # choose middle element of array as pivot
+//    pivotIndex = (left+right) >> 1;
+//    pivotValue = array[pivotIndex]
+//
+//    # swap array[right] and array[pivotIndex]
+//    # note that we already store array[pivotIndex] in pivotValue
+//    array[pivotIndex] = array[right]
+//
+//    # elements <= the pivot are moved to the left (smaller indices)
+//    storeIndex = left
+//    for i in xrange(left,right):  # don't include array[right]
+//        temp = array[i]
+//        if temp <= pivotValue:
+//            array[i] = array[storeIndex]
+//            array[storeIndex] = temp
+//            storeIndex += 1
+//
+//    # move pivot to its final place
+//    array[right] = array[storeIndex]
+//    array[storeIndex] = pivotValue;
+//    return storeIndex;
+
+// partition(ArrayBase, left, right)
+partition:
+	PUSH(LP)
+	PUSH(BP)
+	MOVE(SP, BP)
+	PUSH(R2) 	//R2	: ArrayBase
+	PUSH(R3) 	//R3	: left
+	PUSH(R4) 	//R4	: right
+	PUSH(R5)	//R5	: pivotIndex
+	PUSH(R6)	//R6	: pivotValue
+	PUSH(R7)	//R7	: storeIndex
+	PUSH(R8)	//R8	: rightValue
+	PUSH(R9)	//R9 	: temp
+	PUSH(R10)	//R10 	: adress of array[pivotIndex]
+	PUSH(R11)	//R11 	: adress of array[right]
+	PUSH(R12)	//R12 	: adress of array[i]
+	PUSH(R13)	//R13 	: i
+	PUSH(R14)	//R14	: adress of array[storeIndex]
+	PUSH(R15)	//R15	: iValue
+	PUSH(R16)	//R16	: storeIndexValue
+
+
+	LD(BP, -12, R2) 	// Initialisation var ArrayBase
+	LD(BP, -16, R3) 	// Initialisation var left
+	LD(BP, -20, R4)		// Initialisation var right
+
+	// index of pivot
+	ADD(R3,R4,R5)		// R5 <- left+right
+	SHRC(R5,1,R5)		// R5 <- (left+right)/2
+
+	// value of pivot
+	SHLC(R5,2,R6)		// multiply by 4
+	ADD(R2,R6,R10)		// R10 <- adress of array[pivotIndex]
+	LD(R10,0,R6)		// R6 <- pivotValue
+
+	// swap array[right] and array[pivotIndex]
+	SHLC(R4,2,R8)		// multiply by 4
+	ADD(R2,R8,R11)		// R11 <- adress of array[right]
+	LD(R11,0,R8)		// R8 <- rightValue
+	ST(R8,0,R10)		// array[pivotIndex] <- rightValue 
+
+	// storeIndex = left
+	MOVE(R3,R7)			// storeIndex <- left
+
+	// initialise i
+	MOVE(R3,R13)		// i <- left
+	
+p_loop:
+	// configuration loop
+	CMPLT(R13,R4,R12)	// while i<right
+	BEQ(R12,p_end)		// continue else go to p_end
+
+	// temp = array[i]
+	SHLC(R13,2,R15)		// multiply by 4
+	ADD(R2,R15,R9)		// R9 <- adress of array[i]
+	LD(R9,0,R15)		// R15 <- iValue
+
+	// configuration test
+	CMPLE(R15,R6,R12)	// if temp<=pivotValue
+	BEQ(R12,pre_loop)	// else go to pre_loop
+
+	// array[i] = array[storeIndex]
+	// array[storeIndex] = temp
+	SHLC(R7,2,R16)		// multiply by 4
+	ADD(R2,R16,R14)	  	// R14 <- address of arr[storeIndex]
+	LD(R14,0,R16)		// R16 <- storeIndexValue
+	ST(R16,0,R9)		// array[i] <- storeIndexValue
+	ST(R15,0,R14)		// array[storeIndex] <- iValue
+	
+	ADDC(R7,1,R7)		// storeIndex += 1	
+
+pre_loop:
+	ADDC(R13,1,R13)		// i <- i+1
+	BR(p_loop)			// go to loop
+	  
+p_end:
+
+	SHLC(R7,2,R16)		// multiply by 4
+	ADD(R2,R16,R14)	  	// R14 <- adress of array[storeIndex]
+	LD(R14,0,R16)		// R16 <- storeIndexValue
+	
+	SHLC(R4,2,R8)		// multiply by 4
+	ADD(R2,R8,R11)		// R11 <- adress of array[right]
+		
+	ST(R16,0,R11)		// array[right] <- storeIndexValue
+	ST(R6,0,R14)		// array[storeIndex] <- pivotValue
+
+	MOVE(R7,R0)			// return storeIndex
+	  
+	POP(R16) 	
+	POP(R15) 
+	POP(R14) 	
+	POP(R13)	
+	POP(R12)	
+	POP(R11)	
+	POP(R10)	
+	POP(R9)	
+	POP(R8)	
+	POP(R7)	
+	POP(R6)	
+	POP(R5)	
+	POP(R4)	
+	POP(R3)
+	POP(R2)
+	
+	MOVE(BP, SP)
+	POP(BP)
+	POP(LP)
+	JMP(LP)
+
+
+//def quicksort(array, left, right):
+//    if left < right:
+//        pivotIndex = partition(array,left,right)
+//        quicksort(array,left,pivotIndex-1)
+//        quicksort(array,pivotIndex+1,right)
+
+// quicksort(ArrayBase, left, right)
+quicksort: 
+	PUSH(LP)
+	PUSH(BP) 
+	MOVE(SP, BP) 
+	PUSH(R1) 	//R1	: ArrayBase
+	PUSH(R2) 	//R2	: left
+	PUSH(R3) 	//R3	: right
+	PUSH(R4)	//R4	: pivotIndex
+
+	LD(BP, -12, R1) 	// Initialisation var ArrayBase
+	LD(BP, -16, R2) 	// Initialisation var left
+	LD(BP, -20, R3)		// Initialisation var right
+	
+	// configuration test
+	CMPLT(R2, R3, R0) 	// if left < right 	(R0<-1 else R0<-0)
+	BF(R0, q_end)			// (if R0!=0)		continue else go to q_end
+
+	PUSH(R3)			// R3	: right
+	PUSH(R2)			// R2	: left
+	PUSH(R1) 			// R1	: ArrayBase
+	BR(partition, LP) 	// go to partition
+	DEALLOCATE(3)		// libere R1,R2,R3
+	MOVE(R0, R4)		// pivotIndex <- R0 (reçoit le resultat de partition)
+
+	SUBC(R4, 1, R0)		// R0 <- pivotIndex-1
+	PUSH(R0)			// R0	: pivotIndex-1
+	PUSH(R2)			// R2	: left
+	PUSH(R1) 			// R1	: ArrayBase
+	BR(quicksort, LP) 	// quicksort(array,left,pivotIndex-1)
+	DEALLOCATE(3)		// libere R1,R2,R0
+
+	PUSH(R3)			// R3	: right
+	ADDC(R4, 1, R0)		// R0 <- pivotIndex+1
+	PUSH(R0)			// R0	: pivotIndex+1
+	PUSH(R1) 			// R1	: ArrayBase
+	BR(quicksort, LP)	// quicksort(array,pivotIndex+1,right)
+	DEALLOCATE(3)		// libere R1,R0,R3
+
+q_end:   
+	POP(R4)			
+	POP(R3)			
+	POP(R2)			
+	POP(R1)			
+  
+	MOVE(BP, SP) 
+	POP(BP)
+	POP(LP)
+	JMP(LP)
+
+
+// Allocate a stack: SP is initialized by checkoff code.
+StackBasePtr:
+        LONG(StackArea)
+
+.unprotect
+
+StackArea:
+        STORAGE(1000)
+

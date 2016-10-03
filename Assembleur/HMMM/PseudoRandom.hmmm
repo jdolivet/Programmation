@@ -1,0 +1,13 @@
+# PSEUDORANDOHMMM NUMBER GENERATION
+00 read r1          # input a
+01 read r2          # input c
+02 read r3          # input m
+03 read r4          # input X_0
+04 read r5          # input N
+05 mul r4 r1 r4     # r4 = r1*r4
+06 add r4 r4 r2     # r4 = r4 + r2
+07 mod r4 r4 r3     # r4 = r4 % r3
+08 write r4         # print what's in r4
+09 addn r5 -1       # r5 = r5 - 1
+10 jgtzn r5 05      # if r5 > 0 jump to line 03
+11 halt             # stop

@@ -1,0 +1,153 @@
+.include "beta.uasm"
+.include "checkoff.uasm"
+
+regs:   RESERVE(32)           		// Array used to store register contents
+UI: 
+
+	save_all_regs(regs)
+	LD(xp,-4,r0)          			// illegal instruction
+	extract_field(r0, 31, 26, r1)   // extract opcode, bits 31:26
+	CMPEQC(r1,0x10,r2)    			// OPCODE=0b010000
+	BT(r2, ldb)           			// handle the ldb instruction.
+	CMPEQC(r1,0x11,r2)    			// OPCODE=0b010001
+	BT(r2, stb)           			// handle the stb instruction
+	LD(r31,regs,r0)       			// It's something else.  Restore regs
+	LD(r31,regs+4,r1)     			// we've used, and go to the system's
+	LD(r31,regs+8,r2)     			// Illegal Instruction handler.
+
+	BR(_IllegalInstruction)
+
+
+// The ldb routine
+ldb:
+    extract_field(r0, 25, 21, r1)   // extract rc field
+    MULC(r1, 4, r1)
+    LD(r1, regs, r4)                // r4 = Reg[rc]
+    extract_field(r0, 20, 16, r2)   // extract ra field
+    MULC(r2, 4, r2)                 // convert to byte offset into regs array
+    LD(r2, regs, r5)                // r5 = Reg[ra]
+    extract_field(r0, 15, 0, r3)    // extract literal
+    extract_field(r0, 15, 15, r15)  // check if we need to sign-extend the literal
+    BT(r15, sext_lit)
+
+ldb_continue:
+    ADD(r5, r3, r6)                 // EA
+    LD(r6, 0, r7)                 	// MDATA
+
+    extract_field(r6, 1, 0, r8)     // find the last two digits of EA
+    CMPEQC(r8, 0b00, r9)            // check if EA[1:0] == 0b00
+    BT(r9, if01)
+    CMPEQC(r8, 0b01, r9)           	// check if EA[1:0] == 0b01
+    BT(r9, if02)
+    CMPEQC(r8, 0b10, r9)            // check if EA[1:0] == 0b10
+    BT(r9, if03)
+    CMPEQC(r8, 0b11, r9)            // check if EA[1:0] == 0b11
+    BT(r9, if04)
+
+if01: 
+    extract_field(r7, 7, 0, r4)
+    BR(endif)
+
+if02: 
+    extract_field(r7, 15, 8, r4)
+    BR(endif)
+
+if03: 
+    extract_field(r7, 23, 16, r4)
+    BR(endif)
+
+if04: 
+    extract_field(r7, 31, 24, r4)
+    BR(endif)
+
+endif:
+    ORC(r4, 0, r4)                  // clear rc
+    ST(r4, regs, r1)                // regs[rc] <- r4
+    restore_all_regs(regs)
+    JMP(xp)
+
+sext_lit:
+    SHLC(r3, 16, r3)
+    SRAC(r3, 16, r3)
+    BR(ldb_continue)
+
+
+// The stb routine
+
+stb:    
+    extract_field(r0, 25, 21, r1) 
+    MULC(r1, 4, r1)             
+    extract_field(r0, 20, 16, r2)  
+    MULC(r2, 4, r2)        
+    LD(r2, regs, r5)        
+    extract_field(r0, 15, 0, r3)   
+    extract_field(r3, 15, 15, r10)  
+    BT(r10, stb_sext_lit)       
+
+ea_stb:
+
+    ADD(r5, r3, r4)         
+    LD(r1, regs, r7)        
+    extract_field(r7, 7, 0, r11)   
+    LD(r4, 0, r13)              
+    extract_field(r4, 1, 0, r9)  
+
+    CMPEQC(r9, 0x0, r8)         
+    BT(r8, if05)      
+    CMPEQC(r9, 0x1, r8)
+    BT(r8, if06)      
+    CMPEQC(r9, 0x2, r8)
+    BT(r8, if07)       
+    CMPEQC(r9, 0x3, r8)
+    BT(r8, if08)      
+
+if05:
+    CMOVE(0xFF00, r15)
+    ANDC(r13, 0xFF00, r13)       
+    OR(r13, r11, r13)         
+
+    BR(endif2)    
+
+if06:
+    SHLC(r11, 8, r11)
+    CMOVE(0xFF00, r15)
+    SHLC(r15, 8, r15)
+    ORC(r15, 0x00FF, r15)
+    AND(r13, r15, r13)
+    OR(r13, r11, r13)
+
+    BR(endif2)
+
+if07:
+    SHLC(r11, 16, r11)
+
+    CMOVE(0xFF00, r15)      
+    SHLC(r15, 16, r15)      
+    ADDC(r31, 0xFFFF, r16)     
+    extract_field(r16, 15, 0, r14)  
+    OR(r15, r14, r15)       
+    AND(r13, r15, r13)        
+    OR(r13, r11, r13)
+
+    BR(endif2)
+
+if08:
+    SHLC(r11, 24, r11) 
+    ORC(r31, 0xFFFF, r15)   
+    SHRC(r15, 8, r15)
+
+    AND(r13, r15, r13)
+    OR(r13, r11, r13)
+
+    BR(endif2)
+
+stb_sext_lit:
+    SHLC(r3, 16, r3)
+    SRAC(r3, 16, r3)
+    BR(ea_stb)
+
+endif2:
+    ST(r13, 0, r4)       
+    restore_all_regs(regs)
+    JMP(xp)
+

@@ -1,0 +1,12 @@
+# FIBONACCI FLIER
+00 read r1          # get # from user to r1
+01 setn r2 0        # put 0 into r2
+02 setn r3 1        # put our result into r3
+03 jeqzn r1 10      # jump to line 10 if r1 == 0
+04 add r4 r3 r2     # make r4 = r3 + r2
+05 write r3         # write out the result, r3
+06 copy r2 r3       # copy r3 in r2
+07 copy r3 r4       # copy r4 in r3
+08 addn r1 -1       # make r1 = r1-1
+09 jumpn 03         # jump back to line 3
+10 halt             # stop!

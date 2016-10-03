@@ -1,0 +1,447 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8"><script src="labs_lab6_1_instructions_fichiers/1beac94c95" type="text/javascript"></script><script src="labs_lab6_1_instructions_fichiers/nr-768.js"></script><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={xpid:"XA4GVl5ACwAEV1JQAA=="};window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var o=e[n]={exports:{}};t[n][0].call(o.exports,function(e){var o=t[n][1][e];return r(o||e)},o,o.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({QJf3ax:[function(t,e){function n(t){function e(e,n,a){t&&t(e,n,a),a||(a={});for(var c=s(e),f=c.length,u=i(a,o,r),d=0;f>d;d++)c[d].apply(u,n);return u}function a(t,e){f[t]=s(t).concat(e)}function s(t){return f[t]||[]}function c(){return n(e)}var f={};return{on:a,emit:e,create:c,listeners:s,_events:f}}function r(){return{}}var o="nr@context",i=t("gos");e.exports=n()},{gos:"7eSDFh"}],ee:[function(t,e){e.exports=t("QJf3ax")},{}],3:[function(t){function e(t){try{i.console&&console.log(t)}catch(e){}}var n,r=t("ee"),o=t(1),i={};try{n=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(i.console=!0,-1!==n.indexOf("dev")&&(i.dev=!0),-1!==n.indexOf("nr_dev")&&(i.nrDev=!0))}catch(a){}i.nrDev&&r.on("internal-error",function(t){e(t.stack)}),i.dev&&r.on("fn-err",function(t,n,r){e(r.stack)}),i.dev&&(e("NR AGENT IN DEVELOPMENT MODE"),e("flags: "+o(i,function(t){return t}).join(", ")))},{1:24,ee:"QJf3ax"}],4:[function(t){function e(t,e,n,i,s){try{c?c-=1:r("err",[s||new UncaughtException(t,e,n)])}catch(f){try{r("ierr",[f,(new Date).getTime(),!0])}catch(u){}}return"function"==typeof a?a.apply(this,o(arguments)):!1}function UncaughtException(t,e,n){this.message=t||"Uncaught error with no additional information",this.sourceURL=e,this.line=n}function n(t){r("err",[t,(new Date).getTime()])}var r=t("handle"),o=t(6),i=t("ee"),a=window.onerror,s=!1,c=0;t("loader").features.err=!0,t(5),window.onerror=e;try{throw new Error}catch(f){"stack"in f&&(t(1),t(2),"addEventListener"in window&&t(3),window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&!/CriOS/.test(navigator.userAgent)&&t(4),s=!0)}i.on("fn-start",function(){s&&(c+=1)}),i.on("fn-err",function(t,e,r){s&&(this.thrown=!0,n(r))}),i.on("fn-end",function(){s&&!this.thrown&&c>0&&(c-=1)}),i.on("internal-error",function(t){r("ierr",[t,(new Date).getTime(),!0])})},{1:11,2:10,3:8,4:12,5:3,6:25,ee:"QJf3ax",handle:"D5DuLP",loader:"G9z0Bl"}],5:[function(t){if(window.addEventListener){var e=t("handle"),n=t("ee");t(1),window.addEventListener("click",function(){e("inc",["ck"])},!1),window.addEventListener("hashchange",function(){e("inc",["hc"])},!1),n.on("pushState-start",function(){e("inc",["ps"])})}},{1:9,ee:"QJf3ax",handle:"D5DuLP"}],6:[function(t){t("loader").features.ins=!0},{loader:"G9z0Bl"}],7:[function(t){function e(){}if(window.performance&&window.performance.timing&&window.performance.getEntriesByType){var n=t("ee"),r=t("handle"),o=t(1),i=t(2);t("loader").features.stn=!0,t(3);var a=Event;n.on("fn-start",function(t){var e=t[0];e instanceof a&&(this.bstStart=Date.now())}),n.on("fn-end",function(t,e){var n=t[0];n instanceof a&&r("bst",[n,e,this.bstStart,Date.now()])}),o.on("fn-start",function(t,e,n){this.bstStart=Date.now(),this.bstType=n}),o.on("fn-end",function(t,e){r("bstTimer",[e,this.bstStart,Date.now(),this.bstType])}),i.on("fn-start",function(){this.bstStart=Date.now()}),i.on("fn-end",function(t,e){r("bstTimer",[e,this.bstStart,Date.now(),"requestAnimationFrame"])}),n.on("pushState-start",function(){this.time=Date.now(),this.startPath=location.pathname+location.hash}),n.on("pushState-end",function(){r("bstHist",[location.pathname+location.hash,this.startPath,this.time])}),"addEventListener"in window.performance&&(window.performance.addEventListener("webkitresourcetimingbufferfull",function(){r("bstResource",[window.performance.getEntriesByType("resource")]),window.performance.webkitClearResourceTimings()},!1),window.performance.addEventListener("resourcetimingbufferfull",function(){r("bstResource",[window.performance.getEntriesByType("resource")]),window.performance.clearResourceTimings()},!1)),document.addEventListener("scroll",e,!1),document.addEventListener("keypress",e,!1),document.addEventListener("click",e,!1)}},{1:11,2:10,3:9,ee:"QJf3ax",handle:"D5DuLP",loader:"G9z0Bl"}],8:[function(t,e){function n(t){i.inPlace(t,["addEventListener","removeEventListener"],"-",r)}function r(t){return t[1]}var o=t("ee").create(),i=t(1)(o),a=t("gos");if(e.exports=o,n(window),"getPrototypeOf"in Object){for(var s=document;s&&!s.hasOwnProperty("addEventListener");)s=Object.getPrototypeOf(s);s&&n(s);for(var c=XMLHttpRequest.prototype;c&&!c.hasOwnProperty("addEventListener");)c=Object.getPrototypeOf(c);c&&n(c)}else XMLHttpRequest.prototype.hasOwnProperty("addEventListener")&&n(XMLHttpRequest.prototype);o.on("addEventListener-start",function(t,e){function n(){return s}if(t[1]){var r=t[1];if("function"==typeof r){var s=a(r,"nr@wrapped",function(){return i(r,"fn-",n,r.name||"anonymous")});this.wrapped=t[1]=s,o.emit("initEventContext",[t,e],this.wrapped)}else"function"==typeof r.handleEvent&&i.inPlace(r,["handleEvent"],"fn-")}}),o.on("removeEventListener-start",function(t){var e=this.wrapped;e&&(t[1]=e)})},{1:26,ee:"QJf3ax",gos:"7eSDFh"}],9:[function(t,e){var n=t("ee").create(),r=t(1)(n);e.exports=n,r.inPlace(window.history,["pushState","replaceState"],"-")},{1:26,ee:"QJf3ax"}],10:[function(t,e){var n=t("ee").create(),r=t(1)(n);e.exports=n,r.inPlace(window,["requestAnimationFrame","mozRequestAnimationFrame","webkitRequestAnimationFrame","msRequestAnimationFrame"],"raf-"),n.on("raf-start",function(t){t[0]=r(t[0],"fn-")})},{1:26,ee:"QJf3ax"}],11:[function(t,e){function n(t,e,n){t[0]=i(t[0],"fn-",null,n)}function r(t,e,n){function r(){return a}this.ctx={};var a={"nr@context":this.ctx};o.emit("initTimerContext",[t,n],a),t[0]=i(t[0],"fn-",r,n)}var o=t("ee").create(),i=t(1)(o);e.exports=o,i.inPlace(window,["setTimeout","setImmediate"],"setTimer-"),i.inPlace(window,["setInterval"],"setInterval-"),i.inPlace(window,["clearTimeout","clearImmediate"],"clearTimeout-"),o.on("setInterval-start",n),o.on("setTimer-start",r)},{1:26,ee:"QJf3ax"}],12:[function(t,e){function n(){f.inPlace(this,p,"fn-",o)}function r(t,e){f.inPlace(e,["onreadystatechange"],"fn-")}function o(t,e){return e}function i(t,e){for(var n in t)e[n]=t[n];return e}var a=t("ee").create(),s=t(1),c=t(2),f=c(a),u=c(s),d=window.XMLHttpRequest,p=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"];e.exports=a,window.XMLHttpRequest=function(t){var e=new d(t);try{a.emit("new-xhr",[],e),e.hasOwnProperty("addEventListener")&&u.inPlace(e,["addEventListener","removeEventListener"],"-",o),e.addEventListener("readystatechange",n,!1)}catch(r){try{a.emit("internal-error",[r])}catch(i){}}return e},i(d,XMLHttpRequest),XMLHttpRequest.prototype=d.prototype,f.inPlace(XMLHttpRequest.prototype,["open","send"],"-xhr-",o),a.on("send-xhr-start",r),a.on("open-xhr-start",r)},{1:8,2:26,ee:"QJf3ax"}],13:[function(t){function e(t){var e=this.params,r=this.metrics;if(!this.ended){this.ended=!0;for(var i=0;c>i;i++)t.removeEventListener(s[i],this.listener,!1);if(!e.aborted){if(r.duration=(new Date).getTime()-this.startTime,4===t.readyState){e.status=t.status;var a=t.responseType,f="arraybuffer"===a||"blob"===a||"json"===a?t.response:t.responseText,u=n(f);if(u&&(r.rxSize=u),this.sameOrigin){var d=t.getResponseHeader("X-NewRelic-App-Data");d&&(e.cat=d.split(", ").pop())}}else e.status=0;r.cbTime=this.cbTime,o("xhr",[e,r,this.startTime])}}}function n(t){if("string"==typeof t&&t.length)return t.length;if("object"!=typeof t)return void 0;if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if("undefined"!=typeof FormData&&t instanceof FormData)return void 0;try{return JSON.stringify(t).length}catch(e){return void 0}}function r(t,e){var n=i(e),r=t.params;r.host=n.hostname+":"+n.port,r.pathname=n.pathname,t.sameOrigin=n.sameOrigin}if(window.XMLHttpRequest&&XMLHttpRequest.prototype&&XMLHttpRequest.prototype.addEventListener&&!/CriOS/.test(navigator.userAgent)){t("loader").features.xhr=!0;var o=t("handle"),i=t(2),a=t("ee"),s=["load","error","abort","timeout"],c=s.length,f=t(1),u=window.XMLHttpRequest;t(4),t(3),a.on("new-xhr",function(){this.totalCbs=0,this.called=0,this.cbTime=0,this.end=e,this.ended=!1,this.xhrGuids={}}),a.on("open-xhr-start",function(t){this.params={method:t[0]},r(this,t[1]),this.metrics={}}),a.on("open-xhr-end",function(t,e){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&e.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid)}),a.on("send-xhr-start",function(t,e){var r=this.metrics,o=t[0],i=this;if(r&&o){var f=n(o);f&&(r.txSize=f)}this.startTime=(new Date).getTime(),this.listener=function(t){try{"abort"===t.type&&(i.params.aborted=!0),("load"!==t.type||i.called===i.totalCbs&&(i.onloadCalled||"function"!=typeof e.onload))&&i.end(e)}catch(n){try{a.emit("internal-error",[n])}catch(r){}}};for(var u=0;c>u;u++)e.addEventListener(s[u],this.listener,!1)}),a.on("xhr-cb-time",function(t,e,n){this.cbTime+=t,e?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof n.onload||this.end(n)}),a.on("xhr-load-added",function(t,e){var n=""+f(t)+!!e;this.xhrGuids&&!this.xhrGuids[n]&&(this.xhrGuids[n]=!0,this.totalCbs+=1)}),a.on("xhr-load-removed",function(t,e){var n=""+f(t)+!!e;this.xhrGuids&&this.xhrGuids[n]&&(delete this.xhrGuids[n],this.totalCbs-=1)}),a.on("addEventListener-end",function(t,e){e instanceof u&&"load"===t[0]&&a.emit("xhr-load-added",[t[1],t[2]],e)}),a.on("removeEventListener-end",function(t,e){e instanceof u&&"load"===t[0]&&a.emit("xhr-load-removed",[t[1],t[2]],e)}),a.on("fn-start",function(t,e,n){e instanceof u&&("onload"===n&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=(new Date).getTime()))}),a.on("fn-end",function(t,e){this.xhrCbStart&&a.emit("xhr-cb-time",[(new Date).getTime()-this.xhrCbStart,this.onload,e],e)})}},{1:"XL7HBI",2:14,3:12,4:8,ee:"QJf3ax",handle:"D5DuLP",loader:"G9z0Bl"}],14:[function(t,e){e.exports=function(t){var e=document.createElement("a"),n=window.location,r={};e.href=t,r.port=e.port;var o=e.href.split("://");return!r.port&&o[1]&&(r.port=o[1].split("/")[0].split("@").pop().split(":")[1]),r.port&&"0"!==r.port||(r.port="https"===o[0]?"443":"80"),r.hostname=e.hostname||n.hostname,r.pathname=e.pathname,r.protocol=o[0],"/"!==r.pathname.charAt(0)&&(r.pathname="/"+r.pathname),r.sameOrigin=!e.hostname||e.hostname===document.domain&&e.port===n.port&&e.protocol===n.protocol,r}},{}],15:[function(t,e){function n(t){return function(){r(t,[(new Date).getTime()].concat(i(arguments)))}}var r=t("handle"),o=t(1),i=t(2);"undefined"==typeof window.newrelic&&(newrelic=window.NREUM);var a=["setPageViewName","addPageAction","setCustomAttribute","finished","addToTrace","inlineHit","noticeError"];o(a,function(t,e){window.NREUM[e]=n("api-"+e)}),e.exports=window.NREUM},{1:24,2:25,handle:"D5DuLP"}],gos:[function(t,e){e.exports=t("7eSDFh")},{}],"7eSDFh":[function(t,e){function n(t,e,n){if(r.call(t,e))return t[e];var o=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:o,writable:!0,enumerable:!1}),o}catch(i){}return t[e]=o,o}var r=Object.prototype.hasOwnProperty;e.exports=n},{}],D5DuLP:[function(t,e){function n(t,e,n){return r.listeners(t).length?r.emit(t,e,n):void(r.q&&(r.q[t]||(r.q[t]=[]),r.q[t].push(e)))}var r=t("ee").create();e.exports=n,n.ee=r,r.q={}},{ee:"QJf3ax"}],handle:[function(t,e){e.exports=t("D5DuLP")},{}],XL7HBI:[function(t,e){function n(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:i(t,o,function(){return r++})}var r=1,o="nr@id",i=t("gos");e.exports=n},{gos:"7eSDFh"}],id:[function(t,e){e.exports=t("XL7HBI")},{}],G9z0Bl:[function(t,e){function n(){var t=p.info=NREUM.info,e=f.getElementsByTagName("script")[0];if(t&&t.licenseKey&&t.applicationID&&e){s(d,function(e,n){e in t||(t[e]=n)});var n="https"===u.split(":")[0]||t.sslForHttp;p.proto=n?"https://":"http://",a("mark",["onload",i()]);var r=f.createElement("script");r.src=p.proto+t.agent,e.parentNode.insertBefore(r,e)}}function r(){"complete"===f.readyState&&o()}function o(){a("mark",["domContent",i()])}function i(){return(new Date).getTime()}var a=t("handle"),s=t(1),c=window,f=c.document;t(2);var u=(""+location).split("?")[0],d={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-768.min.js"},p=e.exports={offset:i(),origin:u,features:{}};f.addEventListener?(f.addEventListener("DOMContentLoaded",o,!1),c.addEventListener("load",n,!1)):(f.attachEvent("onreadystatechange",r),c.attachEvent("onload",n)),a("mark",["firstbyte",i()])},{1:24,2:15,handle:"D5DuLP"}],loader:[function(t,e){e.exports=t("G9z0Bl")},{}],24:[function(t,e){function n(t,e){var n=[],o="",i=0;for(o in t)r.call(t,o)&&(n[i]=e(o,t[o]),i+=1);return n}var r=Object.prototype.hasOwnProperty;e.exports=n},{}],25:[function(t,e){function n(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,o=n-e||0,i=Array(0>o?0:o);++r<o;)i[r]=t[e+r];return i}e.exports=n},{}],26:[function(t,e){function n(t){return!(t&&"function"==typeof t&&t.apply&&!t[i])}var r=t("ee"),o=t(1),i="nr@original",a=Object.prototype.hasOwnProperty;e.exports=function(t){function e(t,e,r,a){function nrWrapper(){var n,i,s,f;try{i=this,n=o(arguments),s=r&&r(n,i)||{}}catch(d){u([d,"",[n,i,a],s])}c(e+"start",[n,i,a],s);try{return f=t.apply(i,n)}catch(p){throw c(e+"err",[n,i,p],s),p}finally{c(e+"end",[n,i,f],s)}}return n(t)?t:(e||(e=""),nrWrapper[i]=t,f(t,nrWrapper),nrWrapper)}function s(t,r,o,i){o||(o="");var a,s,c,f="-"===o.charAt(0);for(c=0;c<r.length;c++)s=r[c],a=t[s],n(a)||(t[s]=e(a,f?s+o:o,i,s))}function c(e,n,r){try{t.emit(e,n,r)}catch(o){u([o,e,n,r])}}function f(t,e){if(Object.defineProperty&&Object.keys)try{var n=Object.keys(t);return n.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(r){u([r])}for(var o in t)a.call(t,o)&&(e[o]=t[o]);return e}function u(e){try{t.emit("internal-error",e)}catch(n){}}return t||(t=r),e.inPlace=s,e.flag=i,e}},{1:25,ee:"QJf3ax"}]},{},["G9z0Bl",4,13,7,6,5]);</script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","queueTime":0,"licenseKey":"1beac94c95","agent":"js-agent.newrelic.com/nr-768.min.js","transactionName":"NQQGYUZWDUNSVUMPWQxOIkBaVBdZXFgYBVkMFQFbQEQGQkVTRUhbCwUAWVFAAkJWDGQSVxYIB3ZbWRdVXUJkA0QUBBYbREUMU1ZFRDlEBxARUEdD","applicationID":"3343327","errorBeacon":"bam.nr-data.net","applicationTime":20}</script>
+  <script type="text/javascript" src="labs_lab6_1_instructions_fichiers/MathJax.js"></script>
+  <link rel="stylesheet" href="labs_lab6_1_instructions_fichiers/font-awesome.css">
+  <style>
+    body {
+      font: 16px/1.5 Georgia,serif;
+      width: 600px;
+    }
+    tt {
+      font-size: 14px;
+    }
+    pre {
+      font-size: 14px;
+    }
+    pre.jsim {
+       margin: 10px;
+      padding: 10px;
+      background-color: rgb(255,253,227);
+    }
+    div.hint {
+      margin: 10px;
+      padding: 10px;
+      background-color: rgb(240,255,240);
+      border: 1px solid rgb(176,192,176);
+    }
+    p.question {
+      background-color: rgb(255,217,161);
+      margin: 5px;
+      padding: 3px;
+    }
+  </style>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Hover_Arrow {position: absolute; width: 15px; height: 11px; cursor: pointer}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; color: #666666}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_Menu_Close {position: absolute; width: 31px; height: 31px; top: -15px; left: -15px}
+</style><style type="text/css">.MathJax_Preview .MJXc-math {color: inherit!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXc-script {font-size: .8em}
+.MJXc-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXc-bold {font-weight: bold}
+.MJXc-italic {font-style: italic}
+.MJXc-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXc-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXc-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXc-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXc-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXc-largeop {font-size: 150%}
+.MJXc-largeop.MJXc-int {vertical-align: -.2em}
+.MJXc-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXc-display {display: block; text-align: center; margin: 1em 0}
+.MJXc-math span {display: inline-block}
+.MJXc-box {display: block!important; text-align: center}
+.MJXc-box:after {content: " "}
+.MJXc-rule {display: block!important; margin-top: .1em}
+.MJXc-char {display: block!important}
+.MJXc-mo {margin: 0 .15em}
+.MJXc-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXc-denom {display: inline-table!important; width: 100%}
+.MJXc-denom > * {display: table-row!important}
+.MJXc-surd {vertical-align: top}
+.MJXc-surd > * {display: block!important}
+.MJXc-script-box > *  {display: table!important; height: 50%}
+.MJXc-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXc-script-box > *:last-child > * {vertical-align: bottom}
+.MJXc-script-box > * > * > * {display: block!important}
+.MJXc-mphantom {visibility: hidden}
+.MJXc-munderover {display: inline-table!important}
+.MJXc-over {display: inline-block!important; text-align: center}
+.MJXc-over > * {display: block!important}
+.MJXc-munderover > * {display: table-row!important}
+.MJXc-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXc-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXc-mtr {display: table-row!important}
+.MJXc-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXc-mtr > .MJXc-mtd:first-child {padding-left: 0}
+.MJXc-mtr:first-child > .MJXc-mtd {padding-top: 0}
+.MJXc-mlabeledtr {display: table-row!important}
+.MJXc-mlabeledtr > .MJXc-mtd:first-child {padding-left: 0}
+.MJXc-mlabeledtr:first-child > .MJXc-mtd {padding-top: 0}
+.MJXc-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXc-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXc-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXc-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXc-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXc-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXc-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXc-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXc-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXc-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXc-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_CHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div style="display: none;" id="MathJax_Message"></div>
+<b>Lab 6 Design Problem: Quicksort</b>
+
+<p>Suppose you have an array of N integers, and wish to sort them
+into ascending order.  There are a variety of approaches you might
+use, ranging from the
+<a href="https://www.youtube.com/watch?v=k4RRi_ntQc8">maligned</a>
+<em>bubble sort</em> which takes O(N<sup>2</sup>) time, to faster approaches
+such as <em>quicksort</em> that averages O(N log N) time.  Quicksort
+uses an elegantly simple <em>divide and conquer</em>
+approach to sorting an array:
+</p><ol>
+  <li>Pick a <em>pivot</em> value from among the array elements,
+  and remove that element from the array.</li>
+  <li>Partition the array into two smaller arrays, containing
+  elements whose values are smaller or larger than the pivot value,
+  respectively.</li>
+  <li>Call quicksort recursively to sort each of the two smaller
+  arrays.</li>
+  <li>Finally, combine the sorted smaller-value array, the pivot
+  element, and the sorted larger-value array into a single sorted
+  result.</li>
+</ol>
+This description glosses over several details which may vary by
+implementation; for example, which of the two smaller arrays should
+contain elements that are <em>equal</em> to the pivot value.
+
+<p>
+A high-level Python approach to quicksort of a list is:
+</p><pre class="jsim">def qsort1(list):
+  if list == []: return []
+  else:
+      pivot = list[0]       # arbitrarily choose first element
+      lesser = qsort1([x for x in list[1:] if x &lt; pivot])
+      greater = qsort1([x for x in list[1:] if x &gt;= pivot])
+      return lesser + [pivot] + greater
+</pre>
+
+<p>
+Often it is preferable to sort an array <em>in place</em>, rather
+than allocating space for the resulting new array.  A version of
+quicksort for in-place sorting is given in
+<a href="https://en.wikipedia.org/wiki/Quicksort#In-place_version">
+Wikipedia</a> as
+
+</p><pre class="jsim"># in-place partition of subarray
+#   left is the index of the leftmost element of the subarray
+#   right is the index of the rightmost element of the
+#     subarray (inclusive)
+def partition(array,left,right):
+    # choose middle element of array as pivot
+    pivotIndex = (left+right) &gt;&gt; 1
+    pivotValue = array[pivotIndex]
+
+    # swap array[right] and array[pivotIndex]
+    # note that we already store array[pivotIndex] in pivotValue
+    array[pivotIndex] = array[right]
+
+    # elements &lt;= the pivot are moved to the left (smaller indices)
+    storeIndex = left
+    for i in xrange(left,right):  # don't include array[right]
+        temp = array[i]
+        if temp &lt;= pivotValue:
+            array[i] = array[storeIndex]
+            array[storeIndex] = temp
+            storeIndex += 1
+
+    # move pivot to its final place
+    array[right] = array[storeIndex]
+    array[storeIndex] = pivotValue
+    return storeIndex
+
+def quicksort(array, left, right):
+    if left &lt; right:
+        pivotIndex = partition(array,left,right)
+        quicksort(array,left,pivotIndex-1)
+        quicksort(array,pivotIndex+1,right)
+</pre>
+Although this code is nominally in Python, it is substantially
+identical to C code.
+<p>
+Note that the code for both <code>quicksort</code> and <code>partition</code>
+identifies a range of consecutive elements in the <code>array</code> by
+two integers, <code>left</code> and <code>right</code>, that identify the
+array indices of the leftmost and rightmost elements within the range
+respectively.  In contrast to usual C and Python practice, the indicated
+range includes both the left and right elements: thus, the only way
+to designate an empty (zero-length) subrange is by having
+<code>right</code>&lt;<code>left</code>.
+
+</p><p>Arrays are stored in consecutive locations of memory.  In this
+lab, we're dealing with arrays of integers, so each array element
+occupies a 32-bit word.  Since the memory is byte addressed,
+consecutive elements of an integer array have addresses that differ by 4.
+Integer arrays are always <i>word aligned</i>, <i>i.e.</i>, the byte
+addresses of array elements have <tt>00</tt> as the low-order two address
+bits.  When a program refers to an entire array, the value that gets
+passed around is the address of the first array element, <i>i.e.</i>,
+the address of <tt>array[0]</tt>.  For example,
+here's a simple procedure that adds two consecutive array elements:
+</p><pre class="jsim">def add_pair(array,i): return array[i] + array[i+1]
+</pre>
+The corresponding assembly language code would be
+<pre class="jsim">add_pair:
+     PUSH(LP)       // standard entry sequence
+     PUSH(BP)
+     MOVE(SP,BP)
+     PUSH(R1)       // save registers we use below
+
+     LD(BP,-12,R1)  // R1 = address of array[0]
+     LD(BP,-16,R0)  // R0 = i
+
+     // now we have to convert index i into the appropriate
+     // address offset from the start of the array.  Since
+     // each array element occupies 4 bytes, we multiply the
+     // index by 4 to convert it to a byte offset.
+     SHLC(R0,2,R0)  // shift left by 2 = multiply by 4
+     ADD(R0,R1,R1)  // R1 = address of array[i]
+
+     LD(R1,0,R0)    // R0 = array[i]
+     LD(R1,4,R1)    // R1 = array[i+1]
+     ADD(R1,R0,R0)  // R0 = array[i] + array[i+1]
+
+     POP(R1)        // restore saved registers
+     MOVE(BP,SP)    // standard exit sequence
+     POP(BP)
+     POP(LP)
+     JMP(LP)
+</pre>
+
+<p>
+    <b><em>Setup:</em></b> The <code>Lab 6</code> tab in the BSim
+    window has been initialized with the code from
+    the <code>template.uasm</code> tab.  Look it over briefly; notice
+    that the dummy procedures included are valid (<em>e.g.</em>, they
+    obey stack discipline and our linkage conventions) but devoid of
+    any function.
+
+    </p><p> Select the <code>Lab 6</code> tab in the BSim window,
+    click <em>Assemble</em> to translate it to binary.  Run the code,
+    by hitting the <em>play</em> button; you'll see the Beta stepping
+    through instructions, updating the display.
+
+    </p><div class="hint">
+    <b>Hint:</b> You can click on the "Split" button to configure the BSim window to show
+    both your editor windows and the Beta simulation display.  The simulator
+    will highlight the line in your source code that generated the current
+    Beta instruction, assuming that source line came from the currently
+    selected editor window.  You can watch the Beta scroll through your
+    program making it easy to watch your code being executed.
+    </div>
+
+    When you get tired of watching this show, hit <em>pause</em> and
+    then <em>fast forward</em> to execute without the tedious display
+    updates.  You should see some output from the checkoff program in
+    the <em>console</em> window at the bottom of your screen.
+
+    <p>
+    <em>Good news</em> - you've passed the first two test cases!  Looking
+    at the console output, notice that Test 1 involves a sequence of 1
+    element, and Test 2 involves a sequence of length 2 thats already in
+    order.  These trivial test cases are already sorted, so your do-nothing
+    quicksort (which, in its defense, at least does no damage) passes these
+    tests.  The third test, which actually needs some sorting, should fail.
+
+</p><p>
+    <b><em>TestCase:</em></b>
+    Lets focus on the failed test: change the <code>LONG(0)</code> in the location
+    labeled <em>TestCase</em> near the beginning of the Lab 6 tab
+    to read <code>LONG(3)</code>.  This tells the checkoff program to run only the
+    third test, making debugging that test a bit less tedious.
+    </p><p>
+    Our principal debugging tool is the <em>breakpoint</em>, a marker that
+    can be inserted into our program at interesting points to cause it to pause and let us poke
+    around.
+    </p><p>
+    Insert the line
+    </p><pre>     .breakpoint</pre>
+    in your empty <code>quicksort</code> procedure, immediately following the line
+    reading
+    <pre>     // Fill in your code here...</pre>
+    and run it again.  The simulation should stop when you hit the inserted
+    breakpoint, allowing you to examine the state of the Beta and its memory
+    at that point.
+
+<p class="question">Question (A). Looking at the state of the Beta, determine the value in <code>R20</code>
+and enter your answer in the appropriate answer box in the Lab 6 webpage.</p>
+
+<p>    In fact, you'll notice systematic values in registers; these are used by
+    the checkoff program to check that you're properly saving/restoring registers.
+
+</p><p>
+    Your next project, and the main task of this lab, is to fill in the code for
+    the two procedures and get them working correctly.  Although you may code these
+    procedures however you like, we recommend paying careful attention to details
+    in the Python/C versions supplied; seemingly minor variations (&lt; rather
+    than &lt;=, including/excluding the rightmost element in a loop) can cause
+    errors taking hours to debug.
+    </p><p>
+    While you may vary the order in which you approach the coding of these
+    procedures, we suggest the following sequence of steps:
+
+</p><p>
+    <b><em>quicksort stub:</em></b>
+    Implement the first part of <code>quicksort</code>: the call to <code>partition</code>.
+    Using a breakpoint in <code>partition</code>, ensure that its called with the proper
+    arguments (identical to those of <code>quicksort</code>).  Try it on the first few
+    test cases by varying the value in <code>TestCase</code>.
+  
+
+</p><p>
+    <b><em>partition:</em></b>
+    Implement the code in <code>partition</code>, and debug it (again, using various
+    test cases).  Although this code is more complex than <code>quicksort</code>, it
+    avoids the complication of recursive calls, making debugging easier.
+    Once you're convinced <code>partition</code> works properly, move on to the next step.
+  
+
+</p><div class="hint">
+<b>Hint:</b> The <code>partition</code> code involves a number of local variables.
+Although you can allocate these variables in the stack frame (as we have
+done in examples given in lecture), your code may be both smaller and
+more readable if you allocate registers to hold local variables.  One
+convenient way to do this is to define symbolic names, <i>e.g.</i>,
+<pre class="jsim">  p_array=R2          // base address of array (arg 0)
+  p_left=R3
+  p_right=R4
+  p_pivotIndex=R5     // Corresponds to PivotIndex in C program
+  p_pivotValue=R6
+  p_storeIndex=R7
+  ...
+</pre>
+Note that the <code>p_</code> prefixes are prepended to avoid name conflicts
+with other such assignments.  Of course, you must remember to save and
+restore the values of any register you use in this (or any other) fashion!
+<p>
+Even if you choose to store these variables in the local stack frame,
+you will likely find symbolic names (defined as the variable offsets)
+easier to use than generic <code>Rx</code> register names.
+</p><p>
+<b>Remember:</b> A procedure can use <tt>R0</tt> with impunity, since the caller is expecting
+that to change to contain the return value.  But if you use any other register
+(<tt>R1</tt>, <tt>R2</tt>, ...) it must have the same value after the procedure as it did when the
+procedure is called.  For each register <tt>Rx</tt> that the procedure uses, there should be
+a <tt>PUSH(Rx)</tt> in the entry sequence and a <tt>POP(Rx)</tt> at the corresponding
+part of the exit sequence.
+</p></div>
+
+<p>
+    <b><em>quicksort:</em></b>
+    Complete the <code>quicksort</code> procedure, and get it to run correctly
+    on all the test cases by setting the value in <code>TestCase</code> to zero.
+    Once all tests have passed, you can validate your solution by clicking
+    the <button>Check &amp; Save</button> button.
+
+</p><p>
+    <b><em>Stack crawling:</em></b>
+    The <code>left</code> and <code>right</code> values passed to <code>quicksort</code>
+    are described as indices of <code>array</code> elements, implying that they
+    range from zero through one less than the length of <code>array</code>.
+    This constraint turns out to be not strictly true in all cases in our implementation.
+    As our last exercise, we'll explore an exception that arises during
+    execution of our <code>quicksort</code> implementation.
+    </p><p>
+    Insert a breakpoint in your <code>quicksort</code> procedure, after the stack
+    frame has been set up and interesting values (<em>e.g.</em>, arguments)
+    have been loaded into registers.  Set <code>TestCase</code> to contain 13 (running
+    only the last test case), and run your code.
+    </p><p>
+    When it stops at your breakpoint, check the value that was passed as the
+    <code>right</code> argument.  If its non-negative, click <em>fast forward</em> to continue
+    until you hit the breakpoint again; click again, and keep clicking until you get
+    to the breakpoint with a
+    <b><em>negative</em></b>
+    value for <code>right</code>.
+    </p><p>
+    At this point, you are several calls deep in the recursion of quicksort.  By
+    inspecting values in registers and on the stack, you can determine both the
+    current state of the computation and the call history that led us here.
+
+    </p><p class="question">
+    Question (B): Find the two  arguments to the current call and enter the values in the appropriate
+    answer boxes in the Lab 6 webpage.</p>
+
+    <p class="question">
+    Question (C): What's the current value in element zero of the array?</p>
+
+    <p>
+    Note the relation between the element zero value and the other
+    values in the array.  If you look a bit at the code and
+    think about the behavior of
+    your two procedures, you can see how the negative value arises
+    and convince yourself that it does no harm to the computation.
+    It is, however, a bit sloppy for the author of this code not to
+    have documented this anomaly in an explanatory comment!
+
+</p><p>
+    <b><em>BP Chain:</em></b>
+    Observe where BP points into your stack frame, and the location
+    of the saved LP value relative to this point.  Scroll the disassembly
+    window of BSim and find the two recursive calls within <code>quicksort</code>;
+    note the hex locations of the instructions <em>following</em> each call.
+    Write down these values;
+    they will be saved LP values in stack frames associated with
+    recursive calls, and can be used to distinguish recursive calls from
+    the original call by the checkoff code.
+
+
+</p><p class="question">
+      Question (D): 
+      By inspecting the saved LP value, determine whether the current
+      recursive call to <code>quicksort</code> is from the first recursive
+      call (sorting the array of smaller elements) or the second within
+      <code>quicksort</code>.</p>
+
+    <p class="question">
+    Question (E): Find the saved BP, which points to the stack frame for
+    the prior call to <code>quicksort</code>; find the arguments to that call.</p>
+
+    <p class="question">
+    Question (F): Follow the BP chain back to the original call, and report
+    the recursion depth (number of active calls) when the
+    negative argument is encountered.  Note that a couple of
+    frames at the bottom of the stack belong to procedures
+    in the testing code -- we only want you to count frames
+    belonging to quicksort.  Think about how you can distinguish
+    quicksort frames from test code frames.</p>
+
+<p>You're done!
+
+
+
+</p></body></html>
