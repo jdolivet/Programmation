@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html style="height: 100%;" lang="en"><head>
+
+        <meta content="4851b15326f6b290-09e175a0bcd24dcd-gab2f4fb87b61a9c2-c" name="google-translate-customization">
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        
+
+
+                
+                    
+                        <h1>Problem Set 8: Mashup</h1>
+                    
+                    <span class="author" id="author">
+                        This is CS50. Harvard University.
+                    </span>
+                
+
+                
+                    
+<div class="sect1">
+<h2 id="getting_ready"><a href="#getting_ready" class="link">Getting Ready</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Your (final!) mission for this problem set is to implement "mashup" that integrates Google Maps with Google News with a MySQL database containing thousands of postal codes, GPS coordinates, and more. Quite like this here version by the staff!</p>
+</div>
+<div class="paragraph">
+<p><a href="http://mashup.cs50.net/">http://mashup.cs50.net/</a></p>
+</div>
+<div class="paragraph">
+<p>Not only can you search for places via the text box up top, you can also click on and drag the map elsewhere. Scattered across the map, meanwhile, are newspaper icons that, when clicked, provide links to local news!</p>
+</div>
+<div class="paragraph">
+<p>You may notice that some markers (and labels) overlap others or are otherwise at the wrong coordinates. The GeoNames geographical database is actually imperfect, whereby some places' coordinates are off. For instance, East Boston isn’t in Back Bay. And Readville isn’t in Boston Harbor. Not to worry if you see those same symptoms in your mashup, assuming the source of the problem is indeed the data itself!</p>
+</div>
+<div class="paragraph">
+<p>Anyhow, how neat! But where to begin?</p>
+</div>
+<div class="sect2">
+<h3 id="google_maps"><a href="#google_maps" class="link">Google Maps</a></h3>
+<div class="paragraph">
+<p>Odds are you’re already familiar, but surf on over to Google Maps anyway at <a href="https://www.google.com/maps">https://www.google.com/maps</a>. Input <strong>42.3770, -71.1256</strong> into the search box up top, and you should find yourself near Harvard. Interesting! It seems Google Maps understands GPS coordinates (i.e., latitude and longitude). In fact, search for <strong>28.410, -81.584</strong>. Perhaps you’d rather be there? (You might need to zoom out.)</p>
+</div>
+<div class="paragraph">
+<p>It turns out that Google Maps offers an API that allows you to embed Google’s maps into your own web apps. Hey, that’s one of the ingredients we need! Go ahead and familiarize yourself with <a href="https://developers.google.com/maps/documentation/javascript/">Google Maps Javascript API v3</a> by perusing the three sections below of its Developer’s Guide. Read through any sample code carefully, clicking <strong>View example</strong> below it, if present, to see the code in action.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://developers.google.com/maps/documentation/javascript/tutorial">Getting Started</a></p>
+</li>
+<li>
+<p>Drawing on the Map</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://developers.google.com/maps/documentation/javascript/markers">Markers</a></p>
+</li>
+<li>
+<p><a href="https://developers.google.com/maps/documentation/javascript/infowindows">Info Windows</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="google_news"><a href="#google_news" class="link">Google News</a></h3>
+<div class="paragraph">
+<p>Okay, now we need us some news. If you happen to have a Google Account (e.g., Gmail), head to <a href="https://news.google.com/">https://news.google.com/</a> and click the gear icon at top-right. Below the icon should appear <strong>Personalize Google News</strong>, below which is <strong>Advanced</strong>. Click the latter, and <strong>Add a local section</strong> should appear at right. Input, say, <strong>Cambridge, Massachusetts</strong> into that box, then click <strong>Add</strong>. You should find yourself at the URL below?</p>
+</div>
+<div class="paragraph">
+<p><a href="https://news.google.com/news/section?pz=1&amp;cf=all&amp;geo=Cambridge,+Massachusetts&amp;ned=us&amp;redirect=true">https://news.google.com/news/section?pz=1&amp;cf=all&amp;geo=Cambridge,+Massachusetts&amp;ned=us&amp;redirect=true</a></p>
+</div>
+<div class="paragraph">
+<p>Not to worry if you don’t have a Google Account. Just head straight to that URL.</p>
+</div>
+<div class="paragraph">
+<p>Interesting, it looks like our input is now the value of an HTTP parameter, <code>geo</code>, though there’s a bunch of other parameters too. (Recall that <code>+</code> is one way a browser can encode a space in a URL. Another way is with <code>%20</code>.) One at a time, delete each of those other key-value pairs plus one ampersand (e.g., first <code>pz=1&amp;</code>, then <code>cf=all&amp;</code>, then <code>&amp;ned=us</code>, then <code>&amp;redirect=true</code>, hitting Enter after each deletion so as to reload the page via a shorter and shorter URL. You should find that Google still returns news for Cambridge even when the URL is just the below?</p>
+</div>
+<div class="paragraph">
+<p><a href="https://news.google.com/news/section?geo=Cambridge,+Massachusetts">https://news.google.com/news/section?geo=Cambridge,+Massachusetts</a></p>
+</div>
+<div class="paragraph">
+<p>Nice! +1 for trial and error. Now try changing the value of <code>geo</code> to, say, <code>02138</code> and then hit Enter again. You should find yourself at the URL below? The articles might change (since Cambridge has more than one postal code), but the news should still be about Cambridge?</p>
+</div>
+<div class="paragraph">
+<p><a href="https://news.google.com/news/section?geo=02138">https://news.google.com/news/section?geo=02138</a></p>
+</div>
+<div class="paragraph">
+<p>Nice. Though the page you’re looking at, of course, is written in HTML. And all we want, if the staff’s solution is any indication, is a bulleted list of articles' titles and links. How to get those without "scraping" this page’s (surely complicated) HTML? Scroll down to the page’s bottom and look for <strong>RSS</strong>. Click that link, and you should find yourself at the URL below?</p>
+</div>
+<div class="paragraph">
+<p><a href="https://news.google.com/news/feeds?pz=1&amp;cf=all&amp;ned=us&amp;hl=en&amp;geo=Cambridge,+Massachusetts&amp;output=rss">https://news.google.com/news/feeds?pz=1&amp;cf=all&amp;ned=us&amp;hl=en&amp;geo=Cambridge,+Massachusetts&amp;output=rss</a></p>
+</div>
+<div class="paragraph">
+<p>As before, delete any parameters that don’t feel core to the mission at hand, leaving only, say, <code>geo</code> and, now, <code>output</code>. You should find yourself at the (still fully functional) URL below.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://news.google.com/news/feeds?geo=02138&amp;output=rss">https://news.google.com/news/feeds?geo=02138&amp;output=rss</a></p>
+</div>
+<div class="paragraph">
+<p>Deleting those parameters probably isn’t necessary (and, who knows, their absence might break things eventually), but whittling a URL down to its essence does feel like better design, so let’s stick with simple.</p>
+</div>
+<div class="paragraph">
+<p>Now, what’s all this markup that’s now on your screen? It looks a bit like HTML, but you’re actually looking at an "RSS feed," a flavor of XML (a tag-based markup language). For quite some time, RSS was all the rage insofar as it enabled websites to "syndicate" articles in a standard format that "RSS readers" could read. RSS isn’t quite as hip anymore these days, but it’s still a terrific find for us because it’s "machine-readable". Because it adheres to a standard format, we can parse it (pretty easily!) with software. Here’s what an RSS feed generally looks like (sans actual data):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="xml language-xml"><span class="tag">&lt;rss</span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">2.0</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;channel&gt;</span>
+        <span class="tag">&lt;title&gt;</span>...<span class="tag">&lt;/title&gt;</span>
+        <span class="tag">&lt;description&gt;</span>...<span class="tag">&lt;/description&gt;</span>
+        <span class="tag">&lt;link&gt;</span>...<span class="tag">&lt;/link&gt;</span>
+        <span class="tag">&lt;item&gt;</span>
+            <span class="tag">&lt;guid&gt;</span>...<span class="tag">&lt;/guid&gt;</span>
+            <span class="tag">&lt;title&gt;</span>...<span class="tag">&lt;/title&gt;</span>
+            <span class="tag">&lt;link&gt;</span>...<span class="tag">&lt;/link&gt;</span>
+            <span class="tag">&lt;description&gt;</span>...<span class="tag">&lt;/description&gt;</span>
+            <span class="tag">&lt;category&gt;</span>...<span class="tag">&lt;/category&gt;</span>
+            <span class="tag">&lt;pubDate&gt;</span>...<span class="tag">&lt;/pubDate&gt;</span>
+        <span class="tag">&lt;/item&gt;</span>
+        ...
+    <span class="tag">&lt;/channel&gt;</span>
+<span class="tag">&lt;/rss&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In other words, an RSS feed contains a root element called <code>rss</code>, the child of which is an element called <code>channel</code>.  Inside of <code>channel</code> are elements called <code>title</code>, <code>description</code>, and <code>link</code>, followed by one or more elements called <code>item</code>, each of which represents an article (or blog post or the like). Each <code>item</code>, meanwhile, contains elements called <code>guid</code>, <code>title</code>, <code>link</code>, <code>description</code>, <code>category</code>, and <code>pubDate</code>. Of course, between most of these start tags and end tags should be actual data (e.g., an article’s actual title). For more details, see <a href="http://cyber.law.harvard.edu/rss/rss.html">http://cyber.law.harvard.edu/rss/rss.html</a>.</p>
+</div>
+<div class="paragraph">
+<p>Ultimately, we’ll parse RSS feeds from Google News using PHP and then return articles' titles and links to our web app via Ajax as JSON. But more on that in a bit.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="jquery"><a href="#jquery" class="link">jQuery</a></h3>
+<div class="paragraph">
+<p>Recall that <a href="http://jquery.com/">jQuery</a> is a super-popular JavaScript library that "makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers." To be fair, though, it’s not without a learning curve. Read through a few sections of jQuery’s documentation.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://learn.jquery.com/using-jquery-core/document-ready/">$( document ).ready()</a></p>
+</li>
+<li>
+<p><a href="http://learn.jquery.com/using-jquery-core/selecting-elements/">Selecting Elements</a></p>
+</li>
+<li>
+<p><a href="http://learn.jquery.com/ajax/jquery-ajax-methods/">jQuery’s Ajax-Related Methods</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>jQuery’s documentation isn’t the most user-friendly, though, so odds are you’ll ultimately find <a href="https://www.google.com/">Google</a> and <a href="http://stackoverflow.com/">Stack Overflow</a> handier resources.</p>
+</div>
+<div class="paragraph">
+<p>Recall that <code>$</code> is usually (though not always) an alias for a global object that’s otherwise called <code>jQuery</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="typeahead_js"><a href="#typeahead_js" class="link">typeahead.js</a></h3>
+<div class="paragraph">
+<p>Now take a look at a demo of Twitter’s typeahead.js library, a jQuery "plugin" that adds support for autocompletion to HTML text fields. See <strong>The Basics</strong> specifically:</p>
+</div>
+<div class="paragraph">
+<p><a href="http://twitter.github.io/typeahead.js/examples/">http://twitter.github.io/typeahead.js/examples/</a></p>
+</div>
+<div class="paragraph">
+<p>And now skim the documentation for that same library, which (surprise, surprise) isn’t as user-friendly as would be ideal. But, again, not to worry.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md">https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="underscore"><a href="#underscore" class="link">Underscore</a></h3>
+<div class="paragraph">
+<p>Finall, skim the documentation for <a href="http://underscorejs.org/">Underscore</a>, another popular JavaScript library that offers functions that many folks wish were built into JavaScript itself! In particular, take note of <code>template</code>. Admittedly, this documentation isn’t very user-friendly either, so not to worry if usage is non-obvious for the moment.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://underscorejs.org/#template">http://underscorejs.org/#template</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Much like jQuery uses <code>$</code> as its symbol (because it looks cool), Underscore uses <code>_</code> is its symbol. For instance <code>_.template</code> means that Underscore has a method (i.e., function) called <code>template</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="getting_started"><a href="#getting_started" class="link">Getting Started</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Phew, that was a lot! But think of it this way: that’s a lot of functionality you don’t need to implement yourself! Indeed, implementing autocompletion alone could be a project unto itself. We just need to figure out how to wire (or, if you will, "mash") all of these components together in order to build our own amazing web app.</p>
+</div>
+<div class="paragraph">
+<p>Anyhow! Start up your appliance and, upon reaching John Harvard’s desktop, open a terminal window and execute <code>update50</code> to ensure that your appliance is up-to-date!</p>
+</div>
+<div class="paragraph">
+<p>Then, download this problem set’s distribution code from <a href="http://cdn.cs50.net/2014/fall/psets/8/pset8/pset8.zip">http://cdn.cs50.net/2014/fall/psets/8/pset8/pset8.zip</a>. Unzip it into <code>~/vhosts</code>, so that you ultimately have a <code>pset8</code> directory in <code>~/vhosts</code>. Then delete <code>pset8.zip</code>.</p>
+</div>
+<div class="paragraph">
+<p>Next, execute <code>ls</code> within <code>~/vhosts/pset8</code>, and you should see three subdirectories: <code>bin</code>, <code>includes</code>, and <code>public</code>. Ensure that permissions are as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>700</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>bin</code></p>
+</li>
+<li>
+<p><code>bin/import</code></p>
+</li>
+<li>
+<p><code>includes</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>711</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>public</code></p>
+</li>
+<li>
+<p><code>public/css</code></p>
+</li>
+<li>
+<p><code>public/fonts</code></p>
+</li>
+<li>
+<p><code>public/img</code></p>
+</li>
+<li>
+<p><code>public/js</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>600</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>includes/*.php</code></p>
+</li>
+<li>
+<p><code>public/*.php</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>644</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>public/css/*</code></p>
+</li>
+<li>
+<p><code>public/fonts/*</code></p>
+</li>
+<li>
+<p><code>public/img/*</code></p>
+</li>
+<li>
+<p><code>public/index.html</code></p>
+</li>
+<li>
+<p><code>public/js/*</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>(Remember how? Remember why?)</p>
+</div>
+<div class="paragraph">
+<p>Even though your code for this problem set will again live in <code>~/vhosts</code>, let’s ensure that it’s nonetheless backed up via Dropbox, assuming you set up Dropbox inside of the appliance.  In a terminal window, execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>ln -s ~/vhosts/pset8 ~/Dropbox</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in order to create a "symbolic link" (i.e., alias or shortcut) to your <code>~/vhosts/pset8</code> directory within your <code>~/Dropbox</code> directory so that Dropbox knows to start backing it up.</p>
+</div>
+<div class="paragraph">
+<p>Next, in a terminal window, execute</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>sudo gedit /etc/hosts</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in order to run <code>gedit</code> as the appliance’s "superuser" (aka "root") so that you can edit what’s otherwise a read-only file.  Carefully add this line at the bottom of that file, which will associate <code>pset8</code> with the appliance’s "loopback" address (which won’t ever change):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>127.0.0.1 pset8</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then save the file and quit <code>gedit</code>.</p>
+</div>
+<div class="paragraph">
+<p>Alright, time for a test!  Open up Chrome <span class="underline">inside of the appliance</span> and visit <a href="http://pset8/">http://pset8/</a>.</p>
+</div>
+<div class="paragraph">
+<p>You should find yourself at a map (without much of anything going on)! (If you instead see Forbidden, odds are you missed a step earlier; best to try all those chmod steps again.) Feel free to click on the map and drag it around. Or try searching for your home town via the text box up top. It won’t find it yet! Indeed, the mashup itself doesn’t do much just yet!</p>
+</div>
+<div class="paragraph">
+<p>Head to <a href="http://pset8/phpmyadmin">http://pset8/phpmyadmin</a> using Chrome <span class="underline">inside of the appliance</span> to access phpMyAdmin. Log in as John Harvard if prompted (with a username of <strong>jharvard</strong> and a password of <strong>crimson</strong>). You should then find yourself at phpMyAdmin’s main page.</p>
+</div>
+<div class="paragraph">
+<p>In a separate tab (again using Chrome <span class="underline">inside of the appliance</span>), visit <a href="http://cdn.cs50.net/2014/fall/psets/8/pset8/pset8.sql?download">http://cdn.cs50.net/2014/fall/psets/8/pset8/pset8.sql?download</a> in order to download a file called <code>pset8.sql</code>. Once downloaded, open the file in <code>gedit</code>, as by clicking its name in Chrome’s bottom-left corner or by selecting <strong>File &gt; Open…</strong> in <code>gedit</code> and then navigating your way to <strong>Downloads</strong>.  You should ultimately see a whole bunch of SQL (i.e., database queries) within <code>pset8.sql</code>.  Highlight it all, then select <strong>Edit &gt; Copy</strong> (or hit ctrl-c), then return to phpMyAdmin.  Click phpMyAdmin’s <strong>SQL</strong> tab, and paste everything you copied into that page’s big text box (which is below <strong>Run SQL query/queries on server "localhost"</strong>).  Skim what you just pasted to get a sense of the commands you’re about to execute, then click <strong>Go</strong>.  You should then see a greenish banner indicating success.  In phpMyAdmin’s top-left corner, you should now see link to a database called <strong>pset8</strong>, beneath which is a link to a table called <strong>places</strong>. (The latest version of phpMyAdmin is a bit buggy, though, so you might need to reload the page first.) If you click <strong>places</strong>, you’ll find (gasp!) that this table is empty. But we have defined its "schema" (i.e., structure) for you. Click phpMyAdmin’s <strong>Structure</strong> tab to see.</p>
+</div>
+<div class="paragraph">
+<p>Let’s now download the data that we’ll ultimately import into this table. Using Chrome <span class="underline">inside of the appliance</span>, head to <a href="http://download.geonames.org/export/zip/">http://download.geonames.org/export/zip/</a>, where you’ll see a whole bunch of ZIP files, "data dumps" (in <code>.txt</code> format) from the <a href="http://www.geonames.org/">GeoNames</a> geographical database, which "covers all countries and contains over eight million placenames that are available for download free of charge." Click <code>US.zip</code> to download a dump of postal codes (and more) for the United States. Alternatively, you’re welcome to download another country’s data, though this spec will assume the US for the sake of discussion. See <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements">http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements</a> if unsure how to interpret the ZIP files' 2-letter "base names." (They’re "ISO 3166-1 alpha-2" country codes.)</p>
+</div>
+<div class="paragraph">
+<p>Next, unzip <code>US.zip</code>, which should yield <code>US.txt</code>. And then delete <code>US.zip</code>.</p>
+</div>
+<div class="paragraph">
+<p>Per <a href="http://download.geonames.org/export/zip/readme.txt">http://download.geonames.org/export/zip/readme.txt</a>, <code>US.txt</code> is quite like a CSV file except that fields are delimited with <code>\t</code> instead of a comma. To see the file’s contents, you’re welcome to open it in <code>gedit</code> (or use command-line utilities like <code>head</code>, <code>less</code>, and <code>more</code>), but take care not to change it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="walkthrough"><a href="#walkthrough" class="link">Walkthrough</a></h2>
+<div class="sectionbody">
+
+<div class="paragraph">
+<p>And now a closer look at the distribution code.</p>
+</div>
+<div class="sect2">
+<h3 id="import"><a href="#import" class="link">import</a></h3>
+<div class="paragraph">
+<p>Navigate your way to <code>~/vhosts/pset8/bin</code> and open up <code>import</code> with <code>gedit</code>. Not much there yet! Just a shebang and <code>TODO</code>. It’s in this file that you’ll ultimately write a PHP script that iterates over the lines in <code>US.txt</code>, <code>INSERT</code>ing data from each into <code>places</code>, that MySQL table. But more on that later.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="index_php"><a href="#index_php" class="link">index.php</a></h3>
+<div class="paragraph">
+<p>Next navigate your way to <code>~/vhosts/pset8/public</code> and open up <code>index.html</code> with <code>gedit</code>. Ah, there we go. If you look at the page’s <code>head</code>, you’ll see all those CSS and JavaScript libraries we’ll be using (plus some others). Included in HTML comments are URLs for each library’s documentation.</p>
+</div>
+<div class="paragraph">
+<p>Next take a look at the page’s <code>body</code>, inside of which is <code>div</code> with a unique <code>id</code> of <code>map-canvas</code>. It’s into that <code>div</code> that we’ll be injecting a map. Below that <code>div</code>, meanwhile, is a <code>form</code>, inside of which is an <code>input</code> of type <code>text</code> with a unique <code>id</code> of <code>q</code> that we’ll use to take input from users.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="styles_css"><a href="#styles_css" class="link">styles.css</a></h3>
+<div class="paragraph">
+<p>Now navigate your way to <code>~/vhosts/pset8/public/css</code> and open up <code>styles.css</code> with <code>gedit</code>. In there is a bunch of CSS that implements the mashup’s default UI. Feel free to tinker (i.e., make changes, save the file, and reload the page in Chrome) to see how everything works, but best to undo any such changes for now before forging ahead.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="scripts_js"><a href="#scripts_js" class="link">scripts.js</a></h3>
+<div class="paragraph">
+<p>Navigate next to <code>~/vhosts/pset8/public/js</code> and open up <code>scripts.js</code> with <code>gedit</code>. Ah, the most interesting file yet! It’s this file that implements the mashup’s "front-end" UI, relying on Google Maps and some "back-end" PHP scripts for data (that we’ll soon explore). Let’s walk through this one.</p>
+</div>
+<div class="paragraph">
+<p>Atop the file are some global variables:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>map</code>, which will contain a reference (i.e., a pointer of sorts) to the map we’ll soon be instantiating;</p>
+</li>
+<li>
+<p><code>markers</code>, an array that will contain references to any markers we add atop the map; and</p>
+</li>
+<li>
+<p><code>info</code>, a reference to an "info window" in which we’ll ultimately display links to articles.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Below those global variables is an anonymous function that will be called automatically by jQuery when the mashup’s DOM is fully loaded (i.e., when <code>index.html</code> and all its assets, CSS and JavaScript especially, have been loaded into memory).</p>
+</div>
+<div class="paragraph">
+<p>Atop this anonymous function is a definition of <code>styles</code>, an array of two objects that we’ll use to configure our map, as per <a href="https://developers.google.com/maps/documentation/javascript/styling">https://developers.google.com/maps/documentation/javascript/styling</a>. Recall that <code>[</code> and <code>]</code> denote an array, while <code>{</code> and <code>}</code> denote an object. The (very pretty) indentation you see is just a stylistic convention to which it’s probably ideal to adhere in your code as well.</p>
+</div>
+<div class="paragraph">
+<p>Below <code>styles</code> is <code>options</code>, another collection of keys and values that will ultimately be used to configure the map further, as per <a href="https://developers.google.com/maps/documentation/javascript/reference#MapOptions">https://developers.google.com/maps/documentation/javascript/reference#MapOptions</a>.</p>
+</div>
+<div class="paragraph">
+<p>Next we define <code>canvas</code>, by using a bit of jQuery to get the DOM node whose unique <code>id</code> is <code>map-canvas</code>. Whereas <code>$("#map-canvas")</code> returns a jQuery object (that has a whole bunch of functionality built-in), <code>$("#map-canvas").get(0)</code> returns the actual, underlying DOM node that jQuery is just wrapping.</p>
+</div>
+<div class="paragraph">
+<p>Perhaps the most powerful line yet is the next one in which we assign <code>map</code> (that global variable) a value. With</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="js language-js"><span class="keyword">new</span> google.maps.Map(canvas, options);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>we’re telling the browser to instantiate a new map, injecting it into the DOM node specified by <code>canvas</code>), configured per <code>options</code>.</p>
+</div>
+<div class="paragraph">
+<p>The line below that one, meanwhile, tells the browser to call <code>configure</code> (another function we’ve written) as soon as the map is loaded.</p>
+</div>
+<div class="sect3">
+<h4 id="addmarker"><a href="#addmarker" class="link">addMarker</a></h4>
+<div class="paragraph">
+<p>Uh oh, a <code>TODO</code>. Ultimately, given a <code>place</code> (i.e., postal code and more), this function will need to add a marker (i.e., icon) to the map.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configure"><a href="#configure" class="link">configure</a></h4>
+<div class="paragraph">
+<p>This function, meanwhile, picks up where that anonymous function left off. Recall that <code>configure</code> is called as soon as the map has been loaded. Within this function we configure a number of "listeners," specifying what should happen when we "hear" certain events. For instance,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="js language-js">google.maps.event.addListener(map, <span class="string"><span class="delimiter">"</span><span class="content">dragend</span><span class="delimiter">"</span></span>, <span class="keyword">function</span>() {
+    update();
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>indicates that we want to listen for a <code>dragend</code> event on the map, calling the anonymous function provided when we hear it. That anonymous function, meanwhile, simply calls <code>update</code> (another function we’ll soon see). Per <a href="https://developers.google.com/maps/documentation/javascript/reference#Map">https://developers.google.com/maps/documentation/javascript/reference#Map</a>, <code>dragend</code> is "fired" (i.e., broadcasted) "when the user stops dragging the map."</p>
+</div>
+<div class="paragraph">
+<p>Similarly do we listen for <code>zoom_changed</code>, which is fired "when the map zoom property changes" (i.e., the user zooms in or out).</p>
+</div>
+<div class="paragraph">
+<p>On the other hand, upon hearing <code>dragstart</code>, we ultimately call <code>removeMarkers</code> so that all markers disappear temporarily as a user drags the map, thereby avoiding the appearance of a flicker that might otherwise happen as markers are removed and then re-added after the maps bounds (i.e., corners) have changed.</p>
+</div>
+<div class="paragraph">
+<p>Below those listeners is our configuration of that typeahead plugin. Take another look at <a href="https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md">https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md</a> if unsure what <code>autoselect</code>, <code>highlight</code>, and <code>minLength</code> do here. Most importantly, though, know that the value of <code>source</code> (i.e., <code>search</code>) is the function that the plugin will call as soon as the user starts typing so that the function can respond with an array of search results based on the user’s input. For instance, if the user types <code>foo</code> into that text box, the function should ultimately return an array of all places in your database that somehow match <code>foo</code>. How to perform those matches will ultimately be left to you! The value of <code>templates</code>, meanwhile, is an object with two keys: <code>empty</code>, whose value is the HTML that should be displayed when <code>search</code> comes back empty (i.e., returns an array of length 0), and <code>suggestion</code>, whose value is a "template" that will be used to format each entry in the plugin’s dropdown menu. Right now, that template is simply <code>&lt;p&gt;TODO&lt;/p&gt;</code>, which means that every entry in that dropdown will literally say <code>TODO</code>. Ultimately, you’ll want to change that tvalue to something like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="js language-js"><span class="tag">&lt;p&gt;</span><span class="error">&lt;</span>%- place_name %<span class="error">&gt;</span>, <span class="error">&lt;</span>%- admin_name1 %<span class="error">&gt;</span><span class="tag">&lt;/p&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>so that the plugin dynamically inserts those values (<code>place_name</code> and <code>admin_name1</code>) or some others for you. In contrast to <code>&lt;%=</code>, which Underscore also supports, the <code>&lt;%-</code> ensures that the value will be escaped, a la PHP’s <code>htmlspecialchars</code>, per <a href="http://underscorejs.org/#template">http://underscorejs.org/#template</a>.</p>
+</div>
+<div class="paragraph">
+<p>Next notice these lines, which are admittedly a bit cryptic at first glance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="js language-js"><span class="predefined">$</span>(<span class="string"><span class="delimiter">"</span><span class="content">#q</span><span class="delimiter">"</span></span>).on(<span class="string"><span class="delimiter">"</span><span class="content">typeahead:selected</span><span class="delimiter">"</span></span>, <span class="keyword">function</span>(eventObject, suggestion, name) {
+    map.setCenter({<span class="key">lat</span>: parseFloat(suggestion.latitude), <span class="key">lng</span>: parseFloat(suggestion.longitude)});
+    update();
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These lines are saying that if the HTML element whose unique <code>id</code> is <code>q</code> fires an event called <code>typeahead:selected</code>, as will happen when the user selects an entry from the plugin’s dropdown menu, we want jQuery to call an anonymous function whose second argument, <code>suggestion</code>, will be an object that represents the entry selected. Within that object must be at least two properties: <code>latitude</code> and <code>longitude</code>. We’ll then call <code>setCenter</code> in order to re-center the map at those coordinates, after which we’ll call <code>update</code> to update any markers.</p>
+</div>
+<div class="paragraph">
+<p>Below those lines, meanwhile, are these:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="js language-js"><span class="predefined">$</span>(<span class="string"><span class="delimiter">"</span><span class="content">#q</span><span class="delimiter">"</span></span>).focus(<span class="keyword">function</span>(eventData) {
+    hideInfo();
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you consult <a href="http://api.jquery.com/focus/">http://api.jquery.com/focus/</a>, hopefully those lines will make sense?</p>
+</div>
+<div class="paragraph">
+<p>Below those are these:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="js language-js">document.addEventListener(<span class="string"><span class="delimiter">"</span><span class="content">contextmenu</span><span class="delimiter">"</span></span>, <span class="keyword">function</span>(event) {
+    event.returnValue = <span class="predefined-constant">true</span>;
+    event.stopPropagation &amp;&amp; event.stopPropagation();
+    event.cancelBubble &amp;&amp; event.cancelBubble();
+}, <span class="predefined-constant">true</span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unfortunately, Google Maps disables ctrl- and right-clicks on maps, which interferes with using Chrome’s (amazingly useful) <strong>Inspect Element</strong> feature, so these lines re-enable those.</p>
+</div>
+<div class="paragraph">
+<p>Last up in <code>configure</code> is a call to <code>update</code> (which we’ll soon look at) and a call to <code>focus</code>, this time with no arguments. See <a href="http://api.jquery.com/focus/">http://api.jquery.com/focus/</a> for why!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hideinfo"><a href="#hideinfo" class="link">hideInfo</a></h4>
+<div class="paragraph">
+<p>Thankfully, a short function! This one just calls <code>close</code> on our global info window.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="removemarkers"><a href="#removemarkers" class="link">removeMarkers</a></h4>
+<div class="paragraph">
+<p>Hm, a <code>TODO</code>. Ultimately, this function will need to remove any and all markers from the map!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="search"><a href="#search" class="link">search</a></h4>
+<div class="paragraph">
+<p>This function is called by the typeahead plugin every time the user changes the mashup’s text box, as by typing or deleting a character. The value of the text box (i.e., whatever the user has typed in total) is passed to <code>search</code> as <code>query</code>. And the plugin also passes to <code>search</code> a second argument, <code>cb</code>, a "callback" which is a function that <code>search</code> should call as soon as it’s done searching for matches. In other words, this passing in of <code>cb</code> empowers <code>search</code> to be "asynchronous," whereby it will only call <code>cb</code> as soon as it’s ready, without blocking any of the mashup’s other functionality. Accordingly, <code>search</code> uses jQuery’s <code>getJSON</code> method to contact <code>search.php</code> asynchronously, passing in one parameter, <code>geo</code>, the value of which is <code>query</code>. Once <code>search.php</code> responds (however many milliseconds or seconds later), the anonymous function passed to <code>done</code> will be called and passed <code>data</code>, whose value will be whatever JSON that <code>search.php</code> has emitted. (Though if something goes wrong, <code>fail</code> is instead called.) Finally called is <code>cb</code>, to which <code>search</code> passes that same <code>data</code> so that the plugin can iterate over the places therein (assuming <code>search.php</code> found matches) in order to update the plugin’s drop-down. Phew.</p>
+</div>
+<div class="paragraph">
+<p>Notice that we’re using <code>getJSON</code>'s "Promise" interface, per <a href="http://api.jquery.com/jquery.getjson/">http://api.jquery.com/jquery.getjson/</a>. Rather than pass an anonymous function directly to <code>getJSON</code> (to be called upon success), we’re instead "chaining" together calls to <code>getJSON</code>, <code>done</code> (whose argument, an anonymous function, will be called upon success), and <code>fail</code> (whose argument, another anonymous function, will be called upoon failure). See <a href="http://api.jquery.com/jquery.ajax/">http://api.jquery.com/jquery.ajax/</a> for some additional details. And see <a href="http://davidwalsh.name/write-javascript-promises">http://davidwalsh.name/write-javascript-promises</a> for an explanation of promises themselves.</p>
+</div>
+<div class="paragraph">
+<p>Notice, too, that we’re using <code>console.log</code> much like you might use <code>printf</code> in C to log errors for debugging’s sake. You may want to do so as well! Just realize that <code>console.log</code> will log messages to the browser’s console (i.e., the <strong>Console</strong> tab of Chrome’s developer tools), not to your terminal window. See <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console.log">https://developer.mozilla.org/en-US/docs/Web/API/Console.log</a> for tips.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="showinfo"><a href="#showinfo" class="link">showInfo</a></h4>
+<div class="paragraph">
+<p>This function opens the info window at a particular marker with particular content (i.e., HTML). Though if only one argument is supplied (<code>marker</code>), <code>showInfo</code> simply displays a spinning icon (which is just an animated GIF). Notice, though, how this function is creating a string of HTML dynamically, thereafter passing it to <code>setContent</code>. Perhaps keep that technique in mind elsewhere!</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="update"><a href="#update" class="link">update</a></h4>
+<div class="paragraph">
+<p>Last up is <code>update</code>, which first determines the map’s current bounds, the coordinates of its top-right (northeast) and bottom-left (southwest) corners. It then passes those coordinates to <code>update.php</code> via a GET request (underneath the hood of <code>getJSON</code>) a la:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>GET /update.php?ne=42.42783050736053%2C-71.00200380859377&amp;sw=42.32612831530431%2C-71.24919619140627 HTTP/1.1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>%2C</code> are just commas that have been "URL-encoded." Realize that our use of commas is arbitary; we’re expecting <code>update.php</code> to parse and extract latitudes and longitudes from these parameters. We could have simply passed in four distinct parameters, but we felt it was semantically cleaner to pass in just one parameter per corner.</p>
+</div>
+<div class="paragraph">
+<p>As we’ll soon see, <code>update.php</code> is designed to return a JSON array of places that fall within the map’s current bounds (i.e., cities within view). After all, with those two corners alone can you define a rectangle, which is exactly what the map is!</p>
+</div>
+<div class="paragraph">
+<p>As soon as <code>update.php</code> responds, the anonymous function passed to <code>done</code> is called and passed <code>data</code>, the value of which is the JSON emitted by <code>update.php</code>. (Though if something goes wrong, <code>fail</code> is instead called.) That anonymous function first removes all markers from the map and then iteratively adds new markers, one for each place (i.e., city) in the JSON.</p>
+</div>
+<div class="paragraph">
+<p>Phew and phew!</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="update_php"><a href="#update_php" class="link">update.php</a></h3>
+<div class="paragraph">
+<p>Now navigate your way to <code>~/vhosts/pset8/public</code> and open up <code>update.php</code> with <code>gedit</code>. Ah, okay, here’s the "back-end" script that outputs a JSON array of up to 10 places (i.e., cities) that fall within the specified bounds (i.e., within the rectangle defined by those corners). You won’t need to make changes to this file, but do read through it line by line, Googling any function with which you’re not familiar. Of particular interest should be <code>preg_match</code>, which allows you to compare strings against "regular expressions." While cryptic at first glance, our two calls to <code>preg_match</code> in <code>update.php</code> are simply ensuring that both <code>sw</code> and <code>ne</code> are comma-separated latitudes and longitudes.</p>
+</div>
+<div class="paragraph">
+<p>Oh, and yes, this file’s SQL queries assume that the world is flat for simplity.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="search_php"><a href="#search_php" class="link">search.php</a></h3>
+<div class="paragraph">
+<p>Next open up <code>search.php</code> with <code>gedit</code>. Ah, not much in there now. Just an eventual <code>TODO</code>!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="articles_php"><a href="#articles_php" class="link">articles.php</a></h3>
+<div class="paragraph">
+<p>Now open up <code>articles.php</code> with <code>gedit</code>. This one we’ve implemented for you. Read through its lines, again Googling as needed. Notice how it expects a GET parameter called <code>geo</code>, which it passes to Google News for localized news, thereafter returning a JSON array of objects, each of which has two keys: <code>link</code> and <code>title</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can actually see this file in action. Go ahead and visit URLs like</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://pset8/articles.php?geo=Cambridge,+Massachusetts">http://pset8/articles.php?geo=Cambridge,+Massachusetts</a></p>
+</li>
+<li>
+<p><a href="http://pset8/articles.php?geo=02138">http://pset8/articles.php?geo=02138</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>using Chrome <span class="underline">inside of the appliance</span>. You should see a (pretty-printed) JSON array of articles!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="config_php"><a href="#config_php" class="link">config.php</a></h3>
+<div class="paragraph">
+<p>Let’s now take a quick peek at the file that all those other PHP files have required. Navigate your way to <code>~/vhosts/pset8/includes</code> and open up <code>config.php</code> with <code>gedit</code>. Ah, a file quite like Problem Set 7’s own <code>config.php</code>, albeit simpler.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="constants_php"><a href="#constants_php" class="link">constants.php</a></h3>
+<div class="paragraph">
+<p>Next open up <code>constants.php</code> with <code>gedit</code>. Ah, another familiar sight, albeit with a database called <code>pset8</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="functions_php"><a href="#functions_php" class="link">functions.php</a></h3>
+<div class="paragraph">
+<p>And, lastly, take a look at <code>functions.php</code> with <code>gedit</code>. In there that same function, <code>query</code>, from Problem Set 7, albeit slightly modified. For all intents and purposes, though, you can call it the same as before.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what_to_do"><a href="#what_to_do" class="link">What To Do</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Alright, it’s time to mash Google’s two APIs together.</p>
+</div>
+<div class="sect2">
+<h3 id="import_2"><a href="#import_2" class="link">import</a></h3>
+<div class="paragraph">
+<p>Recall that <code>places</code>, that MySQL table you imported earlier, is currently empty. The data that needs to be in it, meanwhile, is in <code>US.txt</code>.</p>
+</div>
+<div class="paragraph">
+<p>Write, in <code>import</code>, a command-line script in PHP that accepts as a command-line argument the path to a file (which can be assumed to be formatted like <code>US.txt</code>) that iterates over the file’s lines, inserting each as new row in <code>places</code>. We leave the overall design of this script to you, but be sure to perform rigorous error-checking, leveraging <a href="http://php.net/manual/en/function.file-exists.php"><code>file_exists</code></a>, <a href="http://php.net/manual/en/function.is-readable.php"><code>is_readable</code></a>, and/or similar. Odds are you’ll find <a href="http://php.net/manual/en/function.fopen.php"><code>fopen</code></a>, <a href="http://php.net/manual/en/function.fgetcsv.php"><code>fgetcsv</code></a>, and <a href="http://php.net/manual/en/function.fclose.php"><code>fclose</code></a> of particular help, along with <code>query</code> from <code>functions.php</code>. Note that <code>fgetcsv</code> takes an optional third argument that allows you to override the default delimiter from a comma to something else.</p>
+</div>
+<div class="paragraph">
+<p>To run this script, you’ll want to execute a command like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="bash language-bash">./import /path/to/US.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>/path/to/US.txt</code> is indeed the (relative or absolute) path to that file.</p>
+</div>
+<div class="paragraph">
+<p>Odds are the first several runs of your script won’t be quite right, so you’ll likely want to empty <code>places</code> between runs, as by executing</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="sql language-sql"><span class="class">TRUNCATE</span> places</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in phpMyAdmin’s <strong>SQL</strong> tab or by clicking <strong>Empty the table (TRUNCATE)</strong> in phpMyAdmin’s <strong>Operations</strong> tab. If you take the latter approach, be sure that you’ve first selected <strong>places</strong> (as by clicking it in phpMyAdmin’s lefthand column) so that you don’t truncate some other table. And be sure not to click <strong>Delete the table (DROP)</strong>, else you’ll have to re-import <code>pset8.sql</code> and re-create any changes you’d made.</p>
+</div>
+<div class="paragraph">
+<p>Either now or later on, you should probably add one or more additional indexes to <code>places</code> in order to expedite searches (for <code>search.php</code>). See <a href="http://dev.mysql.com/doc/refman/5.5/en/mysql-indexes.html">http://dev.mysql.com/doc/refman/5.5/en/mysql-indexes.html</a> and <a href="http://dev.mysql.com/doc/refman/5.5/en/fulltext-search.html">http://dev.mysql.com/doc/refman/5.5/en/fulltext-search.html</a> (and Google!) for tips. (We defined <code>places</code> in <code>pset8.sql</code> as using a MyISAM engine so that a <code>FULLTEXT</code> index is an option.)</p>
+</div>
+<div class="paragraph">
+<p>Even though data can sometimes be imported in bulk via phpMyAdmin’s <strong>Import</strong> tab, you must indeed (in case wondering!) implement <code>import</code> as prescribed!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="search_php_2"><a href="#search_php_2" class="link">search.php</a></h3>
+<div class="paragraph">
+<p>Implement <code>search.php</code> in such a way that it outputs a JSON array of objects, each of which represents a row from <code>places</code> that somehow matches the value of <code>geo</code>. The value of <code>geo</code>, passed into <code>search.php</code> as a GET parameter, meanwhile, might be a city, state, and/or postal code. We leave it to you to decide what constitutes a match and, therefore, which rows to <code>SELECT</code>. Odds are you’ll find SQL’s <code>LIKE</code> and/or <code>MATCH</code> keywords helpful. Again see <a href="http://dev.mysql.com/doc/refman/5.5/en/string-comparison-functions.html">http://dev.mysql.com/doc/refman/5.5/en/string-comparison-functions.html</a> and <a href="http://dev.mysql.com/doc/refman/5.5/en/fulltext-search.html">http://dev.mysql.com/doc/refman/5.5/en/fulltext-search.html</a> (and Google!) for tips.</p>
+</div>
+<div class="paragraph">
+<p>To test <code>search.php</code>, even before your text box is operational, simply visit URLs like</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://pset8/search.php?geo=Cambridge,Massachusetts,US">http://pset8/search.php?geo=Cambridge,Massachusetts,US</a></p>
+</li>
+<li>
+<p><a href="http://pset8/search.php?geo=Cambridge,+Massachusetts">http://pset8/search.php?geo=Cambridge,+Massachusetts</a></p>
+</li>
+<li>
+<p><a href="http://pset8/search.php?geo=Cambridge,+MA">http://pset8/search.php?geo=Cambridge,+MA</a></p>
+</li>
+<li>
+<p><a href="http://pset8/search.php?geo=Cambridge+MA">http://pset8/search.php?geo=Cambridge+MA</a></p>
+</li>
+<li>
+<p><a href="http://pset8/search.php?geo=02138">http://pset8/search.php?geo=02138</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>and other such variants to see if you get back the JSON you expect. Again, though, we leave it to you to decide just how tolerate <code>search.php</code> will be of abbreviations, punctuation, and the like. The more flexible, though, the better! Try to implement features that you yourself would expect as a user!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configure_2"><a href="#configure_2" class="link">configure</a></h3>
+<div class="paragraph">
+<p>Now that <code>search.php</code> and your text box are (hopefully!) working, modify the value of <code>suggestion</code> in <code>configure</code>, the function in <code>scripts.js</code>, so that it displays matches (i.e., <code>place_name</code>, <code>admin_name1</code>, and/or other fields) instead of <code>TODO</code>. Recall that a value like</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="js language-js"><span class="tag">&lt;p&gt;</span><span class="error">&lt;</span>%- place_name %<span class="error">&gt;</span>, <span class="error">&lt;</span>%- admin_name1 %<span class="error">&gt;</span><span class="tag">&lt;/p&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>might do the trick, perhaps coupled with some CSS.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="addmarker_2"><a href="#addmarker_2" class="link">addMarker</a></h3>
+<div class="paragraph">
+<p>Implement <code>addMarker</code> in <code>scripts.js</code> in such a way that it adds a marker for <code>place</code> on the map, where <code>place</code> is a JavaScript object that represents a row from <code>places</code>, your MySQL table. See <a href="https://developers.google.com/maps/documentation/javascript/markers">https://developers.google.com/maps/documentation/javascript/markers</a> for tips. But also see <a href="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.9/">http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.9/</a> for an alternative to Google’s own markers, which add support for labels beneath markers. (Recall that we’re already loading <code>markerwithlabel_packed.js</code> for you in <code>index.html</code>.)</p>
+</div>
+<div class="paragraph">
+<p>When a marker is clicked, it should trigger the mashup’s info window to open, anchored at that same marker, the contents of which should be an unordered list of links to article for that article’s location (unless <code>articles.php</code> outputs an empty array)!</p>
+</div>
+<div class="paragraph">
+<p>Again, not to worry if some of your markers (or labels) overlap others, assuming such is the result of imperfections in <code>US.txt</code> and not your own code!</p>
+</div>
+<div class="paragraph">
+<p>If you’d like to customize your markers' icon, see <a href="https://developers.google.com/maps/documentation/javascript/markers#simple_icons">https://developers.google.com/maps/documentation/javascript/markers#simple_icons</a>. For the URLs of icons built-into Google Maps, see <a href="http://www.lass.it/Web/viewer.aspx?id=4">http://www.lass.it/Web/viewer.aspx?id=4</a>. For third-party icons, see <a href="http://mapicons.nicolasmollet.com/category/markers/">http://mapicons.nicolasmollet.com/category/markers/</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="removemarkers_2"><a href="#removemarkers_2" class="link">removeMarkers</a></h3>
+<div class="paragraph">
+<p>Implement <code>removeMarkers</code> in such a way that it removes all markers from the map. Odds are you’ll need <code>addMarker</code> to modify that global variable called <code>markers</code> in order for <code>removeMarkers</code> to work its own magic!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="personal_touch"><a href="#personal_touch" class="link">personal touch</a></h3>
+<div class="paragraph">
+<p>Last but not least, add at least one personal touch to your mashup, altering its aesthetics or adding some feature that (ideally!) no classmate has. Any touch that compels you to learn (or Google!) at least one new technique is of reasonable scope.</p>
+</div>
+</div>
+</div>
+</div>
+
+        
+
+        <div id="footer">
+            Copyright &copy; David J. Malan
+        </div>
+
+        
+
+    
+<iframe frameborder="0" class="goog-te-menu-frame skiptranslate" style="visibility: visible; box-sizing: content-box; width: 739px; height: 274px; display: none;"></iframe><iframe frameborder="0" class="goog-te-menu-frame skiptranslate" style="visibility: visible; box-sizing: content-box; width: 228px; height: 71px; display: none;"></iframe></body>
