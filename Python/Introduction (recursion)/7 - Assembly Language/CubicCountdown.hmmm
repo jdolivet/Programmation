@@ -1,0 +1,9 @@
+# THE CUBIC COUNTDOWN
+00 read r1          # get # from user to r1
+01 mul r2 r1 r1     # r2 = r1 * r1
+02 mul r1 r2 r1     # r1 = r2 * r1
+03 write r1         # print what's in r1
+04 addn r1 -1       # add -1 to r1
+05 jgtzn r1 03      # if r1 > 0 jump to line 03
+06 write r1         # print what's in r1
+07 halt             # stop
